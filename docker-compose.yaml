@@ -2,8 +2,9 @@ version: "3.9"
 
 services:
   app:
-    build: .
     container_name: fastfood-app
+    build: .
+    image: fastfood-app:0.0.1
     restart: always
     ports:
       - "3210:3210"
