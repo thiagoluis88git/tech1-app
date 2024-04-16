@@ -1,26 +1,36 @@
-package domain
+package entities
 
 import "gorm.io/gorm"
 
 const (
-	CategorySnack    = "Snack"
-	CategoryBeverage = "Beverage"
-	CategoryDesert   = "Desert"
-	CategoryToppings = "Toppings"
+	CategorySnack    = "Lanche"
+	CategoryBeverage = "Bebida"
+	CategoryDesert   = "Sobremesa"
+	CategoryToppings = "Acompanhamento"
+	CategoryCombo    = "Combo"
 )
 
-type ProductEntity struct {
+type Product struct {
 	gorm.Model
-	Id          int32
+	Id           int32
+	Name         string
+	Description  string
+	Category     string
+	Price        int
+	ProducImage  []ProducImage
+	ProductCombo *[]ProductCombo
+}
+
+type ProducImage struct {
+	gorm.Model
+	ProductID uint
+	ImageUrl  string
+}
+
+type ProductCombo struct {
+	gorm.Model
+	ProductID   uint
 	Name        string
 	Description string
 	Category    string
-	Price       int
-	Images      []ProducImageEntity
-}
-
-type ProducImageEntity struct {
-	Id        int64
-	ProductId int32
-	ImageUrl  string
 }
