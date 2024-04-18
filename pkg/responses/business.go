@@ -53,7 +53,7 @@ func GetResponseError(err error, service string, logicError string) error {
 		message = getBusinessMessageError(statusCode, service)
 	} else if errors.As(err, &databaseError) {
 		message = databaseError.Message
-		statusCode = getBusinessStatusCodeError(databaseError.Code)
+		statusCode = http.StatusUnprocessableEntity
 	} else if errors.As(err, &businessError) {
 		statusCode = businessError.StatusCode
 		message = businessError.Message
@@ -104,21 +104,4 @@ func getBusinessMessageError(statusCode int, service string) string {
 	}
 
 	return message
-}
-
-func getBusinessStatusCodeError(databaseStatusCode int) int {
-	var code int
-
-	switch databaseStatusCode {
-	case DATABASE_ERROR:
-		code = http.StatusInternalServerError
-	case DATABASE_CONSTRAINT_ERROR:
-		code = http.StatusUnprocessableEntity
-	case DATABASE_CONFLICT_ERROR:
-		code = http.StatusConflict
-	case MALFORMED_DATA_ERROR:
-		code = http.StatusBadRequest
-	}
-
-	return code
 }

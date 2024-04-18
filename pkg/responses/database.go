@@ -1,8 +1,6 @@
 package responses
 
 import (
-	"errors"
-
 	"gorm.io/driver/postgres"
 )
 
@@ -24,23 +22,9 @@ func (er LocalError) Error() string {
 }
 
 func GetDatabaseError(err error) *LocalError {
-	var code int
-	message := err.Error()
-	code = DATABASE_ERROR
-
-	var mySqlError *postgres.ErrMessage
-
-	if errors.As(err, &mySqlError) {
-		switch mySqlError.Code {
-		case "1062":
-			code = DATABASE_CONFLICT_ERROR
-		default:
-			code = DATABASE_CONSTRAINT_ERROR
-		}
-	}
+	var postgresError *postgres.Dialector
 
 	return &LocalError{
-		Code:    code,
-		Message: message,
+		Message: postgresError.Translate(err).Error(),
 	}
 }
