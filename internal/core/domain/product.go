@@ -2,15 +2,13 @@ package domain
 
 type Product struct {
 	Id          int32
-	Name        string
-	Description string
-	Category    string
-	Price       int
-	Images      []ProducImage
+	Name        string        `json:"name" validate:"required"`
+	Description string        `json:"description" validate:"required"`
+	Category    string        `json:"category" validate:"required"`
+	Price       int           `json:"price" validate:"required"`
+	Images      []ProducImage `json:"images" validate:"required"`
 }
 
 type ProducImage struct {
-	Id        int64
-	ProductId int32
-	ImageUrl  string
+	ImageUrl string `json:"imageUrl" validate:"required"`
 }

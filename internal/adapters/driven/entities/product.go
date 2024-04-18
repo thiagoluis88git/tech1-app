@@ -12,7 +12,6 @@ const (
 
 type Product struct {
 	gorm.Model
-	Id           int32
 	Name         string
 	Description  string
 	Category     string
