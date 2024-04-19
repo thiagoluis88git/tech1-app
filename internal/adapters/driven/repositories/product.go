@@ -19,6 +19,16 @@ func NewProductRepository(db *gorm.DB) ports.ProductRepository {
 	}
 }
 
+func (repository *ProductRepository) GetCategories() []string {
+	return []string{
+		entities.CategoryCombo,
+		entities.CategorySnack,
+		entities.CategoryBeverage,
+		entities.CategoryToppings,
+		entities.CategoryDesert,
+	}
+}
+
 func (repository *ProductRepository) CreateProduct(ctx context.Context, product domain.Product) (uint, error) {
 	tx := repository.db.WithContext(ctx).Begin()
 	defer func() {

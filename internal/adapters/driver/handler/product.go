@@ -16,7 +16,7 @@ func CreateProductHandler(productService *services.ProductService) http.HandlerF
 		err := httpserver.DecodeJSONBody(w, r, &product)
 
 		if err != nil {
-			log.Print("decoding invest fund body", map[string]interface{}{
+			log.Print("decoding product body", map[string]interface{}{
 				"error":  err.Error(),
 				"status": httpserver.GetStatusCodeFromError(err),
 			})
@@ -27,7 +27,7 @@ func CreateProductHandler(productService *services.ProductService) http.HandlerF
 		productId, err := productService.CreateProduct(context.Background(), product)
 
 		if err != nil {
-			log.Print("listing funds", map[string]interface{}{
+			log.Print("create product", map[string]interface{}{
 				"error":  err.Error(),
 				"status": httpserver.GetStatusCodeFromError(err),
 			})
@@ -36,5 +36,11 @@ func CreateProductHandler(productService *services.ProductService) http.HandlerF
 		}
 
 		httpserver.SendResponseSuccess(w, productId)
+	}
+}
+
+func GetCategoryHandler(productService *services.ProductService) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		httpserver.SendResponseSuccess(w, productService.GetCategories())
 	}
 }

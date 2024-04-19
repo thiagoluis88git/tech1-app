@@ -25,3 +25,7 @@ func (service *ProductService) CreateProduct(ctx context.Context, product domain
 
 	return productId, nil
 }
+
+func (service *ProductService) GetCategories() []string {
+	return service.repository.GetCategories()
+}

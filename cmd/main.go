@@ -43,6 +43,9 @@ func main() {
 	productRepo := repositories.NewProductRepository(db)
 	productService := services.NewProductService(productRepo)
 
+	customerRepo := repositories.NewCustomerRepository(db)
+	customerService := services.NewCustomerService(customerRepo)
+
 	router.Get("/api/health", func(w http.ResponseWriter, r *http.Request) {
 		httpserver.SendResponseSuccess(w, &responses.BusinessResponse{
 			StatusCode: 200,
@@ -50,7 +53,9 @@ func main() {
 		})
 	})
 
+	router.Post("/api/customer", handler.CreateCustomerHandler(customerService))
 	router.Post("/api/product", handler.CreateProductHandler(productService))
+	router.Get("/api/category", handler.GetCategoryHandler(productService))
 
 	server := httpserver.New(router)
 	server.Start()

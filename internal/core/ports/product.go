@@ -7,4 +7,5 @@ import (
 
 type ProductRepository interface {
 	CreateProduct(ctx context.Context, product domain.Product) (uint, error)
+	GetCategories() []string
 }
