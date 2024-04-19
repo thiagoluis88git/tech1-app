@@ -38,3 +38,31 @@ func CreateCustomerHandler(customerService *services.CustomerService) http.Handl
 		httpserver.SendResponseSuccess(w, customerId)
 	}
 }
+
+func GetCustomerByCPFHandler(customerService *services.CustomerService) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		cpf, err := httpserver.GetPathParamFromRequest(r, "cpf")
+
+		if err != nil {
+			log.Print("get customer by cpf", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendResponseError(w, err)
+			return
+		}
+
+		customer, err := customerService.GetCustomerByCPF(context.Background(), cpf)
+
+		if err != nil {
+			log.Print("get customer by cpf", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendResponseError(w, err)
+			return
+		}
+
+		httpserver.SendResponseSuccess(w, customer)
+	}
+}

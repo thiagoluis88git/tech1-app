@@ -25,3 +25,13 @@ func (service *CustomerService) CreateCustomer(ctx context.Context, customer dom
 
 	return customerId, nil
 }
+
+func (service *CustomerService) GetCustomerByCPF(ctx context.Context, cpf string) (domain.Customer, error) {
+	customer, err := service.repository.GetCustomerByCPF(ctx, cpf)
+
+	if err != nil {
+		return domain.Customer{}, err
+	}
+
+	return customer, nil
+}

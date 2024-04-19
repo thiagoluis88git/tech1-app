@@ -34,3 +34,19 @@ func (repository *CustomerRepository) CreateCustomer(ctx context.Context, custom
 
 	return customerEntity.ID, nil
 }
+
+func (repository *CustomerRepository) GetCustomerByCPF(ctx context.Context, cpf string) (domain.Customer, error) {
+	var customerEntity entities.Customer
+	err := repository.db.WithContext(ctx).Where("cpf = ?", cpf).First(&customerEntity).Error
+
+	if err != nil {
+		return domain.Customer{}, err
+	}
+
+	return domain.Customer{
+		ID:    customerEntity.ID,
+		Name:  customerEntity.Name,
+		CPF:   customerEntity.CPF,
+		Email: customerEntity.Email,
+	}, nil
+}
