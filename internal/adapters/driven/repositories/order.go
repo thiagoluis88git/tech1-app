@@ -62,9 +62,27 @@ func (repository *OrderRespository) CreateOrder(ctx context.Context, order domai
 		return domain.OrderResponse{}, responses.GetDatabaseError(err)
 	}
 
+	err = tx.Commit().Error
+
+	if err != nil {
+		tx.Rollback()
+		return domain.OrderResponse{}, responses.GetDatabaseError(err)
+	}
+
 	var customerName *string
-	if orderEntity.Customer != nil {
-		customerName = &orderEntity.Customer.Name
+	if order.CustomerID != nil {
+		var customer entities.Customer
+
+		err := repository.
+			db.WithContext(ctx).
+			Find(&customer).
+			Error
+
+		if err != nil {
+			return domain.OrderResponse{}, responses.GetDatabaseError(err)
+		}
+
+		customerName = &customer.Name
 	}
 
 	return domain.OrderResponse{
