@@ -81,3 +81,41 @@ func (repository *ProductRepository) CreateProduct(ctx context.Context, product 
 
 	return productEntity.ID, nil
 }
+
+func (repository *ProductRepository) GetProductsByCategory(ctx context.Context, category string) ([]domain.Product, error) {
+	var productEntities []entities.Product
+	err := repository.
+		db.WithContext(ctx).
+		Model(&entities.Product{}).
+		Preload("ProductImage").
+		Where("category = ?", category).
+		Find(&productEntities).
+		Error
+
+	if err != nil {
+		return []domain.Product{}, responses.GetDatabaseError(err)
+	}
+
+	products := []domain.Product{}
+
+	for _, value := range productEntities {
+		images := []domain.ProducImage{}
+
+		for _, valueImage := range value.ProductImage {
+			images = append(images, domain.ProducImage{
+				ImageUrl: valueImage.ImageUrl,
+			})
+		}
+
+		products = append(products, domain.Product{
+			Id:          value.ID,
+			Name:        value.Name,
+			Description: value.Description,
+			Category:    value.Category,
+			Price:       value.Price,
+			Images:      images,
+		})
+	}
+
+	return products, nil
+}

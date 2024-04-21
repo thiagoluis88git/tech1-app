@@ -59,8 +59,9 @@ func main() {
 	router.Post("/api/customer", handler.CreateCustomerHandler(customerService))
 	router.Get("/api/customer/{cpf}", handler.GetCustomerByCPFHandler(customerService))
 
-	router.Post("/api/product", handler.CreateProductHandler(productService))
-	router.Get("/api/category", handler.GetCategoryHandler(productService))
+	router.Post("/api/products", handler.CreateProductHandler(productService))
+	router.Get("/api/products/categories", handler.GetCategoryHandler(productService))
+	router.Get("/api/products/categories/{category}", handler.GetProductsByCategory(productService))
 
 	router.Post("/api/order", handler.CreateOrderHandler(orderService))
 

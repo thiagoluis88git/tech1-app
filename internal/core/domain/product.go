@@ -1,7 +1,7 @@
 package domain
 
 type Product struct {
-	Id          int32
+	Id          uint          `json:"id"`
 	Name        string        `json:"name" validate:"required"`
 	Description string        `json:"description" validate:"required"`
 	Category    string        `json:"category" validate:"required"`

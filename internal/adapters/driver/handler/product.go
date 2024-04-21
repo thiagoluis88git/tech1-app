@@ -39,6 +39,34 @@ func CreateProductHandler(productService *services.ProductService) http.HandlerF
 	}
 }
 
+func GetProductsByCategory(productService *services.ProductService) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		category, err := httpserver.GetPathParamFromRequest(r, "category")
+
+		if err != nil {
+			log.Print("get products by category", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendResponseError(w, err)
+			return
+		}
+
+		products, err := productService.GetProductsByCategory(context.Background(), category)
+
+		if err != nil {
+			log.Print("get products by category", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendResponseError(w, err)
+			return
+		}
+
+		httpserver.SendResponseSuccess(w, products)
+	}
+}
+
 func GetCategoryHandler(productService *services.ProductService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		httpserver.SendResponseSuccess(w, productService.GetCategories())

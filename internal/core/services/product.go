@@ -27,6 +27,16 @@ func (service *ProductService) CreateProduct(ctx context.Context, product domain
 	return productId, nil
 }
 
+func (service *ProductService) GetProductsByCategory(ctx context.Context, category string) ([]domain.Product, error) {
+	products, err := service.repository.GetProductsByCategory(ctx, category)
+
+	if err != nil {
+		return []domain.Product{}, responses.GetResponseError(err, "ProductService")
+	}
+
+	return products, nil
+}
+
 func (service *ProductService) GetCategories() []string {
 	return service.repository.GetCategories()
 }
