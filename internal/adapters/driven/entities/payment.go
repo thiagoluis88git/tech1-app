@@ -6,15 +6,19 @@ const (
 	PaymentPayingStatus = "Pagando"
 	PaymentPayedStatus  = "Pago"
 	PaymentErrorStatus  = "Erro"
+
+	PaymentCreditCardKind = "Crédito"
+	PaymentDebitKind      = "Débito"
+	PaymentVoucherKind    = "Voucher"
 )
 
-type PaymentOutbox struct {
+type Payment struct {
 	gorm.Model
 	CustomerID    *uint
 	Customer      *Customer
 	OrderID       uint
+	TotalPrice    int
 	Order         Order
 	PaymentStatus string
-	// Retorno do gateway sobre qual tipo de pagamento o cliente selecionou
-	PaymentKind string
+	PaymentKind   string
 }

@@ -70,7 +70,18 @@ func (repository *OrderRespository) CreateOrder(ctx context.Context, order domai
 	}
 
 	return domain.OrderResponse{
+		OrderId:   orderEntity.ID,
 		OrderDate: orderEntity.CreatedAt,
 		TickerId:  orderEntity.TickerID,
 	}, nil
+}
+
+func (repository *OrderRespository) FinishOrderPayment(ctx context.Context, orderId uint) error {
+	err := repository.db.Model(&entities.Order{}).Where("id = ?", orderId).Update("order_status", entities.OrderStatusPayed).Error
+
+	if err != nil {
+		return responses.GetDatabaseError(err)
+	}
+
+	return nil
 }

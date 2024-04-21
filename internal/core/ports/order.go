@@ -7,4 +7,5 @@ import (
 
 type OrderRepository interface {
 	CreateOrder(ctx context.Context, order domain.Order) (domain.OrderResponse, error)
+	FinishOrderPayment(ctx context.Context, orderId uint) error
 }

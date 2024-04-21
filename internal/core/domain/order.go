@@ -7,6 +7,7 @@ type Order struct {
 	TotalPrice   int            `json:"totalPrice" validate:"required"`
 	CustomerID   *uint          `json:"customerId"`
 	OrderProduct []OrderProduct `json:"orderProducts" validate:"required"`
+	PaymentKind  string         `json:"paymentKind" validate:"required"`
 	TickerId     int
 }
 
@@ -15,7 +16,9 @@ type OrderProduct struct {
 }
 
 type OrderResponse struct {
-	OrderDate    time.Time `json:"productId"`
-	TickerId     int       `json:"tickerId"`
-	CustomerName *string   `json:"customerName"`
+	OrderId          uint
+	OrderDate        time.Time `json:"productId"`
+	TickerId         int       `json:"tickerId"`
+	PaymentGatewayId string    `json:"paymentGatewayId"`
+	CustomerName     *string   `json:"customerName"`
 }

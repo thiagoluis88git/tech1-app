@@ -8,14 +8,20 @@ import (
 )
 
 type OrderService struct {
-	orderRepo    ports.OrderRepository
-	customerRepo ports.CustomerRepository
+	orderRepo      ports.OrderRepository
+	customerRepo   ports.CustomerRepository
+	paymentService *PaymentService
 }
 
-func NewOrderService(orderRepo ports.OrderRepository, customerRepo ports.CustomerRepository) *OrderService {
+func NewOrderService(
+	orderRepo ports.OrderRepository,
+	customerRepo ports.CustomerRepository,
+	paymentService *PaymentService,
+) *OrderService {
 	return &OrderService{
-		orderRepo:    orderRepo,
-		customerRepo: customerRepo,
+		orderRepo:      orderRepo,
+		customerRepo:   customerRepo,
+		paymentService: paymentService,
 	}
 }
 
@@ -32,6 +38,27 @@ func (service *OrderService) CreateOrder(ctx context.Context, order domain.Order
 			response.CustomerName = &customer.Name
 		}
 	}
+
+	payment := domain.Payment{
+		OrderID:     response.OrderId,
+		CustomerID:  order.CustomerID,
+		TotalPrice:  order.TotalPrice,
+		PaymentKind: order.PaymentKind,
+	}
+
+	paymentResponse, err := service.paymentService.PayOrder(ctx, payment)
+
+	if err != nil {
+		return domain.OrderResponse{}, responses.GetResponseError(err, "OrderService")
+	}
+
+	err = service.orderRepo.FinishOrderPayment(ctx, response.OrderId)
+
+	if err != nil {
+		return domain.OrderResponse{}, responses.GetResponseError(err, "OrderService")
+	}
+
+	response.PaymentGatewayId = paymentResponse.PaymentGatewayId
 
 	return response, nil
 }

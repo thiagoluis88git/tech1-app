@@ -2,19 +2,16 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"net/http"
-	"thiagoluis88git/tech1/internal/adapters/driven/entities"
+	"thiagoluis88git/tech1/internal/adapters/driven/external"
 	"thiagoluis88git/tech1/internal/adapters/driven/repositories"
 	"thiagoluis88git/tech1/internal/adapters/driver/handler"
 	"thiagoluis88git/tech1/internal/core/services"
-	"thiagoluis88git/tech1/pkg/environment"
+	"thiagoluis88git/tech1/pkg/database"
 	"thiagoluis88git/tech1/pkg/httpserver"
 	"thiagoluis88git/tech1/pkg/responses"
 
 	"github.com/go-chi/chi/v5"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 
 	chiMiddleware "github.com/go-chi/chi/v5/middleware"
 )
@@ -22,27 +19,16 @@ import (
 func main() {
 	flag.Parse()
 
-	dsn := fmt.Sprintf("host=%v user=fastfood password=fastfood1234 dbname=fastfood_db port=5432 sslmode=disable", *environment.DbHost)
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-
-	if err != nil {
-		panic(fmt.Sprintf("could not open database: %v", err.Error()))
-	}
-
-	db.AutoMigrate(
-		&entities.Customer{},
-		&entities.Order{},
-		&entities.OrderProduct{},
-		&entities.PaymentOutbox{},
-		&entities.Product{},
-		&entities.ProductImage{},
-		&entities.ProductCombo{},
-	)
+	db := database.ConfigDatabase()
 
 	router := chi.NewRouter()
 	router.Use(chiMiddleware.RequestID)
 	router.Use(chiMiddleware.RealIP)
 	router.Use(chiMiddleware.Recoverer)
+
+	paymentRepo := repositories.NewPaymentRepository(db)
+	paymentGateway := external.NewPaymentGateway()
+	paymentService := services.NewPaymentService(paymentRepo, paymentGateway)
 
 	productRepo := repositories.NewProductRepository(db)
 	productService := services.NewProductService(productRepo)
@@ -51,7 +37,7 @@ func main() {
 	customerService := services.NewCustomerService(customerRepo)
 
 	orderRepo := repositories.NewOrderRespository(db)
-	orderService := services.NewOrderService(orderRepo, customerRepo)
+	orderService := services.NewOrderService(orderRepo, customerRepo, paymentService)
 
 	router.Get("/api/health", func(w http.ResponseWriter, r *http.Request) {
 		httpserver.SendResponseSuccess(w, &responses.BusinessResponse{
