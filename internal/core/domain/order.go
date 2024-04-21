@@ -16,8 +16,8 @@ type OrderProduct struct {
 }
 
 type OrderResponse struct {
-	OrderId          uint
-	OrderDate        time.Time `json:"productId"`
+	OrderId          uint      `json:"orderId"`
+	OrderDate        time.Time `json:"orderDate"`
 	TickerId         int       `json:"tickerId"`
 	PaymentGatewayId string    `json:"paymentGatewayId"`
 	CustomerName     *string   `json:"customerName"`

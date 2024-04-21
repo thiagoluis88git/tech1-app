@@ -49,13 +49,13 @@ func (service *OrderService) CreateOrder(ctx context.Context, order domain.Order
 	paymentResponse, err := service.paymentService.PayOrder(ctx, payment)
 
 	if err != nil {
-		return domain.OrderResponse{}, responses.GetResponseError(err, "OrderService")
+		return domain.OrderResponse{}, responses.GetResponseError(err, "OrderService -> PayOrder")
 	}
 
 	err = service.orderRepo.FinishOrderPayment(ctx, response.OrderId)
 
 	if err != nil {
-		return domain.OrderResponse{}, responses.GetResponseError(err, "OrderService")
+		return domain.OrderResponse{}, responses.GetResponseError(err, "OrderService -> FinishOrderPayment")
 	}
 
 	response.PaymentGatewayId = paymentResponse.PaymentGatewayId

@@ -21,7 +21,7 @@ func (service *CustomerService) CreateCustomer(ctx context.Context, customer dom
 	customerId, err := service.repository.CreateCustomer(ctx, customer)
 
 	if err != nil {
-		return 0, err
+		return 0, responses.GetResponseError(err, "CustomerService")
 	}
 
 	return customerId, nil

@@ -11,7 +11,7 @@ const (
 	DATABASE_ERROR            = 1
 	DATABASE_CONSTRAINT_ERROR = 2
 	DATABASE_CONFLICT_ERROR   = 3
-	MALFORMED_DATA_ERROR      = 4
+	NOT_FOUND_ERROR           = 4
 	LOGIC_ERROR               = 5
 )
 
@@ -26,8 +26,9 @@ func (er LocalError) Error() string {
 
 func GetDatabaseError(err error) *LocalError {
 	var localError *pgconn.PgError
+
 	code := DATABASE_ERROR
-	message := "Unknown error"
+	message := err.Error()
 
 	if errors.As(err, &localError) {
 		iCode, err := strconv.Atoi(localError.Code)
@@ -37,6 +38,10 @@ func GetDatabaseError(err error) *LocalError {
 
 		code = iCode
 		message = localError.Message
+	}
+
+	if message == "record not found" {
+		code = NOT_FOUND_ERROR
 	}
 
 	return &LocalError{

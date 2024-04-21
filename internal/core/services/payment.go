@@ -50,3 +50,7 @@ func (service *PaymentService) PayOrder(ctx context.Context, payment domain.Paym
 		PaymentDate:      gatewayResponse.PaymentDate,
 	}, nil
 }
+
+func (service *PaymentService) GetPaymentKinds() []string {
+	return service.paymentRepo.GetPaymentKinds()
+}

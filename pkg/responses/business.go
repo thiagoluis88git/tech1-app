@@ -106,5 +106,9 @@ func getBusinessStatusCode(localError LocalError) int {
 		return http.StatusConflict
 	}
 
+	if localError.Code == NOT_FOUND_ERROR {
+		return http.StatusNotFound
+	}
+
 	return http.StatusUnprocessableEntity
 }

@@ -53,6 +53,7 @@ func main() {
 	router.Get("/api/products/categories", handler.GetCategoryHandler(productService))
 	router.Get("/api/products/categories/{category}", handler.GetProductsByCategory(productService))
 
+	router.Get("/api/payment/kinds", handler.GetPaymentKindsHandler(paymentService))
 	router.Post("/api/order", handler.CreateOrderHandler(orderService))
 
 	server := httpserver.New(router)
