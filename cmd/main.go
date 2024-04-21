@@ -51,7 +51,7 @@ func main() {
 	customerService := services.NewCustomerService(customerRepo)
 
 	orderRepo := repositories.NewOrderRespository(db)
-	orderService := services.NewOrderService(orderRepo)
+	orderService := services.NewOrderService(orderRepo, customerRepo)
 
 	router.Get("/api/health", func(w http.ResponseWriter, r *http.Request) {
 		httpserver.SendResponseSuccess(w, &responses.BusinessResponse{

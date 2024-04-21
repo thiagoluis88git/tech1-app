@@ -44,10 +44,30 @@ func (repository *CustomerRepository) GetCustomerByCPF(ctx context.Context, cpf 
 		return domain.Customer{}, responses.GetDatabaseError(err)
 	}
 
+	return repository.populateCustomer(customerEntity), nil
+}
+
+// GetCustomerById implements ports.CustomerRepository.
+func (repository *CustomerRepository) GetCustomerById(ctx context.Context, id uint) (domain.Customer, error) {
+	var customerEntity entities.Customer
+
+	err := repository.
+		db.WithContext(ctx).
+		First(&customerEntity, id).
+		Error
+
+	if err != nil {
+		return domain.Customer{}, responses.GetDatabaseError(err)
+	}
+
+	return repository.populateCustomer(customerEntity), nil
+}
+
+func (repository *CustomerRepository) populateCustomer(customerEntity entities.Customer) domain.Customer {
 	return domain.Customer{
 		ID:    customerEntity.ID,
 		Name:  customerEntity.Name,
 		CPF:   customerEntity.CPF,
 		Email: customerEntity.Email,
-	}, nil
+	}
 }
