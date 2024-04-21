@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -42,7 +43,21 @@ func New(handler http.Handler) *Server {
 
 func (s *Server) Start() {
 	go func() {
-		s.notify <- s.server.ListenAndServe()
+		listener, err := net.Listen("tcp", s.server.Addr)
+
+		if err != nil {
+			//shutdown
+			err := s.Shutdown()
+			if err != nil {
+				log.Print("httpServer shutdown", map[string]interface{}{
+					"signal": err.Error(),
+				})
+			}
+		}
+
+		log.Print("API Tech 1 has started")
+
+		s.notify <- s.server.Serve(listener)
 		close(s.notify)
 	}()
 

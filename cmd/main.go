@@ -1,12 +1,14 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"net/http"
 	"thiagoluis88git/tech1/internal/adapters/driven/entities"
 	"thiagoluis88git/tech1/internal/adapters/driven/repositories"
 	"thiagoluis88git/tech1/internal/adapters/driver/handler"
 	"thiagoluis88git/tech1/internal/core/services"
+	"thiagoluis88git/tech1/pkg/environment"
 	"thiagoluis88git/tech1/pkg/httpserver"
 	"thiagoluis88git/tech1/pkg/responses"
 
@@ -18,7 +20,9 @@ import (
 )
 
 func main() {
-	dsn := "host=database user=fastfood password=fastfood1234 dbname=fastfood_db port=5432 sslmode=disable"
+	flag.Parse()
+
+	dsn := fmt.Sprintf("host=%v user=fastfood password=fastfood1234 dbname=fastfood_db port=5432 sslmode=disable", *environment.DbHost)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
