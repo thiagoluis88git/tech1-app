@@ -61,7 +61,7 @@ func (repository *PaymentRepository) CreatePaymentOrder(ctx context.Context, pay
 }
 
 func (repository *PaymentRepository) FinishPaymentWithError(ctx context.Context, paymentId uint) error {
-	err := repository.db.Model(&entities.Payment{}).Where("id = ?", paymentId).Update("payment_status", entities.PaymentPayedStatus).Error
+	err := repository.db.WithContext(ctx).Model(&entities.Payment{}).Where("id = ?", paymentId).Update("payment_status", entities.PaymentPayedStatus).Error
 
 	if err != nil {
 		return responses.GetDatabaseError(err)
@@ -71,7 +71,7 @@ func (repository *PaymentRepository) FinishPaymentWithError(ctx context.Context,
 }
 
 func (repository *PaymentRepository) FinishPaymentWithSuccess(ctx context.Context, paymentId uint) error {
-	err := repository.db.Model(&entities.Payment{}).Where("id = ?", paymentId).Update("payment_status", entities.PaymentErrorStatus).Error
+	err := repository.db.WithContext(ctx).Model(&entities.Payment{}).Where("id = ?", paymentId).Update("payment_status", entities.PaymentErrorStatus).Error
 
 	if err != nil {
 		return responses.GetDatabaseError(err)

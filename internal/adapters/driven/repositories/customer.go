@@ -27,7 +27,7 @@ func (repository *CustomerRepository) CreateCustomer(ctx context.Context, custom
 		Email: customer.Email,
 	}
 
-	err := repository.db.Create(customerEntity).Error
+	err := repository.db.WithContext(ctx).Create(customerEntity).Error
 
 	if err != nil {
 		return 0, responses.GetDatabaseError(err)
