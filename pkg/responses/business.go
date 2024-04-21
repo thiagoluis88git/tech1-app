@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"strings"
 )
 
 type BusinessResponse struct {
@@ -40,7 +39,7 @@ func (br BusinessResponse) Error() string {
 
 *
 */
-func GetResponseError(err error, service string, logicError string) error {
+func GetResponseError(err error, service string) error {
 	var networkError *NetworkError
 	var databaseError *LocalError
 	var businessError *BusinessResponse
@@ -53,7 +52,7 @@ func GetResponseError(err error, service string, logicError string) error {
 		message = getBusinessMessageError(statusCode, service)
 	} else if errors.As(err, &databaseError) {
 		message = databaseError.Message
-		statusCode = http.StatusUnprocessableEntity
+		statusCode = getBusinessStatusCode(*databaseError)
 	} else if errors.As(err, &businessError) {
 		statusCode = businessError.StatusCode
 		message = businessError.Message
@@ -62,10 +61,6 @@ func GetResponseError(err error, service string, logicError string) error {
 	businessResponse := &BusinessResponse{
 		StatusCode: statusCode,
 		Message:    message,
-	}
-
-	if strings.TrimSpace(logicError) != "" {
-		businessResponse.Message = fmt.Sprintf("%v: %v", businessResponse.Message, logicError)
 	}
 
 	return businessResponse
@@ -104,4 +99,12 @@ func getBusinessMessageError(statusCode int, service string) string {
 	}
 
 	return message
+}
+
+func getBusinessStatusCode(localError LocalError) int {
+	if localError.Code == 23505 {
+		return http.StatusConflict
+	}
+
+	return http.StatusUnprocessableEntity
 }

@@ -1,7 +1,10 @@
 package responses
 
 import (
-	"gorm.io/driver/postgres"
+	"errors"
+	"strconv"
+
+	"github.com/jackc/pgx/v5/pgconn"
 )
 
 const (
@@ -22,9 +25,22 @@ func (er LocalError) Error() string {
 }
 
 func GetDatabaseError(err error) *LocalError {
-	var postgresError *postgres.Dialector
+	var localError *pgconn.PgError
+	code := DATABASE_ERROR
+	message := "Unknown error"
+
+	if errors.As(err, &localError) {
+		iCode, err := strconv.Atoi(localError.Code)
+		if err != nil {
+			iCode = DATABASE_ERROR
+		}
+
+		code = iCode
+		message = localError.Message
+	}
 
 	return &LocalError{
-		Message: postgresError.Translate(err).Error(),
+		Message: message,
+		Code:    code,
 	}
 }

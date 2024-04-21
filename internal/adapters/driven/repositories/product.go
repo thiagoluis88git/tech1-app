@@ -5,6 +5,7 @@ import (
 	"thiagoluis88git/tech1/internal/adapters/driven/entities"
 	"thiagoluis88git/tech1/internal/core/domain"
 	"thiagoluis88git/tech1/internal/core/ports"
+	"thiagoluis88git/tech1/pkg/responses"
 
 	"gorm.io/gorm"
 )
@@ -38,7 +39,7 @@ func (repository *ProductRepository) CreateProduct(ctx context.Context, product 
 	}()
 
 	if err := tx.Error; err != nil {
-		return 0, err
+		return 0, responses.GetDatabaseError(err)
 	}
 
 	productEntity := &entities.Product{
@@ -52,13 +53,13 @@ func (repository *ProductRepository) CreateProduct(ctx context.Context, product 
 
 	if err != nil {
 		tx.Rollback()
-		return 0, err
+		return 0, responses.GetDatabaseError(err)
 	}
 
-	productImages := []*entities.ProducImage{}
+	productImages := []*entities.ProductImage{}
 
 	for _, value := range product.Images {
-		productImages = append(productImages, &entities.ProducImage{
+		productImages = append(productImages, &entities.ProductImage{
 			ProductID: productEntity.ID,
 			ImageUrl:  value.ImageUrl,
 		})
@@ -68,14 +69,14 @@ func (repository *ProductRepository) CreateProduct(ctx context.Context, product 
 
 	if err != nil {
 		tx.Rollback()
-		return 0, err
+		return 0, responses.GetDatabaseError(err)
 	}
 
 	err = tx.Commit().Error
 
 	if err != nil {
 		tx.Rollback()
-		return 0, err
+		return 0, responses.GetDatabaseError(err)
 	}
 
 	return productEntity.ID, nil

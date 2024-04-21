@@ -5,6 +5,7 @@ import (
 	"thiagoluis88git/tech1/internal/adapters/driven/entities"
 	"thiagoluis88git/tech1/internal/core/domain"
 	"thiagoluis88git/tech1/internal/core/ports"
+	"thiagoluis88git/tech1/pkg/responses"
 
 	"gorm.io/gorm"
 )
@@ -29,7 +30,7 @@ func (repository *CustomerRepository) CreateCustomer(ctx context.Context, custom
 	err := repository.db.Create(customerEntity).Error
 
 	if err != nil {
-		return 0, err
+		return 0, responses.GetDatabaseError(err)
 	}
 
 	return customerEntity.ID, nil
@@ -40,7 +41,7 @@ func (repository *CustomerRepository) GetCustomerByCPF(ctx context.Context, cpf 
 	err := repository.db.WithContext(ctx).Where("cpf = ?", cpf).First(&customerEntity).Error
 
 	if err != nil {
-		return domain.Customer{}, err
+		return domain.Customer{}, responses.GetDatabaseError(err)
 	}
 
 	return domain.Customer{

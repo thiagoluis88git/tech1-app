@@ -4,6 +4,7 @@ import (
 	"context"
 	"thiagoluis88git/tech1/internal/core/domain"
 	"thiagoluis88git/tech1/internal/core/ports"
+	"thiagoluis88git/tech1/pkg/responses"
 )
 
 type CustomerService struct {
@@ -30,7 +31,7 @@ func (service *CustomerService) GetCustomerByCPF(ctx context.Context, cpf string
 	customer, err := service.repository.GetCustomerByCPF(ctx, cpf)
 
 	if err != nil {
-		return domain.Customer{}, err
+		return domain.Customer{}, responses.GetResponseError(err, "CustomerService")
 	}
 
 	return customer, nil

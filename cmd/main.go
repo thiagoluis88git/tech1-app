@@ -31,7 +31,7 @@ func main() {
 		&entities.OrderProduct{},
 		&entities.PaymentOutbox{},
 		&entities.Product{},
-		&entities.ProducImage{},
+		&entities.ProductImage{},
 		&entities.ProductCombo{},
 	)
 
@@ -46,6 +46,9 @@ func main() {
 	customerRepo := repositories.NewCustomerRepository(db)
 	customerService := services.NewCustomerService(customerRepo)
 
+	orderRepo := repositories.NewOrderRespository(db)
+	orderService := services.NewOrderService(orderRepo)
+
 	router.Get("/api/health", func(w http.ResponseWriter, r *http.Request) {
 		httpserver.SendResponseSuccess(w, &responses.BusinessResponse{
 			StatusCode: 200,
@@ -58,6 +61,8 @@ func main() {
 
 	router.Post("/api/product", handler.CreateProductHandler(productService))
 	router.Get("/api/category", handler.GetCategoryHandler(productService))
+
+	router.Post("/api/order", handler.CreateOrderHandler(orderService))
 
 	server := httpserver.New(router)
 	server.Start()

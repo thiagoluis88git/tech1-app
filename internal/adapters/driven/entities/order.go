@@ -20,7 +20,7 @@ type Order struct {
 	OrderStatus    string
 	TotalPrice     int
 	CustomerID     *uint
-	Customer       Customer
+	Customer       *Customer
 	TickerID       int
 	PreparingAt    *time.Time
 	DoneAt         *time.Time

@@ -4,6 +4,7 @@ import (
 	"context"
 	"thiagoluis88git/tech1/internal/core/domain"
 	"thiagoluis88git/tech1/internal/core/ports"
+	"thiagoluis88git/tech1/pkg/responses"
 )
 
 type ProductService struct {
@@ -20,7 +21,7 @@ func (service *ProductService) CreateProduct(ctx context.Context, product domain
 	productId, err := service.repository.CreateProduct(ctx, product)
 
 	if err != nil {
-		return 0, err
+		return 0, responses.GetResponseError(err, "ProductService")
 	}
 
 	return productId, nil
