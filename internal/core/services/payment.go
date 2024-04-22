@@ -51,6 +51,6 @@ func (service *PaymentService) PayOrder(ctx context.Context, payment domain.Paym
 	}, nil
 }
 
-func (service *PaymentService) GetPaymentKinds() []string {
-	return service.paymentRepo.GetPaymentKinds()
+func (service *PaymentService) GetPaymentTypes() []string {
+	return service.paymentRepo.GetPaymentTypes()
 }

@@ -119,3 +119,59 @@ func (repository *ProductRepository) GetProductsByCategory(ctx context.Context, 
 
 	return products, nil
 }
+
+// DeleteProduct implements ports.ProductRepository.
+func (repository *ProductRepository) DeleteProduct(ctx context.Context, productId uint) error {
+	tx := repository.db.WithContext(ctx).Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if err := tx.Error; err != nil {
+		return responses.GetDatabaseError(err)
+	}
+
+	err := tx.Where("product_id = ?", productId).Delete(&entities.ProductImage{}).Error
+
+	if err != nil {
+		tx.Rollback()
+		return responses.GetDatabaseError(err)
+	}
+
+	err = tx.Delete(&entities.Product{}, productId).Error
+
+	if err != nil {
+		tx.Rollback()
+		return responses.GetDatabaseError(err)
+	}
+
+	err = tx.Commit().Error
+
+	if err != nil {
+		tx.Rollback()
+		return responses.GetDatabaseError(err)
+	}
+
+	return nil
+}
+
+// UpdateProduct implements ports.ProductRepository.
+func (repository *ProductRepository) UpdateProduct(ctx context.Context, product domain.Product) error {
+	productEntity := entities.Product{
+		Model:       gorm.Model{ID: product.Id},
+		Name:        product.Name,
+		Description: product.Description,
+		Category:    product.Category,
+		Price:       product.Price,
+	}
+
+	err := repository.db.WithContext(ctx).Save(&productEntity).Error
+
+	if err != nil {
+		return responses.GetDatabaseError(err)
+	}
+
+	return nil
+}

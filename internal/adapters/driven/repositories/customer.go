@@ -36,6 +36,23 @@ func (repository *CustomerRepository) CreateCustomer(ctx context.Context, custom
 	return customerEntity.ID, nil
 }
 
+func (repository *CustomerRepository) UpdateCustomer(ctx context.Context, customer domain.Customer) error {
+	customerEntity := &entities.Customer{
+		Model: gorm.Model{ID: customer.ID},
+		Name:  customer.Name,
+		CPF:   customer.CPF,
+		Email: customer.Email,
+	}
+
+	err := repository.db.WithContext(ctx).Save(&customerEntity).Error
+
+	if err != nil {
+		return responses.GetDatabaseError(err)
+	}
+
+	return nil
+}
+
 func (repository *CustomerRepository) GetCustomerByCPF(ctx context.Context, cpf string) (domain.Customer, error) {
 	var customerEntity entities.Customer
 	err := repository.db.WithContext(ctx).Where("cpf = ?", cpf).First(&customerEntity).Error

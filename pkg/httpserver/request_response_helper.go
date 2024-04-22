@@ -114,6 +114,13 @@ func GetStatusCodeFromError(err error) int {
 	return http.StatusInternalServerError
 }
 
+func SendBadRequestError(w http.ResponseWriter, err error) {
+	SendResponseError(w, &responses.BusinessResponse{
+		StatusCode: http.StatusBadRequest,
+		Message:    fmt.Sprintf("Bad request: %v", err.Error()),
+	})
+}
+
 func SendResponseNoContentSuccess(w http.ResponseWriter) {
 	SendResponseSuccessWithStatus(w, nil, http.StatusNoContent)
 }

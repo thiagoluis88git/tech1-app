@@ -37,6 +37,26 @@ func (service *ProductService) GetProductsByCategory(ctx context.Context, catego
 	return products, nil
 }
 
+func (service *ProductService) DeleteProduct(ctx context.Context, productId uint) error {
+	err := service.repository.DeleteProduct(ctx, productId)
+
+	if err != nil {
+		return responses.GetResponseError(err, "ProductService")
+	}
+
+	return nil
+}
+
+func (service *ProductService) UpdateProduct(ctx context.Context, product domain.Product) error {
+	err := service.repository.UpdateProduct(ctx, product)
+
+	if err != nil {
+		return responses.GetResponseError(err, "ProductService")
+	}
+
+	return nil
+}
+
 func (service *ProductService) GetCategories() []string {
 	return service.repository.GetCategories()
 }

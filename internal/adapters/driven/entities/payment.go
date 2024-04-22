@@ -7,9 +7,9 @@ const (
 	PaymentPayedStatus  = "Pago"
 	PaymentErrorStatus  = "Erro"
 
-	PaymentCreditCardKind = "Crédito"
-	PaymentDebitKind      = "Débito"
-	PaymentVoucherKind    = "Voucher"
+	PaymentCreditCardType = "Crédito"
+	PaymentDebitType      = "Débito"
+	PaymentVoucherType    = "Voucher"
 )
 
 type Payment struct {

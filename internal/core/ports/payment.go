@@ -6,7 +6,7 @@ import (
 )
 
 type PaymentRepository interface {
-	GetPaymentKinds() []string
+	GetPaymentTypes() []string
 	CreatePaymentOrder(ctx context.Context, payment domain.Payment) (domain.PaymentResponse, error)
 	FinishPaymentWithSuccess(ctx context.Context, paymentId uint) error
 	FinishPaymentWithError(ctx context.Context, paymentId uint) error

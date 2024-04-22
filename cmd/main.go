@@ -50,10 +50,12 @@ func main() {
 	router.Get("/api/customer/{cpf}", handler.GetCustomerByCPFHandler(customerService))
 
 	router.Post("/api/products", handler.CreateProductHandler(productService))
+	router.Delete("/api/products/{id}", handler.DeleteProductHandler(productService))
+	router.Put("/api/products/{id}", handler.UpdateProductHandler(productService))
 	router.Get("/api/products/categories", handler.GetCategoryHandler(productService))
-	router.Get("/api/products/categories/{category}", handler.GetProductsByCategory(productService))
+	router.Get("/api/products/categories/{category}", handler.GetProductsByCategoryHandler(productService))
 
-	router.Get("/api/payment/kinds", handler.GetPaymentKindsHandler(paymentService))
+	router.Get("/api/payment/types", handler.GetPaymentTypeHandler(paymentService))
 	router.Post("/api/order", handler.CreateOrderHandler(orderService))
 
 	server := httpserver.New(router)

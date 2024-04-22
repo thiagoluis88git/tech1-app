@@ -20,11 +20,11 @@ func NewPaymentRepository(db *gorm.DB) ports.PaymentRepository {
 	}
 }
 
-func (repository *PaymentRepository) GetPaymentKinds() []string {
+func (repository *PaymentRepository) GetPaymentTypes() []string {
 	return []string{
-		entities.PaymentCreditCardKind,
-		entities.PaymentDebitKind,
-		entities.PaymentVoucherKind,
+		entities.PaymentCreditCardType,
+		entities.PaymentDebitType,
+		entities.PaymentVoucherType,
 	}
 }
 

@@ -27,6 +27,16 @@ func (service *CustomerService) CreateCustomer(ctx context.Context, customer dom
 	return customerId, nil
 }
 
+func (service *CustomerService) UpdateCustomer(ctx context.Context, customer domain.Customer) error {
+	err := service.repository.UpdateCustomer(ctx, customer)
+
+	if err != nil {
+		return responses.GetResponseError(err, "CustomerService")
+	}
+
+	return nil
+}
+
 func (service *CustomerService) GetCustomerByCPF(ctx context.Context, cpf string) (domain.Customer, error) {
 	customer, err := service.repository.GetCustomerByCPF(ctx, cpf)
 

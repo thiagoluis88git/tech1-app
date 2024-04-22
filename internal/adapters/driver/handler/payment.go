@@ -6,8 +6,8 @@ import (
 	"thiagoluis88git/tech1/pkg/httpserver"
 )
 
-func GetPaymentKindsHandler(paymentService *services.PaymentService) http.HandlerFunc {
+func GetPaymentTypeHandler(paymentService *services.PaymentService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		httpserver.SendResponseSuccess(w, paymentService.GetPaymentKinds())
+		httpserver.SendResponseSuccess(w, paymentService.GetPaymentTypes())
 	}
 }
