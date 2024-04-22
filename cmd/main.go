@@ -47,6 +47,7 @@ func main() {
 	})
 
 	router.Post("/api/customer", handler.CreateCustomerHandler(customerService))
+	router.Put("/api/customer/{id}", handler.UpdateCustomerHandler(customerService))
 	router.Get("/api/customer/{cpf}", handler.GetCustomerByCPFHandler(customerService))
 
 	router.Post("/api/products", handler.CreateProductHandler(productService))
