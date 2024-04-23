@@ -2,14 +2,6 @@ package entities
 
 import "gorm.io/gorm"
 
-const (
-	CategorySnack    = "Lanche"
-	CategoryBeverage = "Bebida"
-	CategoryDesert   = "Sobremesa"
-	CategoryToppings = "Acompanhamento"
-	CategoryCombo    = "Combo"
-)
-
 type Product struct {
 	gorm.Model
 	Name         string `gorm:"unique"`
@@ -17,7 +9,6 @@ type Product struct {
 	Category     string
 	Price        int
 	ProductImage []ProductImage
-	ProductCombo *[]ProductCombo
 }
 
 type ProductImage struct {
@@ -26,10 +17,16 @@ type ProductImage struct {
 	ImageUrl  string
 }
 
-type ProductCombo struct {
+type Combo struct {
 	gorm.Model
-	ProductID   uint
 	Name        string
 	Description string
 	Category    string
+	Products    []ComboProduct
+}
+
+type ComboProduct struct {
+	gorm.Model
+	ProductID uint
+	ComboID   uint
 }

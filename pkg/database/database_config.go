@@ -24,7 +24,8 @@ func ConfigDatabase() *gorm.DB {
 		&entities.Payment{},
 		&entities.Product{},
 		&entities.ProductImage{},
-		&entities.ProductCombo{},
+		&entities.Combo{},
+		&entities.ComboProduct{},
 	)
 
 	return db

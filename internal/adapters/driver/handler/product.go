@@ -40,6 +40,36 @@ func CreateProductHandler(productService *services.ProductService) http.HandlerF
 	}
 }
 
+func CreateComboHandler(productService *services.ProductService) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var product domain.Product
+
+		err := httpserver.DecodeJSONBody(w, r, &product)
+
+		if err != nil {
+			log.Print("decoding combo body", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendBadRequestError(w, err)
+			return
+		}
+
+		productId, err := productService.CreateCombo(context.Background(), product)
+
+		if err != nil {
+			log.Print("create combo", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendResponseError(w, err)
+			return
+		}
+
+		httpserver.SendResponseSuccess(w, productId)
+	}
+}
+
 func GetProductsByCategoryHandler(productService *services.ProductService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		category, err := httpserver.GetPathParamFromRequest(r, "category")

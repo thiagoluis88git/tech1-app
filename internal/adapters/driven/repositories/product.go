@@ -22,11 +22,11 @@ func NewProductRepository(db *gorm.DB) ports.ProductRepository {
 
 func (repository *ProductRepository) GetCategories() []string {
 	return []string{
-		entities.CategoryCombo,
-		entities.CategorySnack,
-		entities.CategoryBeverage,
-		entities.CategoryToppings,
-		entities.CategoryDesert,
+		domain.CategoryCombo,
+		domain.CategorySnack,
+		domain.CategoryBeverage,
+		domain.CategoryToppings,
+		domain.CategoryDesert,
 	}
 }
 
@@ -82,6 +82,55 @@ func (repository *ProductRepository) CreateProduct(ctx context.Context, product 
 	return productEntity.ID, nil
 }
 
+func (repository *ProductRepository) CreateCombo(ctx context.Context, product domain.Product) (uint, error) {
+	tx := repository.db.WithContext(ctx).Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if err := tx.Error; err != nil {
+		return 0, responses.GetDatabaseError(err)
+	}
+
+	comboEntity := &entities.Combo{
+		Name:        product.Name,
+		Description: product.Description,
+		Category:    product.Category,
+	}
+
+	err := tx.Create(comboEntity).Error
+
+	if err != nil {
+		tx.Rollback()
+		return 0, responses.GetDatabaseError(err)
+	}
+
+	for _, value := range *product.ComboProductsIds {
+		comboProductEntity := &entities.ComboProduct{
+			ProductID: value,
+			ComboID:   comboEntity.ID,
+		}
+
+		err := tx.Create(comboProductEntity).Error
+
+		if err != nil {
+			tx.Rollback()
+			return 0, responses.GetDatabaseError(err)
+		}
+	}
+
+	err = tx.Commit().Error
+
+	if err != nil {
+		tx.Rollback()
+		return 0, responses.GetDatabaseError(err)
+	}
+
+	return comboEntity.ID, nil
+}
+
 func (repository *ProductRepository) GetProductsByCategory(ctx context.Context, category string) ([]domain.Product, error) {
 	var productEntities []entities.Product
 	err := repository.
@@ -120,7 +169,6 @@ func (repository *ProductRepository) GetProductsByCategory(ctx context.Context, 
 	return products, nil
 }
 
-// DeleteProduct implements ports.ProductRepository.
 func (repository *ProductRepository) DeleteProduct(ctx context.Context, productId uint) error {
 	tx := repository.db.WithContext(ctx).Begin()
 	defer func() {
@@ -157,7 +205,6 @@ func (repository *ProductRepository) DeleteProduct(ctx context.Context, productI
 	return nil
 }
 
-// UpdateProduct implements ports.ProductRepository.
 func (repository *ProductRepository) UpdateProduct(ctx context.Context, product domain.Product) error {
 	productEntity := entities.Product{
 		Model:       gorm.Model{ID: product.Id},

@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"net/http"
 	"thiagoluis88git/tech1/internal/core/domain"
 	"thiagoluis88git/tech1/internal/core/ports"
 	"thiagoluis88git/tech1/pkg/responses"
@@ -19,6 +20,23 @@ func NewProductService(repository ports.ProductRepository) *ProductService {
 
 func (service *ProductService) CreateProduct(ctx context.Context, product domain.Product) (uint, error) {
 	productId, err := service.repository.CreateProduct(ctx, product)
+
+	if err != nil {
+		return 0, responses.GetResponseError(err, "ProductService")
+	}
+
+	return productId, nil
+}
+
+func (service *ProductService) CreateCombo(ctx context.Context, product domain.Product) (uint, error) {
+	if product.Category == domain.CategoryCombo && (product.ComboProductsIds == nil || len(*product.ComboProductsIds) == 0) {
+		return 0, &responses.NetworkError{
+			Code:    http.StatusBadRequest,
+			Message: "Combo must have products",
+		}
+	}
+
+	productId, err := service.repository.CreateCombo(ctx, product)
 
 	if err != nil {
 		return 0, responses.GetResponseError(err, "ProductService")
