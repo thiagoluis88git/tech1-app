@@ -59,10 +59,10 @@ func main() {
 
 	router.Get("/api/payment/types", handler.GetPaymentTypeHandler(paymentService))
 	router.Post("/api/order", handler.CreateOrderHandler(orderService))
-	router.Put("/api/order/preparing", handler.UpdateOrderPreparingHandler(orderService))
-	router.Put("/api/order/done", handler.UpdateOrderDoneHandler(orderService))
-	router.Put("/api/order/delivered", handler.UpdateOrderDeliveredHandler(orderService))
-	router.Put("/api/order/not-delivered", handler.UpdateOrderNotDeliveredandler(orderService))
+	router.Put("/api/order/{id}/preparing", handler.UpdateOrderPreparingHandler(orderService))
+	router.Put("/api/order/{id}/done", handler.UpdateOrderDoneHandler(orderService))
+	router.Put("/api/order/{id}/delivered", handler.UpdateOrderDeliveredHandler(orderService))
+	router.Put("/api/order/{id}/not-delivered", handler.UpdateOrderNotDeliveredandler(orderService))
 
 	server := httpserver.New(router)
 	server.Start()
