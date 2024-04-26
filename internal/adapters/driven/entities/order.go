@@ -22,6 +22,7 @@ type Order struct {
 	CustomerID     *uint
 	Customer       *Customer
 	TickerID       int
+	PayedAt        *time.Time
 	PreparingAt    *time.Time
 	DoneAt         *time.Time
 	DeliveredAt    *time.Time
