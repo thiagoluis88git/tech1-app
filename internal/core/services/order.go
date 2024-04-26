@@ -62,3 +62,43 @@ func (service *OrderService) CreateOrder(ctx context.Context, order domain.Order
 
 	return response, nil
 }
+
+func (service *OrderService) UpdateToPreparing(ctx context.Context, orderId uint) error {
+	err := service.orderRepo.UpdateToPreparing(ctx, orderId)
+
+	if err != nil {
+		return responses.GetResponseError(err, "OrderService")
+	}
+
+	return nil
+}
+
+func (service *OrderService) UpdateToDone(ctx context.Context, orderId uint) error {
+	err := service.orderRepo.UpdateToDone(ctx, orderId)
+
+	if err != nil {
+		return responses.GetResponseError(err, "OrderService")
+	}
+
+	return nil
+}
+
+func (service *OrderService) UpdateToDelivered(ctx context.Context, orderId uint) error {
+	err := service.orderRepo.UpdateToDelivered(ctx, orderId)
+
+	if err != nil {
+		return responses.GetResponseError(err, "OrderService")
+	}
+
+	return nil
+}
+
+func (service *OrderService) UpdateToNotDelivered(ctx context.Context, orderId uint) error {
+	err := service.orderRepo.UpdateToNotDelivered(ctx, orderId)
+
+	if err != nil {
+		return responses.GetResponseError(err, "OrderService")
+	}
+
+	return nil
+}

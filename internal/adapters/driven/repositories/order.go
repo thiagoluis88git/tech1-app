@@ -6,6 +6,7 @@ import (
 	"thiagoluis88git/tech1/internal/core/domain"
 	"thiagoluis88git/tech1/internal/core/ports"
 	"thiagoluis88git/tech1/pkg/responses"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -78,6 +79,66 @@ func (repository *OrderRespository) CreateOrder(ctx context.Context, order domai
 
 func (repository *OrderRespository) FinishOrderPayment(ctx context.Context, orderId uint) error {
 	err := repository.db.WithContext(ctx).Model(&entities.Order{}).Where("id = ?", orderId).Update("order_status", entities.OrderStatusPayed).Error
+
+	if err != nil {
+		return responses.GetDatabaseError(err)
+	}
+
+	return nil
+}
+
+func (repository *OrderRespository) UpdateToPreparing(ctx context.Context, orderId uint) error {
+	err := repository.db.WithContext(ctx).
+		Model(&entities.Order{}).
+		Where("id = ?", orderId).
+		Update("order_status", entities.OrderStatusPreparing).
+		Update("preparing_at", time.Now()).
+		Error
+
+	if err != nil {
+		return responses.GetDatabaseError(err)
+	}
+
+	return nil
+}
+
+func (repository *OrderRespository) UpdateToDone(ctx context.Context, orderId uint) error {
+	err := repository.db.WithContext(ctx).
+		Model(&entities.Order{}).
+		Where("id = ?", orderId).
+		Update("order_status", entities.OrderStatusDone).
+		Update("done_at", time.Now()).
+		Error
+
+	if err != nil {
+		return responses.GetDatabaseError(err)
+	}
+
+	return nil
+}
+
+func (repository *OrderRespository) UpdateToDelivered(ctx context.Context, orderId uint) error {
+	err := repository.db.WithContext(ctx).
+		Model(&entities.Order{}).
+		Where("id = ?", orderId).
+		Update("order_status", entities.OrderStatusDelivered).
+		Update("delivered_at", time.Now()).
+		Error
+
+	if err != nil {
+		return responses.GetDatabaseError(err)
+	}
+
+	return nil
+}
+
+func (repository *OrderRespository) UpdateToNotDelivered(ctx context.Context, orderId uint) error {
+	err := repository.db.WithContext(ctx).
+		Model(&entities.Order{}).
+		Where("id = ?", orderId).
+		Update("order_status", entities.OrderStatusNotDelivered).
+		Update("not_delivered_at", time.Now()).
+		Error
 
 	if err != nil {
 		return responses.GetDatabaseError(err)
