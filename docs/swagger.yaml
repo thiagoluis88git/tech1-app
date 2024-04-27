@@ -1,5 +1,20 @@
 basePath: /
 definitions:
+  domain.Combo:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: integer
+      products:
+        items:
+          $ref: '#/definitions/domain.Product'
+        type: array
+    type: object
   domain.ComboForm:
     properties:
       description:
@@ -97,7 +112,83 @@ paths:
       summary: Create new product
       tags:
       - product
+  /api/products/{category}:
+    get:
+      consumes:
+      - application/json
+      description: List all products by a category
+      parameters:
+      - description: Lanches
+        in: path
+        name: category
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Product'
+            type: array
+      summary: List all products by a category
+      tags:
+      - product
+  /api/products/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a product by ID
+      parameters:
+      - description: "12"
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Delete a product
+      tags:
+      - product
+    put:
+      consumes:
+      - application/json
+      description: Update a product by ID
+      parameters:
+      - description: "12"
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Update a product
+      tags:
+      - product
   /api/products/combo:
+    get:
+      consumes:
+      - application/json
+      description: List all combos with their products
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Combo'
+            type: array
+      summary: List all combos
+      tags:
+      - product
     post:
       consumes:
       - application/json
@@ -122,5 +213,5 @@ paths:
           description: This Combo is already added
       summary: Create new combo
       tags:
-      - combo
+      - product
 swagger: "2.0"

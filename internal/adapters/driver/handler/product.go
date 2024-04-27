@@ -54,7 +54,7 @@ func CreateProductHandler(productService *services.ProductService) http.HandlerF
 
 // @Summary Create new combo
 // @Description Create new combo of products
-// @Tags combo
+// @Tags product
 // @Accept json
 // @Produce json
 // @Param product body domain.ComboForm true "combo"
@@ -94,6 +94,14 @@ func CreateComboHandler(productService *services.ProductService) http.HandlerFun
 	}
 }
 
+// @Summary List all products by a category
+// @Description List all products by a category
+// @Tags product
+// @Param category path string true "Lanches"
+// @Accept json
+// @Produce json
+// @Success 200 {object} []domain.Product
+// @Router /api/products/{category} [get]
 func GetProductsByCategoryHandler(productService *services.ProductService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		category, err := httpserver.GetPathParamFromRequest(r, "category")
@@ -122,6 +130,13 @@ func GetProductsByCategoryHandler(productService *services.ProductService) http.
 	}
 }
 
+// @Summary List all combos
+// @Description List all combos with their products
+// @Tags product
+// @Accept json
+// @Produce json
+// @Success 200 {object} []domain.Combo
+// @Router /api/products/combo [get]
 func GetCombosHandler(productService *services.ProductService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		combos, err := productService.GetCombos(context.Background())
@@ -139,6 +154,14 @@ func GetCombosHandler(productService *services.ProductService) http.HandlerFunc 
 	}
 }
 
+// @Summary Delete a product
+// @Description Delete a product by ID
+// @Tags product
+// @Param id path int true "12"
+// @Accept json
+// @Produce json
+// @Success 204
+// @Router /api/products/{id} [delete]
 func DeleteProductHandler(productService *services.ProductService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		productIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
@@ -178,6 +201,14 @@ func DeleteProductHandler(productService *services.ProductService) http.HandlerF
 	}
 }
 
+// @Summary Update a product
+// @Description Update a product by ID
+// @Tags product
+// @Param id path int true "12"
+// @Accept json
+// @Produce json
+// @Success 204
+// @Router /api/products/{id} [put]
 func UpdateProductHandler(productService *services.ProductService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		productIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
