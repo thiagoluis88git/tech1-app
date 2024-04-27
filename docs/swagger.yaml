@@ -1,0 +1,118 @@
+basePath: /
+definitions:
+  domain.ComboForm:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: integer
+      products:
+        items:
+          type: integer
+        type: array
+    required:
+    - description
+    - name
+    - price
+    - products
+    type: object
+  domain.ProducImage:
+    properties:
+      imageUrl:
+        type: string
+    required:
+    - imageUrl
+    type: object
+  domain.Product:
+    properties:
+      category:
+        type: string
+      comboProductsIds:
+        items:
+          type: integer
+        type: array
+      description:
+        type: string
+      id:
+        type: integer
+      images:
+        items:
+          $ref: '#/definitions/domain.ProducImage'
+        type: array
+      name:
+        type: string
+      price:
+        type: integer
+    required:
+    - category
+    - description
+    - images
+    - name
+    - price
+    type: object
+  domain.ProductResponse:
+    properties:
+      id:
+        type: integer
+    type: object
+host: localshot:3210
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is the API for the Tech1 Fiap Project.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Tech1 API Docs
+  version: "1.0"
+paths:
+  /api/products:
+    post:
+      consumes:
+      - application/json
+      description: Create new product
+      parameters:
+      - description: product
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Product'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.ProductResponse'
+      summary: Create new product
+      tags:
+      - product
+  /api/products/combo:
+    post:
+      consumes:
+      - application/json
+      description: Create new combo of products
+      parameters:
+      - description: combo
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/domain.ComboForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.ProductResponse'
+      summary: Create new combo
+      tags:
+      - product
+swagger: "2.0"

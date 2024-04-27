@@ -13,9 +13,26 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
+	_ "thiagoluis88git/tech1/docs"
+
 	chiMiddleware "github.com/go-chi/chi/v5/middleware"
+	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
 
+// @title Tech1 API Docs
+// @version 1.0
+// @description This is the API for the Tech1 Fiap Project.
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name API Support
+// @contact.url http://www.swagger.io/support
+// @contact.email support@swagger.io
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host localshot:3210
+// @BasePath /
 func main() {
 	flag.Parse()
 
@@ -64,6 +81,10 @@ func main() {
 	router.Put("/api/order/{id}/done", handler.UpdateOrderDoneHandler(orderService))
 	router.Put("/api/order/{id}/delivered", handler.UpdateOrderDeliveredHandler(orderService))
 	router.Put("/api/order/{id}/not-delivered", handler.UpdateOrderNotDeliveredandler(orderService))
+
+	router.Get("/swagger/*", httpSwagger.Handler(
+		httpSwagger.URL("http://localhost:3210/swagger/doc.json"),
+	))
 
 	server := httpserver.New(router)
 	server.Start()

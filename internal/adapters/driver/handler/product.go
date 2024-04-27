@@ -10,6 +10,14 @@ import (
 	"thiagoluis88git/tech1/pkg/httpserver"
 )
 
+// @Summary Create new product
+// @Description Create new product
+// @Tags product
+// @Accept json
+// @Produce json
+// @Param product body domain.Product true "product"
+// @Success 200 {object} domain.ProductResponse
+// @Router /api/products [post]
 func CreateProductHandler(productService *services.ProductService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var product domain.Product
@@ -36,10 +44,20 @@ func CreateProductHandler(productService *services.ProductService) http.HandlerF
 			return
 		}
 
-		httpserver.SendResponseSuccess(w, productId)
+		httpserver.SendResponseSuccess(w, domain.ProductResponse{
+			Id: productId,
+		})
 	}
 }
 
+// @Summary Create new combo
+// @Description Create new combo of products
+// @Tags combo
+// @Accept json
+// @Produce json
+// @Param product body domain.ComboForm true "combo"
+// @Success 200 {object} domain.ProductResponse
+// @Router /api/products/combo [post]
 func CreateComboHandler(productService *services.ProductService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var combo domain.ComboForm
@@ -66,7 +84,9 @@ func CreateComboHandler(productService *services.ProductService) http.HandlerFun
 			return
 		}
 
-		httpserver.SendResponseSuccess(w, productId)
+		httpserver.SendResponseSuccess(w, domain.ProductResponse{
+			Id: productId,
+		})
 	}
 }
 

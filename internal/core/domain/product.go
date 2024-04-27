@@ -18,6 +18,10 @@ type Product struct {
 	ComboProductsIds *[]uint       `json:"comboProductsIds"`
 }
 
+type ProductResponse struct {
+	Id uint `json:"id"`
+}
+
 type ProducImage struct {
 	ImageUrl string `json:"imageUrl" validate:"required"`
 }
