@@ -2,7 +2,6 @@ package services
 
 import (
 	"context"
-	"net/http"
 	"thiagoluis88git/tech1/internal/core/domain"
 	"thiagoluis88git/tech1/internal/core/ports"
 	"thiagoluis88git/tech1/pkg/responses"
@@ -28,15 +27,8 @@ func (service *ProductService) CreateProduct(ctx context.Context, product domain
 	return productId, nil
 }
 
-func (service *ProductService) CreateCombo(ctx context.Context, product domain.Product) (uint, error) {
-	if product.Category == domain.CategoryCombo && (product.ComboProductsIds == nil || len(*product.ComboProductsIds) == 0) {
-		return 0, &responses.NetworkError{
-			Code:    http.StatusBadRequest,
-			Message: "Combo must have products",
-		}
-	}
-
-	productId, err := service.repository.CreateCombo(ctx, product)
+func (service *ProductService) CreateCombo(ctx context.Context, combo domain.ComboForm) (uint, error) {
+	productId, err := service.repository.CreateCombo(ctx, combo)
 
 	if err != nil {
 		return 0, responses.GetResponseError(err, "ProductService")
@@ -53,6 +45,16 @@ func (service *ProductService) GetProductsByCategory(ctx context.Context, catego
 	}
 
 	return products, nil
+}
+
+func (service *ProductService) GetCombos(ctx context.Context) ([]domain.Combo, error) {
+	combos, err := service.repository.GetCombos(ctx)
+
+	if err != nil {
+		return []domain.Combo{}, responses.GetResponseError(err, "ProductService")
+	}
+
+	return combos, nil
 }
 
 func (service *ProductService) DeleteProduct(ctx context.Context, productId uint) error {

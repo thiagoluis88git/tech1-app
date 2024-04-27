@@ -42,9 +42,9 @@ func CreateProductHandler(productService *services.ProductService) http.HandlerF
 
 func CreateComboHandler(productService *services.ProductService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var product domain.Product
+		var combo domain.ComboForm
 
-		err := httpserver.DecodeJSONBody(w, r, &product)
+		err := httpserver.DecodeJSONBody(w, r, &combo)
 
 		if err != nil {
 			log.Print("decoding combo body", map[string]interface{}{
@@ -55,7 +55,7 @@ func CreateComboHandler(productService *services.ProductService) http.HandlerFun
 			return
 		}
 
-		productId, err := productService.CreateCombo(context.Background(), product)
+		productId, err := productService.CreateCombo(context.Background(), combo)
 
 		if err != nil {
 			log.Print("create combo", map[string]interface{}{
@@ -95,6 +95,23 @@ func GetProductsByCategoryHandler(productService *services.ProductService) http.
 		}
 
 		httpserver.SendResponseSuccess(w, products)
+	}
+}
+
+func GetCombosHandler(productService *services.ProductService) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		combos, err := productService.GetCombos(context.Background())
+
+		if err != nil {
+			log.Print("get combos", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendResponseError(w, err)
+			return
+		}
+
+		httpserver.SendResponseSuccess(w, combos)
 	}
 }
 

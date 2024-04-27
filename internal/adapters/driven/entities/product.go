@@ -21,7 +21,7 @@ type Combo struct {
 	gorm.Model
 	Name        string
 	Description string
-	Category    string
+	Price       int
 	Products    []ComboProduct
 }
 
