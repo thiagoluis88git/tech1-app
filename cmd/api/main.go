@@ -11,9 +11,11 @@ import (
 	"thiagoluis88git/tech1/pkg/httpserver"
 	"thiagoluis88git/tech1/pkg/responses"
 
+	// "github.com/mvrilo/go-redoc"
+
 	"github.com/go-chi/chi/v5"
 
-	_ "thiagoluis88git/tech1/docs"
+	_ "thiagoluis88git/tech1/cmd/docs"
 
 	chiMiddleware "github.com/go-chi/chi/v5/middleware"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
@@ -34,6 +36,14 @@ import (
 // @host localshot:3210
 // @BasePath /
 func main() {
+	// doc := redoc.Redoc{
+	// 	Title:       "Example API",
+	// 	Description: "Example API Description",
+	// 	SpecFile:    "./cmd/docs/swagger.json",
+	// 	SpecPath:    "/cmd/docs/swagger.json",
+	// 	DocsPath:    "/docs",
+	// }
+
 	flag.Parse()
 
 	db := database.ConfigDatabase()
@@ -42,6 +52,7 @@ func main() {
 	router.Use(chiMiddleware.RequestID)
 	router.Use(chiMiddleware.RealIP)
 	router.Use(chiMiddleware.Recoverer)
+	// router.Use(chiMiddleware.New(doc.Handler()))
 
 	paymentRepo := repositories.NewPaymentRepository(db)
 	paymentGateway := external.NewPaymentGateway()
