@@ -52,7 +52,6 @@ func main() {
 	router.Use(chiMiddleware.RequestID)
 	router.Use(chiMiddleware.RealIP)
 	router.Use(chiMiddleware.Recoverer)
-	router.Use(chiMiddleware.New(doc.Handler()))
 
 	paymentRepo := repositories.NewPaymentRepository(db)
 	paymentGateway := external.NewPaymentGateway()
@@ -94,8 +93,10 @@ func main() {
 	router.Put("/api/order/{id}/not-delivered", handler.UpdateOrderNotDeliveredandler(orderService))
 
 	router.Get("/swagger/*", httpSwagger.Handler(
-		httpSwagger.URL("http://localhost:3211/swagger/doc.json"),
+		httpSwagger.URL("http://localhost:3210/swagger/doc.json"),
 	))
+
+	go http.ListenAndServe(":3211", doc.Handler())
 
 	server := httpserver.New(router)
 	server.Start()
