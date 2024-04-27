@@ -54,6 +54,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/domain.ProductResponse"
                         }
+                    },
+                    "400": {
+                        "description": "Product has required fields"
+                    },
+                    "409": {
+                        "description": "This Product is already added"
                     }
                 }
             }
@@ -68,7 +74,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "product"
+                    "combo"
                 ],
                 "summary": "Create new combo",
                 "parameters": [
@@ -88,6 +94,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/domain.ProductResponse"
                         }
+                    },
+                    "400": {
+                        "description": "ComboForm has required fields"
+                    },
+                    "409": {
+                        "description": "This Combo is already added"
                     }
                 }
             }

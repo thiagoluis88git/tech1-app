@@ -90,6 +90,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/domain.ProductResponse'
+        "400":
+          description: Product has required fields
+        "409":
+          description: This Product is already added
       summary: Create new product
       tags:
       - product
@@ -112,7 +116,11 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/domain.ProductResponse'
+        "400":
+          description: ComboForm has required fields
+        "409":
+          description: This Combo is already added
       summary: Create new combo
       tags:
-      - product
+      - combo
 swagger: "2.0"

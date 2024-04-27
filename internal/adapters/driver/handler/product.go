@@ -17,6 +17,8 @@ import (
 // @Produce json
 // @Param product body domain.Product true "product"
 // @Success 200 {object} domain.ProductResponse
+// @Failure 400 "Product has required fields"
+// @Failure 409 "This Product is already added"
 // @Router /api/products [post]
 func CreateProductHandler(productService *services.ProductService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -57,6 +59,8 @@ func CreateProductHandler(productService *services.ProductService) http.HandlerF
 // @Produce json
 // @Param product body domain.ComboForm true "combo"
 // @Success 200 {object} domain.ProductResponse
+// @Failure 400 "ComboForm has required fields"
+// @Failure 409 "This Combo is already added"
 // @Router /api/products/combo [post]
 func CreateComboHandler(productService *services.ProductService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
