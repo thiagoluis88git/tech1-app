@@ -42,13 +42,19 @@ func (repository *PaymentRepository) CreatePaymentOrder(ctx context.Context, pay
 
 	paymentEntity := entities.Payment{
 		CustomerID:    payment.CustomerID,
-		OrderID:       payment.OrderID,
 		TotalPrice:    payment.TotalPrice,
 		PaymentKind:   payment.PaymentKind,
 		PaymentStatus: entities.PaymentPayingStatus,
 	}
 
 	err := tx.Create(&paymentEntity).Error
+
+	if err != nil {
+		tx.Rollback()
+		return domain.PaymentResponse{}, responses.GetDatabaseError(err)
+	}
+
+	err = tx.Commit().Error
 
 	if err != nil {
 		tx.Rollback()

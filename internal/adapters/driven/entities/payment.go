@@ -16,9 +16,7 @@ type Payment struct {
 	gorm.Model
 	CustomerID    *uint
 	Customer      *Customer
-	OrderID       uint
 	TotalPrice    int
-	Order         Order
 	PaymentStatus string
 	PaymentKind   string
 }

@@ -64,7 +64,7 @@ func main() {
 	customerService := services.NewCustomerService(customerRepo)
 
 	orderRepo := repositories.NewOrderRespository(db)
-	orderService := services.NewOrderService(orderRepo, customerRepo, paymentService)
+	orderService := services.NewOrderService(orderRepo, customerRepo)
 
 	router.Get("/api/health", func(w http.ResponseWriter, r *http.Request) {
 		httpserver.SendResponseSuccess(w, &responses.BusinessResponse{
@@ -86,6 +86,7 @@ func main() {
 	router.Get("/api/products/categories/{category}", handler.GetProductsByCategoryHandler(productService))
 
 	router.Get("/api/payment/types", handler.GetPaymentTypeHandler(paymentService))
+	router.Post("/api/payment", handler.GetPaymentTypeHandler(paymentService))
 	router.Post("/api/order", handler.CreateOrderHandler(orderService))
 	router.Put("/api/order/{id}/preparing", handler.UpdateOrderPreparingHandler(orderService))
 	router.Put("/api/order/{id}/done", handler.UpdateOrderDoneHandler(orderService))

@@ -37,6 +37,7 @@ func (repository *OrderRespository) CreateOrder(ctx context.Context, order domai
 		OrderStatus: entities.OrderStatusCreated,
 		TotalPrice:  order.TotalPrice,
 		CustomerID:  order.CustomerID,
+		PaymentID:   order.PaymentID,
 		TickerID:    order.TickerId,
 	}
 
@@ -75,21 +76,6 @@ func (repository *OrderRespository) CreateOrder(ctx context.Context, order domai
 		OrderDate: orderEntity.CreatedAt,
 		TickerId:  orderEntity.TickerID,
 	}, nil
-}
-
-func (repository *OrderRespository) FinishOrderPayment(ctx context.Context, orderId uint) error {
-	err := repository.db.WithContext(ctx).
-		Model(&entities.Order{}).
-		Where("id = ?", orderId).
-		Update("order_status", entities.OrderStatusPayed).
-		Update("payed_at", time.Now()).
-		Error
-
-	if err != nil {
-		return responses.GetDatabaseError(err)
-	}
-
-	return nil
 }
 
 func (repository *OrderRespository) UpdateToPreparing(ctx context.Context, orderId uint) error {

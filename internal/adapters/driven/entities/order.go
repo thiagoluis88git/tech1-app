@@ -8,7 +8,6 @@ import (
 
 const (
 	OrderStatusCreated      = "Criado"
-	OrderStatusPayed        = "Pago"
 	OrderStatusPreparing    = "Preparando"
 	OrderStatusDone         = "Finalizado"
 	OrderStatusDelivered    = "Entregue"
@@ -19,10 +18,10 @@ type Order struct {
 	gorm.Model
 	OrderStatus    string
 	TotalPrice     int
+	PaymentID      uint
 	CustomerID     *uint
 	Customer       *Customer
 	TickerID       int
-	PayedAt        *time.Time
 	PreparingAt    *time.Time
 	DoneAt         *time.Time
 	DeliveredAt    *time.Time
