@@ -86,8 +86,10 @@ func main() {
 	router.Get("/api/products/categories/{category}", handler.GetProductsByCategoryHandler(productService))
 
 	router.Get("/api/payment/types", handler.GetPaymentTypeHandler(paymentService))
-	router.Post("/api/payment", handler.GetPaymentTypeHandler(paymentService))
+	router.Post("/api/payment", handler.CreatePaymentHandler(paymentService))
+
 	router.Post("/api/order", handler.CreateOrderHandler(orderService))
+	router.Get("/api/order/{id}", handler.GetOrderByIdHandler(orderService))
 	router.Put("/api/order/{id}/preparing", handler.UpdateOrderPreparingHandler(orderService))
 	router.Put("/api/order/{id}/done", handler.UpdateOrderDoneHandler(orderService))
 	router.Put("/api/order/{id}/delivered", handler.UpdateOrderDeliveredHandler(orderService))

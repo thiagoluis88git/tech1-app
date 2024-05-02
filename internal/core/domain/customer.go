@@ -6,3 +6,7 @@ type Customer struct {
 	CPF   string `json:"cpf" validate:"required"`
 	Email string `json:"email" validate:"required"`
 }
+
+type CustomerResponse struct {
+	Id uint `json:"id"`
+}

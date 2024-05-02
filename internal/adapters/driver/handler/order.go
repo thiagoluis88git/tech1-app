@@ -10,6 +10,15 @@ import (
 	"thiagoluis88git/tech1/pkg/httpserver"
 )
 
+// @Summary Create new order
+// @Description Create new order. To make an order the payment needs to be completed
+// @Tags Order
+// @Accept json
+// @Produce json
+// @Param product body domain.Order true "order"
+// @Success 200 {object} domain.OrderResponse
+// @Failure 400 "Order has required fields"
+// @Router /api/order [post]
 func CreateOrderHandler(orderService *services.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var order domain.Order
@@ -40,6 +49,63 @@ func CreateOrderHandler(orderService *services.OrderService) http.HandlerFunc {
 	}
 }
 
+// @Summary Get order by Id
+// @Description Get an order by Id
+// @Tags Order
+// @Accept json
+// @Produce json
+// @Param id path int true "12"
+// @Success 200 {object} domain.OrderResponse
+// @Failure 400 "Order has required fields"
+// @Router /api/order/{id} [get]
+func GetOrderByIdHandler(orderService *services.OrderService) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		orderIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
+
+		if err != nil {
+			log.Print("get order by id path", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendBadRequestError(w, err)
+			return
+		}
+
+		orderId, err := strconv.Atoi(orderIdStr)
+
+		if err != nil {
+			log.Print("get order by id path", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendBadRequestError(w, err)
+			return
+		}
+
+		response, err := orderService.GetOrderById(context.Background(), uint(orderId))
+
+		if err != nil {
+			log.Print("get order by id", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendResponseError(w, err)
+			return
+		}
+
+		httpserver.SendResponseSuccess(w, response)
+	}
+}
+
+// @Summary Update an order to PREPARING
+// @Description Update an order. This service wil be used by the kitchen to notify a customer that the order is being prepared
+// @Tags Order
+// @Accept json
+// @Produce json
+// @Param id path int true "12"
+// @Success 204
+// @Failure 404 "Order not found"
+// @Router /api/order/{id}/preparing [put]
 func UpdateOrderPreparingHandler(orderService *services.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr, err := httpserver.GetPathParamFromRequest(r, "id")
@@ -79,6 +145,15 @@ func UpdateOrderPreparingHandler(orderService *services.OrderService) http.Handl
 	}
 }
 
+// @Summary Update an order to DONE
+// @Description Update an order. This service wil be used by the kitchen to notify a customer and the waiter that the order is done
+// @Tags Order
+// @Accept json
+// @Produce json
+// @Param id path int true "12"
+// @Success 204
+// @Failure 404 "Order not found"
+// @Router /api/order/{id}/done [put]
 func UpdateOrderDoneHandler(orderService *services.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr, err := httpserver.GetPathParamFromRequest(r, "id")
@@ -118,6 +193,15 @@ func UpdateOrderDoneHandler(orderService *services.OrderService) http.HandlerFun
 	}
 }
 
+// @Summary Update an order to DELIVERED
+// @Description Update an order. This service wil be used by the waiter to close the order informing that user got its order
+// @Tags Order
+// @Accept json
+// @Produce json
+// @Param id path int true "12"
+// @Success 204
+// @Failure 404 "Order not found"
+// @Router /api/order/{id}/delivered [put]
 func UpdateOrderDeliveredHandler(orderService *services.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr, err := httpserver.GetPathParamFromRequest(r, "id")
@@ -157,6 +241,15 @@ func UpdateOrderDeliveredHandler(orderService *services.OrderService) http.Handl
 	}
 }
 
+// @Summary Update an order to NOT_DELIVERED
+// @Description Update an order. This service wil be used by the waiter to close the order informing that user didn't get the order
+// @Tags Order
+// @Accept json
+// @Produce json
+// @Param id path int true "12"
+// @Success 204
+// @Failure 404 "Order not found"
+// @Router /api/order/{id}/not-delivered [put]
 func UpdateOrderNotDeliveredandler(orderService *services.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr, err := httpserver.GetPathParamFromRequest(r, "id")

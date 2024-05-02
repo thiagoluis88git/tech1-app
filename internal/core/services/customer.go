@@ -17,14 +17,16 @@ func NewCustomerService(repository ports.CustomerRepository) *CustomerService {
 	}
 }
 
-func (service *CustomerService) CreateCustomer(ctx context.Context, customer domain.Customer) (uint, error) {
+func (service *CustomerService) CreateCustomer(ctx context.Context, customer domain.Customer) (domain.CustomerResponse, error) {
 	customerId, err := service.repository.CreateCustomer(ctx, customer)
 
 	if err != nil {
-		return 0, responses.GetResponseError(err, "CustomerService")
+		return domain.CustomerResponse{}, responses.GetResponseError(err, "CustomerService")
 	}
 
-	return customerId, nil
+	return domain.CustomerResponse{
+		Id: customerId,
+	}, nil
 }
 
 func (service *CustomerService) UpdateCustomer(ctx context.Context, customer domain.Customer) error {

@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"fmt"
 	"thiagoluis88git/tech1/internal/adapters/driven/entities"
 	"thiagoluis88git/tech1/internal/core/domain"
 	"thiagoluis88git/tech1/internal/core/ports"
@@ -75,6 +76,47 @@ func (repository *OrderRespository) CreateOrder(ctx context.Context, order domai
 		OrderId:   orderEntity.ID,
 		OrderDate: orderEntity.CreatedAt,
 		TickerId:  orderEntity.TickerID,
+	}, nil
+}
+
+func (repository *OrderRespository) GetOrderById(ctx context.Context, orderId uint) (domain.OrderResponse, error) {
+	var orderEntity entities.Order
+	err := repository.
+		db.WithContext(ctx).
+		Model(&entities.Order{}).
+		Preload("OrderProduct").
+		Preload("Customer").
+		Where("id = ?", orderId).
+		Find(&orderEntity).
+		Limit(1).
+		Error
+
+	if err != nil {
+		return domain.OrderResponse{}, responses.GetDatabaseError(err)
+	}
+
+	orderProduct := []domain.OrderProductResponse{}
+
+	for _, value := range orderEntity.OrderProduct {
+		orderProduct = append(orderProduct, domain.OrderProductResponse{
+			ProductID:   orderId,
+			ProductName: fmt.Sprintf("FALTA BUSCAR: %d", value.ID),
+		})
+	}
+
+	var customerName *string
+
+	if orderEntity.Customer != nil {
+		customerName = &orderEntity.Customer.Name
+	}
+
+	return domain.OrderResponse{
+		OrderId:      orderId,
+		OrderDate:    orderEntity.CreatedAt,
+		TickerId:     orderEntity.TickerID,
+		OrderStatus:  orderEntity.OrderStatus,
+		OrderProduct: orderProduct,
+		CustomerName: customerName,
 	}, nil
 }
 

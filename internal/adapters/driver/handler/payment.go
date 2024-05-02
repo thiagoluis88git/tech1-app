@@ -9,13 +9,13 @@ import (
 	"thiagoluis88git/tech1/pkg/httpserver"
 )
 
-// @Summary Create new combo
-// @Description Create new combo of products
-// @Tags payment
+// @Summary Create new payment
+// @Description Create a payment and return its ID. With it, we can proceed with a Order Creation
+// @Tags Payment
 // @Accept json
 // @Produce json
-// @Param product body domain.ComboForm true "combo"
-// @Success 200 {object} domain.Payment
+// @Param product body domain.Payment true "payment"
+// @Success 200 {object} domain.PaymentResponse
 // @Failure 400 "Payment has required fields"
 // @Router /api/payment [post]
 func CreatePaymentHandler(productService *services.PaymentService) http.HandlerFunc {
@@ -48,6 +48,13 @@ func CreatePaymentHandler(productService *services.PaymentService) http.HandlerF
 	}
 }
 
+// @Summary Get payment types
+// @Description Get payment type, like [DEBIT, CREDIT]
+// @Tags Payment
+// @Accept json
+// @Produce json
+// @Success 200 {object} []string
+// @Router /api/payment/type [get]
 func GetPaymentTypeHandler(paymentService *services.PaymentService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		httpserver.SendResponseSuccess(w, paymentService.GetPaymentTypes())

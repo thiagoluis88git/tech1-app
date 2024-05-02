@@ -10,6 +10,16 @@ import (
 	"thiagoluis88git/tech1/pkg/httpserver"
 )
 
+// @Summary Create new customer
+// @Description Create new customer. This process is not required to make an order
+// @Tags Customer
+// @Accept json
+// @Produce json
+// @Param product body domain.Customer true "customer"
+// @Success 200 {object} domain.CustomerResponse
+// @Failure 400 "Customer has required fields"
+// @Failure 409 "This Customer is already added"
+// @Router /api/customer [post]
 func CreateCustomerHandler(customerService *services.CustomerService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var customer domain.Customer
@@ -25,7 +35,7 @@ func CreateCustomerHandler(customerService *services.CustomerService) http.Handl
 			return
 		}
 
-		customerId, err := customerService.CreateCustomer(context.Background(), customer)
+		response, err := customerService.CreateCustomer(context.Background(), customer)
 
 		if err != nil {
 			log.Print("create customer", map[string]interface{}{
@@ -36,10 +46,21 @@ func CreateCustomerHandler(customerService *services.CustomerService) http.Handl
 			return
 		}
 
-		httpserver.SendResponseSuccess(w, customerId)
+		httpserver.SendResponseSuccess(w, response)
 	}
 }
 
+// @Summary Update customer
+// @Description Update customer
+// @Tags Customer
+// @Accept json
+// @Produce json
+// @Param id path int true "12"
+// @Param product body domain.Customer true "customer"
+// @Success 204
+// @Failure 400 "Customer has required fields"
+// @Failure 404 "Customer not found"
+// @Router /api/customer/{id} [put]
 func UpdateCustomerHandler(customerService *services.CustomerService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		customerIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
@@ -88,10 +109,19 @@ func UpdateCustomerHandler(customerService *services.CustomerService) http.Handl
 			return
 		}
 
-		httpserver.SendResponseSuccess(w, customerId)
+		httpserver.SendResponseNoContentSuccess(w)
 	}
 }
 
+// @Summary Get customer by CPF
+// @Description Get customer by CPF
+// @Tags Customer
+// @Accept json
+// @Produce json
+// @Param CPF path string true "12345678910"
+// @Success 200 {object} domain.Customer
+// @Failure 404 "Customer not found"
+// @Router /api/customer/{cpf} [get]
 func GetCustomerByCPFHandler(customerService *services.CustomerService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		cpf, err := httpserver.GetPathParamFromRequest(r, "cpf")

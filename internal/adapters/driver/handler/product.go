@@ -12,7 +12,7 @@ import (
 
 // @Summary Create new product
 // @Description Create new product
-// @Tags product
+// @Tags Product
 // @Accept json
 // @Produce json
 // @Param product body domain.Product true "product"
@@ -54,7 +54,7 @@ func CreateProductHandler(productService *services.ProductService) http.HandlerF
 
 // @Summary Create new combo
 // @Description Create new combo of products
-// @Tags product
+// @Tags Product
 // @Accept json
 // @Produce json
 // @Param product body domain.ComboForm true "combo"
@@ -96,7 +96,7 @@ func CreateComboHandler(productService *services.ProductService) http.HandlerFun
 
 // @Summary List all products by a category
 // @Description List all products by a category
-// @Tags product
+// @Tags Product
 // @Param category path string true "Lanches"
 // @Accept json
 // @Produce json
@@ -132,7 +132,7 @@ func GetProductsByCategoryHandler(productService *services.ProductService) http.
 
 // @Summary List all combos
 // @Description List all combos with their products
-// @Tags product
+// @Tags Product
 // @Accept json
 // @Produce json
 // @Success 200 {object} []domain.Combo
@@ -156,7 +156,7 @@ func GetCombosHandler(productService *services.ProductService) http.HandlerFunc 
 
 // @Summary Delete a product
 // @Description Delete a product by ID
-// @Tags product
+// @Tags Product
 // @Param id path int true "12"
 // @Accept json
 // @Produce json
@@ -203,7 +203,7 @@ func DeleteProductHandler(productService *services.ProductService) http.HandlerF
 
 // @Summary Update a product
 // @Description Update a product by ID
-// @Tags product
+// @Tags Product
 // @Param id path int true "12"
 // @Accept json
 // @Produce json
