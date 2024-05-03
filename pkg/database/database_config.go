@@ -2,8 +2,9 @@ package database
 
 import (
 	"fmt"
-	"thiagoluis88git/tech1/internal/adapters/driven/entities"
-	"thiagoluis88git/tech1/pkg/environment"
+
+	"github.com/thiagoluis88git/tech1/internal/adapters/driven/entities"
+	"github.com/thiagoluis88git/tech1/pkg/environment"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

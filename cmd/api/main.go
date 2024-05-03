@@ -3,20 +3,21 @@ package main
 import (
 	"flag"
 	"net/http"
-	"thiagoluis88git/tech1/internal/adapters/driven/external"
-	"thiagoluis88git/tech1/internal/adapters/driven/repositories"
-	"thiagoluis88git/tech1/internal/adapters/driver/handler"
-	"thiagoluis88git/tech1/internal/core/services"
-	"thiagoluis88git/tech1/pkg/database"
-	"thiagoluis88git/tech1/pkg/environment"
-	"thiagoluis88git/tech1/pkg/httpserver"
-	"thiagoluis88git/tech1/pkg/responses"
+
+	"github.com/thiagoluis88git/tech1/internal/adapters/driven/external"
+	"github.com/thiagoluis88git/tech1/internal/adapters/driven/repositories"
+	"github.com/thiagoluis88git/tech1/internal/adapters/driver/handler"
+	"github.com/thiagoluis88git/tech1/internal/core/services"
+	"github.com/thiagoluis88git/tech1/pkg/database"
+	"github.com/thiagoluis88git/tech1/pkg/environment"
+	"github.com/thiagoluis88git/tech1/pkg/httpserver"
+	"github.com/thiagoluis88git/tech1/pkg/responses"
 
 	"github.com/mvrilo/go-redoc"
 
 	"github.com/go-chi/chi/v5"
 
-	_ "thiagoluis88git/tech1/docs"
+	_ "github.com/thiagoluis88git/tech1/docs"
 
 	chiMiddleware "github.com/go-chi/chi/v5/middleware"
 	httpSwagger "github.com/swaggo/http-swagger/v2"

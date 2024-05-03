@@ -1,9 +1,10 @@
 package external
 
 import (
-	"thiagoluis88git/tech1/internal/core/domain"
-	"thiagoluis88git/tech1/internal/core/ports"
 	"time"
+
+	"github.com/thiagoluis88git/tech1/internal/core/domain"
+	"github.com/thiagoluis88git/tech1/internal/core/ports"
 
 	"github.com/google/uuid"
 )

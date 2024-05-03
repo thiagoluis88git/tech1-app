@@ -5,9 +5,10 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"thiagoluis88git/tech1/internal/core/domain"
-	"thiagoluis88git/tech1/internal/core/services"
-	"thiagoluis88git/tech1/pkg/httpserver"
+
+	"github.com/thiagoluis88git/tech1/internal/core/domain"
+	"github.com/thiagoluis88git/tech1/internal/core/services"
+	"github.com/thiagoluis88git/tech1/pkg/httpserver"
 )
 
 // @Summary Create new product

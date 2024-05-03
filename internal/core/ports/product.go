@@ -2,7 +2,7 @@ package ports
 
 import (
 	"context"
-	"thiagoluis88git/tech1/internal/core/domain"
+	"github.com/thiagoluis88git/tech1/internal/core/domain"
 )
 
 type ProductRepository interface {

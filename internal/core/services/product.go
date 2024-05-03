@@ -2,9 +2,10 @@ package services
 
 import (
 	"context"
-	"thiagoluis88git/tech1/internal/core/domain"
-	"thiagoluis88git/tech1/internal/core/ports"
-	"thiagoluis88git/tech1/pkg/responses"
+
+	"github.com/thiagoluis88git/tech1/internal/core/domain"
+	"github.com/thiagoluis88git/tech1/internal/core/ports"
+	"github.com/thiagoluis88git/tech1/pkg/responses"
 )
 
 type ProductService struct {

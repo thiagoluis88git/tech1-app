@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"strings"
 
-	"thiagoluis88git/tech1/pkg/responses"
+	"github.com/thiagoluis88git/tech1/pkg/responses"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"

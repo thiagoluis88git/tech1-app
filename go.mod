@@ -1,4 +1,4 @@
-module thiagoluis88git/tech1
+module github.com/thiagoluis88git/tech1
 
 go 1.22.2
 

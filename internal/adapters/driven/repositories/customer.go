@@ -2,10 +2,10 @@ package repositories
 
 import (
 	"context"
-	"thiagoluis88git/tech1/internal/adapters/driven/entities"
-	"thiagoluis88git/tech1/internal/core/domain"
-	"thiagoluis88git/tech1/internal/core/ports"
-	"thiagoluis88git/tech1/pkg/responses"
+	"github.com/thiagoluis88git/tech1/internal/adapters/driven/entities"
+	"github.com/thiagoluis88git/tech1/internal/core/domain"
+	"github.com/thiagoluis88git/tech1/internal/core/ports"
+	"github.com/thiagoluis88git/tech1/pkg/responses"
 
 	"gorm.io/gorm"
 )
