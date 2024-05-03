@@ -122,6 +122,30 @@ func GetOrdersToPrepareHandler(orderService *services.OrderService) http.Handler
 	}
 }
 
+// @Summary Get all orders status different to prepare
+// @Description Get all orders status by the waiter and the customer. This endpoint will be used by the waiter and customer
+// @Tags Order
+// @Accept json
+// @Produce json
+// @Success 200 {object} []domain.OrderResponse
+// @Router /api/orders/status [get]
+func GetOrdersStatusHandler(orderService *services.OrderService) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		response, err := orderService.GetOrdersStatus(context.Background())
+
+		if err != nil {
+			log.Print("get orders status", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendResponseError(w, err)
+			return
+		}
+
+		httpserver.SendResponseSuccess(w, response)
+	}
+}
+
 // @Summary Update an order to PREPARING
 // @Description Update an order. This service wil be used by the kitchen to notify a customer that the order is being prepared
 // @Tags Order

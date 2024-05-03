@@ -167,6 +167,52 @@ func (repository *OrderRespository) GetOrdersToPrepare(ctx context.Context) ([]d
 	return orders, nil
 }
 
+func (repository *OrderRespository) GetOrdersStatus(ctx context.Context) ([]domain.OrderResponse, error) {
+	var orderEntity []entities.Order
+	err := repository.
+		db.WithContext(ctx).
+		Model(&entities.Order{}).
+		Preload("OrderProduct").
+		Preload("Customer").
+		Where("order_status in ?", entities.OrderStatusPreparing, entities.OrderStatusDone).
+		Find(&orderEntity).
+		Error
+
+	if err != nil {
+		return []domain.OrderResponse{}, responses.GetDatabaseError(err)
+	}
+
+	orders := []domain.OrderResponse{}
+
+	for _, value := range orderEntity {
+		orderProduct := []domain.OrderProductResponse{}
+
+		for _, value := range value.OrderProduct {
+			orderProduct = append(orderProduct, domain.OrderProductResponse{
+				ProductID:   value.ProductID,
+				ProductName: fmt.Sprintf("FALTA BUSCAR: %d", value.ID),
+			})
+		}
+
+		var customerName *string
+
+		if value.Customer != nil {
+			customerName = &value.Customer.Name
+		}
+
+		orders = append(orders, domain.OrderResponse{
+			OrderId:      value.ID,
+			OrderDate:    value.CreatedAt,
+			TickerId:     value.TickerID,
+			OrderStatus:  value.OrderStatus,
+			OrderProduct: orderProduct,
+			CustomerName: customerName,
+		})
+	}
+
+	return orders, nil
+}
+
 func (repository *OrderRespository) UpdateToPreparing(ctx context.Context, orderId uint) error {
 	err := repository.db.WithContext(ctx).
 		Model(&entities.Order{}).

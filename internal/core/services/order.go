@@ -27,7 +27,7 @@ func (service *OrderService) CreateOrder(ctx context.Context, order domain.Order
 	response, err := service.orderRepo.CreateOrder(ctx, order)
 
 	if err != nil {
-		return domain.OrderResponse{}, responses.GetResponseError(err, "OrderService")
+		return domain.OrderResponse{}, responses.GetResponseError(err, "OrderService -> CreateOrder")
 	}
 
 	if order.CustomerID != nil {
@@ -44,7 +44,7 @@ func (service *OrderService) GetOrderById(ctx context.Context, orderId uint) (do
 	response, err := service.orderRepo.GetOrderById(ctx, orderId)
 
 	if err != nil {
-		return domain.OrderResponse{}, responses.GetResponseError(err, "OrderService")
+		return domain.OrderResponse{}, responses.GetResponseError(err, "OrderService -> GetOrderById")
 	}
 
 	return response, nil
@@ -54,7 +54,16 @@ func (service *OrderService) GetOrdersToPrepare(ctx context.Context) ([]domain.O
 	response, err := service.orderRepo.GetOrdersToPrepare(ctx)
 
 	if err != nil {
-		return []domain.OrderResponse{}, responses.GetResponseError(err, "OrderService")
+		return []domain.OrderResponse{}, responses.GetResponseError(err, "OrderService -> GetOrdersToPrepare")
+	}
+
+	return response, nil
+}
+func (service *OrderService) GetOrdersStatus(ctx context.Context) ([]domain.OrderResponse, error) {
+	response, err := service.orderRepo.GetOrdersStatus(ctx)
+
+	if err != nil {
+		return []domain.OrderResponse{}, responses.GetResponseError(err, "OrderService -> GetOrdersStatus")
 	}
 
 	return response, nil
@@ -64,7 +73,7 @@ func (service *OrderService) UpdateToPreparing(ctx context.Context, orderId uint
 	err := service.orderRepo.UpdateToPreparing(ctx, orderId)
 
 	if err != nil {
-		return responses.GetResponseError(err, "OrderService")
+		return responses.GetResponseError(err, "OrderService -> UpdateToPreparing")
 	}
 
 	return nil
@@ -74,7 +83,7 @@ func (service *OrderService) UpdateToDone(ctx context.Context, orderId uint) err
 	err := service.orderRepo.UpdateToDone(ctx, orderId)
 
 	if err != nil {
-		return responses.GetResponseError(err, "OrderService")
+		return responses.GetResponseError(err, "OrderService -> UpdateToDone")
 	}
 
 	return nil
@@ -84,7 +93,7 @@ func (service *OrderService) UpdateToDelivered(ctx context.Context, orderId uint
 	err := service.orderRepo.UpdateToDelivered(ctx, orderId)
 
 	if err != nil {
-		return responses.GetResponseError(err, "OrderService")
+		return responses.GetResponseError(err, "OrderService -> UpdateToDelivered")
 	}
 
 	return nil
@@ -94,7 +103,7 @@ func (service *OrderService) UpdateToNotDelivered(ctx context.Context, orderId u
 	err := service.orderRepo.UpdateToNotDelivered(ctx, orderId)
 
 	if err != nil {
-		return responses.GetResponseError(err, "OrderService")
+		return responses.GetResponseError(err, "OrderService -> UpdateToNotDelivered")
 	}
 
 	return nil
