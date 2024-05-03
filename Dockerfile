@@ -26,6 +26,6 @@ WORKDIR /app
 COPY --from=build-stage /FasfoodApp /FasfoodApp
 COPY --from=build-stage /go/src/docs/ /docs/
 
-EXPOSE 3210
+EXPOSE 3210 3211
 
 ENTRYPOINT ["/FasfoodApp"]

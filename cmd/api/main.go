@@ -8,6 +8,7 @@ import (
 	"thiagoluis88git/tech1/internal/adapters/driver/handler"
 	"thiagoluis88git/tech1/internal/core/services"
 	"thiagoluis88git/tech1/pkg/database"
+	"thiagoluis88git/tech1/pkg/environment"
 	"thiagoluis88git/tech1/pkg/httpserver"
 	"thiagoluis88git/tech1/pkg/responses"
 
@@ -36,15 +37,15 @@ import (
 // @host localshot:3210
 // @BasePath /
 func main() {
+	flag.Parse()
+
 	doc := redoc.Redoc{
 		Title:       "Example API",
 		Description: "Example API Description",
-		SpecFile:    "./docs/swagger.json",
+		SpecFile:    *environment.RedocFolderPath,
 		SpecPath:    "/docs/swagger.json",
 		DocsPath:    "/docs",
 	}
-
-	flag.Parse()
 
 	db := database.ConfigDatabase()
 
