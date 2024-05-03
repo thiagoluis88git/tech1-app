@@ -19,7 +19,7 @@ import (
 // @Success 200 {object} domain.CustomerResponse
 // @Failure 400 "Customer has required fields"
 // @Failure 409 "This Customer is already added"
-// @Router /api/customer [post]
+// @Router /api/customers [post]
 func CreateCustomerHandler(customerService *services.CustomerService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var customer domain.Customer
@@ -60,7 +60,7 @@ func CreateCustomerHandler(customerService *services.CustomerService) http.Handl
 // @Success 204
 // @Failure 400 "Customer has required fields"
 // @Failure 404 "Customer not found"
-// @Router /api/customer/{id} [put]
+// @Router /api/customers/{id} [put]
 func UpdateCustomerHandler(customerService *services.CustomerService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		customerIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
@@ -121,7 +121,7 @@ func UpdateCustomerHandler(customerService *services.CustomerService) http.Handl
 // @Param CPF path string true "12345678910"
 // @Success 200 {object} domain.Customer
 // @Failure 404 "Customer not found"
-// @Router /api/customer/{cpf} [get]
+// @Router /api/customers/{cpf} [get]
 func GetCustomerByCPFHandler(customerService *services.CustomerService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		cpf, err := httpserver.GetPathParamFromRequest(r, "cpf")

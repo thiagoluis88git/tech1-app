@@ -49,6 +49,16 @@ func (service *OrderService) GetOrderById(ctx context.Context, orderId uint) (do
 	return response, nil
 }
 
+func (service *OrderService) GetOrdersToPrepare(ctx context.Context) ([]domain.OrderResponse, error) {
+	response, err := service.orderRepo.GetOrdersToPrepare(ctx)
+
+	if err != nil {
+		return []domain.OrderResponse{}, responses.GetResponseError(err, "OrderService")
+	}
+
+	return response, nil
+}
+
 func (service *OrderService) UpdateToPreparing(ctx context.Context, orderId uint) error {
 	err := service.orderRepo.UpdateToPreparing(ctx, orderId)
 

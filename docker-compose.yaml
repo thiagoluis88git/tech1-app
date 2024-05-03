@@ -4,7 +4,7 @@ services:
   app:
     container_name: fastfood-app
     build: .
-    image: fastfood-app:0.0.1
+    image: fastfood-app:0.0.2
     restart: always
     ports:
       - "3210:3210"

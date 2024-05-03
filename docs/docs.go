@@ -24,7 +24,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/customer": {
+        "/api/customers": {
             "post": {
                 "description": "Create new customer. This process is not required to make an order",
                 "consumes": [
@@ -64,7 +64,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/customer/{cpf}": {
+        "/api/customers/{cpf}": {
             "get": {
                 "description": "Get customer by CPF",
                 "consumes": [
@@ -99,7 +99,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/customer/{id}": {
+        "/api/customers/{id}": {
             "put": {
                 "description": "Update customer",
                 "consumes": [
@@ -143,7 +143,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/order": {
+        "/api/orders": {
             "post": {
                 "description": "Create new order. To make an order the payment needs to be completed",
                 "consumes": [
@@ -180,7 +180,33 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/order/{id}": {
+        "/api/orders/to-prepare": {
+            "get": {
+                "description": "Get all orders already payed that needs to be prepared. This endpoint will be used by the kitchen",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Get all orders to prepare",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.OrderResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/orders/{id}": {
             "get": {
                 "description": "Get an order by Id",
                 "consumes": [
@@ -215,7 +241,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/order/{id}/delivered": {
+        "/api/orders/{id}/delivered": {
             "put": {
                 "description": "Update an order. This service wil be used by the waiter to close the order informing that user got its order",
                 "consumes": [
@@ -247,7 +273,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/order/{id}/done": {
+        "/api/orders/{id}/done": {
             "put": {
                 "description": "Update an order. This service wil be used by the kitchen to notify a customer and the waiter that the order is done",
                 "consumes": [
@@ -279,7 +305,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/order/{id}/not-delivered": {
+        "/api/orders/{id}/not-delivered": {
             "put": {
                 "description": "Update an order. This service wil be used by the waiter to close the order informing that user didn't get the order",
                 "consumes": [
@@ -311,7 +337,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/order/{id}/preparing": {
+        "/api/orders/{id}/preparing": {
             "put": {
                 "description": "Update an order. This service wil be used by the kitchen to notify a customer that the order is being prepared",
                 "consumes": [
@@ -343,7 +369,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/payment": {
+        "/api/payments": {
             "post": {
                 "description": "Create a payment and return its ID. With it, we can proceed with a Order Creation",
                 "consumes": [
@@ -380,7 +406,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/payment/type": {
+        "/api/payments/type": {
             "get": {
                 "description": "Get payment type, like [DEBIT, CREDIT]",
                 "consumes": [
@@ -752,6 +778,9 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/domain.OrderProductResponse"
                     }
+                },
+                "orderStatus": {
+                    "type": "string"
                 },
                 "tickerId": {
                     "type": "integer"

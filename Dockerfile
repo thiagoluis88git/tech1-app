@@ -24,6 +24,7 @@ FROM scratch
 WORKDIR /app
 
 COPY --from=build-stage /FasfoodApp /FasfoodApp
+COPY --from=build-stage /go/src/docs/ /docs/
 
 EXPOSE 3210
 

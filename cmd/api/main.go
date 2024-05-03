@@ -73,9 +73,9 @@ func main() {
 		})
 	})
 
-	router.Post("/api/customer", handler.CreateCustomerHandler(customerService))
-	router.Put("/api/customer/{id}", handler.UpdateCustomerHandler(customerService))
-	router.Get("/api/customer/{cpf}", handler.GetCustomerByCPFHandler(customerService))
+	router.Post("/api/customers", handler.CreateCustomerHandler(customerService))
+	router.Put("/api/customers/{id}", handler.UpdateCustomerHandler(customerService))
+	router.Get("/api/customers/{cpf}", handler.GetCustomerByCPFHandler(customerService))
 
 	router.Post("/api/products", handler.CreateProductHandler(productService))
 	router.Post("/api/products/combo", handler.CreateComboHandler(productService))
@@ -85,15 +85,16 @@ func main() {
 	router.Get("/api/products/categories", handler.GetCategoryHandler(productService))
 	router.Get("/api/products/categories/{category}", handler.GetProductsByCategoryHandler(productService))
 
-	router.Get("/api/payment/types", handler.GetPaymentTypeHandler(paymentService))
-	router.Post("/api/payment", handler.CreatePaymentHandler(paymentService))
+	router.Get("/api/payments/types", handler.GetPaymentTypeHandler(paymentService))
+	router.Post("/api/payments", handler.CreatePaymentHandler(paymentService))
 
-	router.Post("/api/order", handler.CreateOrderHandler(orderService))
-	router.Get("/api/order/{id}", handler.GetOrderByIdHandler(orderService))
-	router.Put("/api/order/{id}/preparing", handler.UpdateOrderPreparingHandler(orderService))
-	router.Put("/api/order/{id}/done", handler.UpdateOrderDoneHandler(orderService))
-	router.Put("/api/order/{id}/delivered", handler.UpdateOrderDeliveredHandler(orderService))
-	router.Put("/api/order/{id}/not-delivered", handler.UpdateOrderNotDeliveredandler(orderService))
+	router.Post("/api/orders", handler.CreateOrderHandler(orderService))
+	router.Get("/api/orders/{id}", handler.GetOrderByIdHandler(orderService))
+	router.Get("/api/orders/to-prepare", handler.GetOrdersToPrepareHandler(orderService))
+	router.Put("/api/orders/{id}/preparing", handler.UpdateOrderPreparingHandler(orderService))
+	router.Put("/api/orders/{id}/done", handler.UpdateOrderDoneHandler(orderService))
+	router.Put("/api/orders/{id}/delivered", handler.UpdateOrderDeliveredHandler(orderService))
+	router.Put("/api/orders/{id}/not-delivered", handler.UpdateOrderNotDeliveredandler(orderService))
 
 	router.Get("/swagger/*", httpSwagger.Handler(
 		httpSwagger.URL("http://localhost:3210/swagger/doc.json"),

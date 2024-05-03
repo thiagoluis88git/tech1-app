@@ -18,7 +18,7 @@ import (
 // @Param product body domain.Order true "order"
 // @Success 200 {object} domain.OrderResponse
 // @Failure 400 "Order has required fields"
-// @Router /api/order [post]
+// @Router /api/orders [post]
 func CreateOrderHandler(orderService *services.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var order domain.Order
@@ -57,7 +57,7 @@ func CreateOrderHandler(orderService *services.OrderService) http.HandlerFunc {
 // @Param id path int true "12"
 // @Success 200 {object} domain.OrderResponse
 // @Failure 400 "Order has required fields"
-// @Router /api/order/{id} [get]
+// @Router /api/orders/{id} [get]
 func GetOrderByIdHandler(orderService *services.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		orderIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
@@ -97,6 +97,30 @@ func GetOrderByIdHandler(orderService *services.OrderService) http.HandlerFunc {
 	}
 }
 
+// @Summary Get all orders to prepare
+// @Description Get all orders already payed that needs to be prepared. This endpoint will be used by the kitchen
+// @Tags Order
+// @Accept json
+// @Produce json
+// @Success 200 {object} []domain.OrderResponse
+// @Router /api/orders/to-prepare [get]
+func GetOrdersToPrepareHandler(orderService *services.OrderService) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		response, err := orderService.GetOrdersToPrepare(context.Background())
+
+		if err != nil {
+			log.Print("get orders to prepare", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendResponseError(w, err)
+			return
+		}
+
+		httpserver.SendResponseSuccess(w, response)
+	}
+}
+
 // @Summary Update an order to PREPARING
 // @Description Update an order. This service wil be used by the kitchen to notify a customer that the order is being prepared
 // @Tags Order
@@ -105,7 +129,7 @@ func GetOrderByIdHandler(orderService *services.OrderService) http.HandlerFunc {
 // @Param id path int true "12"
 // @Success 204
 // @Failure 404 "Order not found"
-// @Router /api/order/{id}/preparing [put]
+// @Router /api/orders/{id}/preparing [put]
 func UpdateOrderPreparingHandler(orderService *services.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr, err := httpserver.GetPathParamFromRequest(r, "id")
@@ -153,7 +177,7 @@ func UpdateOrderPreparingHandler(orderService *services.OrderService) http.Handl
 // @Param id path int true "12"
 // @Success 204
 // @Failure 404 "Order not found"
-// @Router /api/order/{id}/done [put]
+// @Router /api/orders/{id}/done [put]
 func UpdateOrderDoneHandler(orderService *services.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr, err := httpserver.GetPathParamFromRequest(r, "id")
@@ -201,7 +225,7 @@ func UpdateOrderDoneHandler(orderService *services.OrderService) http.HandlerFun
 // @Param id path int true "12"
 // @Success 204
 // @Failure 404 "Order not found"
-// @Router /api/order/{id}/delivered [put]
+// @Router /api/orders/{id}/delivered [put]
 func UpdateOrderDeliveredHandler(orderService *services.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr, err := httpserver.GetPathParamFromRequest(r, "id")
@@ -249,7 +273,7 @@ func UpdateOrderDeliveredHandler(orderService *services.OrderService) http.Handl
 // @Param id path int true "12"
 // @Success 204
 // @Failure 404 "Order not found"
-// @Router /api/order/{id}/not-delivered [put]
+// @Router /api/orders/{id}/not-delivered [put]
 func UpdateOrderNotDeliveredandler(orderService *services.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr, err := httpserver.GetPathParamFromRequest(r, "id")

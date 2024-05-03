@@ -17,7 +17,7 @@ import (
 // @Param product body domain.Payment true "payment"
 // @Success 200 {object} domain.PaymentResponse
 // @Failure 400 "Payment has required fields"
-// @Router /api/payment [post]
+// @Router /api/payments [post]
 func CreatePaymentHandler(productService *services.PaymentService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var combo domain.Payment
@@ -54,7 +54,7 @@ func CreatePaymentHandler(productService *services.PaymentService) http.HandlerF
 // @Accept json
 // @Produce json
 // @Success 200 {object} []string
-// @Router /api/payment/type [get]
+// @Router /api/payments/type [get]
 func GetPaymentTypeHandler(paymentService *services.PaymentService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		httpserver.SendResponseSuccess(w, paymentService.GetPaymentTypes())

@@ -100,6 +100,8 @@ definitions:
         items:
           $ref: '#/definitions/domain.OrderProductResponse'
         type: array
+      orderStatus:
+        type: string
       tickerId:
         type: integer
     type: object
@@ -177,7 +179,7 @@ info:
   title: Tech1 API Docs
   version: "1.0"
 paths:
-  /api/customer:
+  /api/customers:
     post:
       consumes:
       - application/json
@@ -203,7 +205,7 @@ paths:
       summary: Create new customer
       tags:
       - Customer
-  /api/customer/{cpf}:
+  /api/customers/{cpf}:
     get:
       consumes:
       - application/json
@@ -226,7 +228,7 @@ paths:
       summary: Get customer by CPF
       tags:
       - Customer
-  /api/customer/{id}:
+  /api/customers/{id}:
     put:
       consumes:
       - application/json
@@ -255,7 +257,7 @@ paths:
       summary: Update customer
       tags:
       - Customer
-  /api/order:
+  /api/orders:
     post:
       consumes:
       - application/json
@@ -279,7 +281,7 @@ paths:
       summary: Create new order
       tags:
       - Order
-  /api/order/{id}:
+  /api/orders/{id}:
     get:
       consumes:
       - application/json
@@ -302,7 +304,7 @@ paths:
       summary: Get order by Id
       tags:
       - Order
-  /api/order/{id}/delivered:
+  /api/orders/{id}/delivered:
     put:
       consumes:
       - application/json
@@ -324,7 +326,7 @@ paths:
       summary: Update an order to DELIVERED
       tags:
       - Order
-  /api/order/{id}/done:
+  /api/orders/{id}/done:
     put:
       consumes:
       - application/json
@@ -346,7 +348,7 @@ paths:
       summary: Update an order to DONE
       tags:
       - Order
-  /api/order/{id}/not-delivered:
+  /api/orders/{id}/not-delivered:
     put:
       consumes:
       - application/json
@@ -368,7 +370,7 @@ paths:
       summary: Update an order to NOT_DELIVERED
       tags:
       - Order
-  /api/order/{id}/preparing:
+  /api/orders/{id}/preparing:
     put:
       consumes:
       - application/json
@@ -390,7 +392,25 @@ paths:
       summary: Update an order to PREPARING
       tags:
       - Order
-  /api/payment:
+  /api/orders/to-prepare:
+    get:
+      consumes:
+      - application/json
+      description: Get all orders already payed that needs to be prepared. This endpoint
+        will be used by the kitchen
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.OrderResponse'
+            type: array
+      summary: Get all orders to prepare
+      tags:
+      - Order
+  /api/payments:
     post:
       consumes:
       - application/json
@@ -415,7 +435,7 @@ paths:
       summary: Create new payment
       tags:
       - Payment
-  /api/payment/type:
+  /api/payments/type:
     get:
       consumes:
       - application/json
