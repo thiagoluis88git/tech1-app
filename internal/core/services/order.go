@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"sync"
 
 	"github.com/thiagoluis88git/tech1/internal/core/domain"
 	"github.com/thiagoluis88git/tech1/internal/core/ports"
@@ -23,7 +24,10 @@ func NewOrderService(
 	}
 }
 
-func (service *OrderService) CreateOrder(ctx context.Context, order domain.Order, date int64) (domain.OrderResponse, error) {
+func (service *OrderService) CreateOrder(ctx context.Context, order domain.Order, date int64, wg *sync.WaitGroup, ch chan bool) (domain.OrderResponse, error) {
+	//Block this code below until this Channel be empty (by reading with <-ch)
+	ch <- true
+
 	order.TicketNumber = service.GenerateTicket(ctx, date)
 
 	response, err := service.orderRepo.CreateOrder(ctx, order)
@@ -38,6 +42,10 @@ func (service *OrderService) CreateOrder(ctx context.Context, order domain.Order
 			response.CustomerName = &customer.Name
 		}
 	}
+
+	// Release the channel to others process be able to start a new order creation
+	<-ch
+	wg.Done()
 
 	return response, nil
 }

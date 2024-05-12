@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"sync"
 	"time"
 
 	"github.com/thiagoluis88git/tech1/internal/core/domain"
@@ -41,7 +42,12 @@ func CreateOrderHandler(orderService *services.OrderService) http.HandlerFunc {
 		now := time.Now()
 		orderDate := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.Local)
 
-		response, err := orderService.CreateOrder(context.Background(), order, orderDate.UnixMilli())
+		// Create this to prevent 2 process/goroutines create order with the same TicketNumber
+		var waitGroup sync.WaitGroup
+		ch := make(chan bool, 1)
+		waitGroup.Add(1)
+
+		response, err := orderService.CreateOrder(context.Background(), order, orderDate.UnixMilli(), &waitGroup, ch)
 
 		if err != nil {
 			log.Print("create order", map[string]interface{}{
