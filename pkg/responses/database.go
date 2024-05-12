@@ -26,6 +26,7 @@ func (er LocalError) Error() string {
 
 func GetDatabaseError(err error) *LocalError {
 	var localError *pgconn.PgError
+	var connError *pgconn.ConnectError
 
 	code := DATABASE_ERROR
 	message := err.Error()
@@ -38,6 +39,10 @@ func GetDatabaseError(err error) *LocalError {
 
 		code = iCode
 		message = localError.Message
+	}
+
+	if errors.As(err, &connError) {
+		message = "service unavailable"
 	}
 
 	if message == "record not found" {
