@@ -110,5 +110,9 @@ func getBusinessStatusCode(localError LocalError) int {
 		return http.StatusNotFound
 	}
 
+	if localError.Code == DATABASE_ERROR {
+		return http.StatusServiceUnavailable
+	}
+
 	return http.StatusUnprocessableEntity
 }
