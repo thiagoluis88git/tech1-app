@@ -15,4 +15,5 @@ type OrderRepository interface {
 	UpdateToDone(ctx context.Context, orderId uint) error
 	UpdateToDelivered(ctx context.Context, orderId uint) error
 	UpdateToNotDelivered(ctx context.Context, orderId uint) error
+	GetNextTicketNumber(ctx context.Context, date int64) int
 }

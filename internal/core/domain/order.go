@@ -8,7 +8,7 @@ type Order struct {
 	CustomerID   *uint          `json:"customerId"`
 	PaymentID    uint           `json:"paymentId" validate:"required"`
 	OrderProduct []OrderProduct `json:"orderProducts" validate:"required"`
-	TickerId     int
+	TicketNumber int
 }
 
 type OrderProduct struct {
@@ -18,7 +18,7 @@ type OrderProduct struct {
 type OrderResponse struct {
 	OrderId      uint                   `json:"orderId"`
 	OrderDate    time.Time              `json:"orderDate"`
-	TickerId     int                    `json:"tickerId"`
+	TicketNumber int                    `json:"ticketNumber"`
 	CustomerName *string                `json:"customerName"`
 	OrderStatus  string                 `json:"orderStatus"`
 	OrderProduct []OrderProductResponse `json:"orderProducts"`

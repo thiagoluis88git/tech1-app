@@ -21,7 +21,7 @@ type Order struct {
 	PaymentID      uint
 	CustomerID     *uint
 	Customer       *Customer
-	TickerID       int
+	TicketNumber   int
 	PreparingAt    *time.Time
 	DoneAt         *time.Time
 	DeliveredAt    *time.Time
@@ -33,4 +33,9 @@ type OrderProduct struct {
 	gorm.Model
 	OrderID   uint
 	ProductID uint
+}
+
+type OrderTicketNumber struct {
+	Date         int64 `gorm:"index;unique"`
+	TicketNumber int
 }

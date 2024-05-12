@@ -23,7 +23,9 @@ func NewOrderService(
 	}
 }
 
-func (service *OrderService) CreateOrder(ctx context.Context, order domain.Order) (domain.OrderResponse, error) {
+func (service *OrderService) CreateOrder(ctx context.Context, order domain.Order, date int64) (domain.OrderResponse, error) {
+	order.TicketNumber = service.GenerateTicket(ctx, date)
+
 	response, err := service.orderRepo.CreateOrder(ctx, order)
 
 	if err != nil {
@@ -38,6 +40,10 @@ func (service *OrderService) CreateOrder(ctx context.Context, order domain.Order
 	}
 
 	return response, nil
+}
+
+func (service *OrderService) GenerateTicket(ctx context.Context, date int64) int {
+	return service.orderRepo.GetNextTicketNumber(ctx, date)
 }
 
 func (service *OrderService) GetOrderById(ctx context.Context, orderId uint) (domain.OrderResponse, error) {

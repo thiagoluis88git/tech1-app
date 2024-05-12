@@ -36,11 +36,11 @@ func (repository *OrderRespository) CreateOrder(ctx context.Context, order domai
 	}
 
 	orderEntity := &entities.Order{
-		OrderStatus: entities.OrderStatusCreated,
-		TotalPrice:  order.TotalPrice,
-		CustomerID:  order.CustomerID,
-		PaymentID:   order.PaymentID,
-		TickerID:    order.TickerId,
+		OrderStatus:  entities.OrderStatusCreated,
+		TotalPrice:   order.TotalPrice,
+		CustomerID:   order.CustomerID,
+		PaymentID:    order.PaymentID,
+		TicketNumber: order.TicketNumber,
 	}
 
 	err := tx.Create(orderEntity).Error
@@ -74,9 +74,9 @@ func (repository *OrderRespository) CreateOrder(ctx context.Context, order domai
 	}
 
 	return domain.OrderResponse{
-		OrderId:   orderEntity.ID,
-		OrderDate: orderEntity.CreatedAt,
-		TickerId:  orderEntity.TickerID,
+		OrderId:      orderEntity.ID,
+		OrderDate:    orderEntity.CreatedAt,
+		TicketNumber: orderEntity.TicketNumber,
 	}, nil
 }
 
@@ -114,7 +114,7 @@ func (repository *OrderRespository) GetOrderById(ctx context.Context, orderId ui
 	return domain.OrderResponse{
 		OrderId:      orderId,
 		OrderDate:    orderEntity.CreatedAt,
-		TickerId:     orderEntity.TickerID,
+		TicketNumber: orderEntity.TicketNumber,
 		OrderStatus:  orderEntity.OrderStatus,
 		OrderProduct: orderProduct,
 		CustomerName: customerName,
@@ -157,7 +157,7 @@ func (repository *OrderRespository) GetOrdersToPrepare(ctx context.Context) ([]d
 		orders = append(orders, domain.OrderResponse{
 			OrderId:      value.ID,
 			OrderDate:    value.CreatedAt,
-			TickerId:     value.TickerID,
+			TicketNumber: value.TicketNumber,
 			OrderStatus:  value.OrderStatus,
 			OrderProduct: orderProduct,
 			CustomerName: customerName,
@@ -203,7 +203,7 @@ func (repository *OrderRespository) GetOrdersStatus(ctx context.Context) ([]doma
 		orders = append(orders, domain.OrderResponse{
 			OrderId:      value.ID,
 			OrderDate:    value.CreatedAt,
-			TickerId:     value.TickerID,
+			TicketNumber: value.TicketNumber,
 			OrderStatus:  value.OrderStatus,
 			OrderProduct: orderProduct,
 			CustomerName: customerName,
@@ -271,4 +271,51 @@ func (repository *OrderRespository) UpdateToNotDelivered(ctx context.Context, or
 	}
 
 	return nil
+}
+
+func (repository *OrderRespository) GetNextTicketNumber(ctx context.Context, date int64) int {
+	var orderTicketNumber entities.OrderTicketNumber
+	err := repository.db.WithContext(ctx).
+		Model(&entities.OrderTicketNumber{}).
+		Where("date = ?", date).
+		Find(&orderTicketNumber).
+		Limit(1).
+		Error
+
+	if err != nil || orderTicketNumber.Date == 0 {
+		return repository.createNewTicketForDate(ctx, date)
+	}
+
+	newTicketNumber := orderTicketNumber.TicketNumber + 1
+
+	return repository.updateTicketForDate(ctx, date, newTicketNumber)
+}
+
+func (repository *OrderRespository) createNewTicketForDate(ctx context.Context, date int64) int {
+	orderTicketNumber := entities.OrderTicketNumber{
+		Date:         date,
+		TicketNumber: 1,
+	}
+
+	errCreate := repository.db.WithContext(ctx).Create(&orderTicketNumber).Error
+
+	if errCreate != nil {
+		return 999
+	}
+
+	return 1
+}
+
+func (repository *OrderRespository) updateTicketForDate(ctx context.Context, date int64, newTicketNumber int) int {
+	err := repository.db.WithContext(ctx).
+		Model(&entities.OrderTicketNumber{}).
+		Where("date = ?", date).
+		Update("ticket_number", newTicketNumber).
+		Error
+
+	if err != nil {
+		return 999
+	}
+
+	return newTicketNumber
 }
