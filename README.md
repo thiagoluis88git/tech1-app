@@ -103,7 +103,7 @@ With this endpoints we can simulate a screen producst selection by chosing all p
 - Call the PUT `http://localhost:3210/api/orders/{id}/delivered` to set Delivered status to indicate that customer receive the meal. 
 This is used to 'finish' the order and can be used to track some convertion rate
 
-### 9. Update order to not delivered (Waiter view)
+### 10. Update order to not delivered (Waiter view)
 
 - Call the PUT `http://localhost:3210/api/orders/{id}/not-delivered` to set Not Delivered status to indicate that customer doesn not receive the meal.
 This is used to 'finish' the order and can be used to track some convertion rate
