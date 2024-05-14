@@ -73,6 +73,7 @@ func (service *OrderService) GetOrdersToPrepare(ctx context.Context) ([]domain.O
 
 	return response, nil
 }
+
 func (service *OrderService) GetOrdersStatus(ctx context.Context) ([]domain.OrderResponse, error) {
 	response, err := service.orderRepo.GetOrdersStatus(ctx)
 
