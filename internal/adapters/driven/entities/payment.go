@@ -18,5 +18,5 @@ type Payment struct {
 	Customer      *Customer
 	TotalPrice    int
 	PaymentStatus string
-	PaymentKind   string
+	PaymentType   string
 }

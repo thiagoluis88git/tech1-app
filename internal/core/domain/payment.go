@@ -5,7 +5,7 @@ import "time"
 type Payment struct {
 	CustomerID  *uint  `json:"customerId"`
 	TotalPrice  int    `json:"totalPrice" validate:"required"`
-	PaymentKind string `json:"paymentKind" validate:"required"`
+	PaymentType string `json:"paymentType" validate:"required"`
 }
 
 type PaymentResponse struct {

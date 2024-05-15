@@ -44,7 +44,7 @@ func (repository *PaymentRepository) CreatePaymentOrder(ctx context.Context, pay
 	paymentEntity := entities.Payment{
 		CustomerID:    payment.CustomerID,
 		TotalPrice:    payment.TotalPrice,
-		PaymentKind:   payment.PaymentKind,
+		PaymentType:   payment.PaymentType,
 		PaymentStatus: entities.PaymentPayingStatus,
 	}
 

@@ -97,6 +97,22 @@ var (
 			},
 		},
 	}
+
+	paymentCreation = domain.Payment{
+		TotalPrice:  1234,
+		PaymentType: "Crédito",
+	}
+
+	paymentResponse = domain.PaymentResponse{
+		PaymentId:        1,
+		PaymentGatewayId: "123",
+		PaymentDate:      time.Date(2024, 10, 10, 0, 0, 0, 0, time.Local),
+	}
+
+	paymentGatewayResponse = domain.PaymentGatewayResponse{
+		PaymentGatewayId: "1234",
+		PaymentDate:      time.Date(2024, 10, 10, 0, 0, 0, 0, time.Local),
+	}
 )
 
 type MockOrderRepository struct {
@@ -104,6 +120,14 @@ type MockOrderRepository struct {
 }
 
 type MockCustomerRepository struct {
+	mock.Mock
+}
+
+type MockPaymentRepository struct {
+	mock.Mock
+}
+
+type MockPaymentGatewayRepository struct {
 	mock.Mock
 }
 
@@ -242,4 +266,53 @@ func (mock *MockOrderRepository) UpdateToNotDelivered(ctx context.Context, order
 func (mock *MockOrderRepository) GetNextTicketNumber(ctx context.Context, date int64) int {
 	args := mock.Called(ctx, date)
 	return args.Get(0).(int)
+}
+
+func (mock *MockPaymentRepository) GetPaymentTypes() []string {
+	args := mock.Called()
+	return args.Get(0).([]string)
+}
+
+func (mock *MockPaymentRepository) CreatePaymentOrder(ctx context.Context, payment domain.Payment) (domain.PaymentResponse, error) {
+	args := mock.Called(ctx, payment)
+	err := args.Error(1)
+
+	if err != nil {
+		return domain.PaymentResponse{}, err
+	}
+
+	return args.Get(0).(domain.PaymentResponse), nil
+}
+
+func (mock *MockPaymentRepository) FinishPaymentWithSuccess(ctx context.Context, paymentId uint) error {
+	args := mock.Called(ctx, paymentId)
+	err := args.Error(0)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (mock *MockPaymentRepository) FinishPaymentWithError(ctx context.Context, paymentId uint) error {
+	args := mock.Called(ctx, paymentId)
+	err := args.Error(0)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (mock *MockPaymentGatewayRepository) Pay(paymentResonse domain.PaymentResponse, payment domain.Payment) (domain.PaymentGatewayResponse, error) {
+	args := mock.Called(paymentResonse, payment)
+	err := args.Error(1)
+
+	if err != nil {
+		return domain.PaymentGatewayResponse{}, err
+	}
+
+	return args.Get(0).(domain.PaymentGatewayResponse), nil
 }
