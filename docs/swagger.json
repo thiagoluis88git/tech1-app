@@ -751,7 +751,7 @@
                 "paymentId": {
                     "type": "integer"
                 },
-                "ticketId": {
+                "ticketNumber": {
                     "type": "integer"
                 },
                 "totalPrice": {
@@ -802,7 +802,7 @@
                 "orderStatus": {
                     "type": "string"
                 },
-                "ticketId": {
+                "ticketNumber": {
                     "type": "integer"
                 }
             }
@@ -810,14 +810,14 @@
         "domain.Payment": {
             "type": "object",
             "required": [
-                "paymentKind",
+                "paymentType",
                 "totalPrice"
             ],
             "properties": {
                 "customerId": {
                     "type": "integer"
                 },
-                "paymentKind": {
+                "paymentType": {
                     "type": "string"
                 },
                 "totalPrice": {

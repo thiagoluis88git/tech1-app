@@ -65,7 +65,7 @@ definitions:
         type: string
       paymentId:
         type: integer
-      ticketId:
+      ticketNumber:
         type: integer
       totalPrice:
         type: integer
@@ -102,19 +102,19 @@ definitions:
         type: array
       orderStatus:
         type: string
-      ticketId:
+      ticketNumber:
         type: integer
     type: object
   domain.Payment:
     properties:
       customerId:
         type: integer
-      paymentKind:
+      paymentType:
         type: string
       totalPrice:
         type: integer
     required:
-    - paymentKind
+    - paymentType
     - totalPrice
     type: object
   domain.PaymentResponse:

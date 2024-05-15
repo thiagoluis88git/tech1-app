@@ -757,7 +757,7 @@ const docTemplate = `{
                 "paymentId": {
                     "type": "integer"
                 },
-                "ticketId": {
+                "ticketNumber": {
                     "type": "integer"
                 },
                 "totalPrice": {
@@ -808,7 +808,7 @@ const docTemplate = `{
                 "orderStatus": {
                     "type": "string"
                 },
-                "ticketId": {
+                "ticketNumber": {
                     "type": "integer"
                 }
             }
@@ -816,14 +816,14 @@ const docTemplate = `{
         "domain.Payment": {
             "type": "object",
             "required": [
-                "paymentKind",
+                "paymentType",
                 "totalPrice"
             ],
             "properties": {
                 "customerId": {
                     "type": "integer"
                 },
-                "paymentKind": {
+                "paymentType": {
                     "type": "string"
                 },
                 "totalPrice": {
