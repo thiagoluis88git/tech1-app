@@ -19,6 +19,8 @@ definitions:
     properties:
       description:
         type: string
+      id:
+        type: integer
       name:
         type: string
       price:
@@ -559,7 +561,7 @@ paths:
       summary: Update a product
       tags:
       - Product
-  /api/products/combo:
+  /api/products/combos:
     get:
       consumes:
       - application/json
@@ -599,6 +601,43 @@ paths:
         "409":
           description: This Combo is already added
       summary: Create new combo
+      tags:
+      - Product
+  /api/products/combos/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a combo by ID
+      parameters:
+      - description: "12"
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Delete a combo
+      tags:
+      - Product
+    put:
+      consumes:
+      - application/json
+      description: Update a combo by ID
+      parameters:
+      - description: "12"
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Update a combo
       tags:
       - Product
 swagger: "2.0"

@@ -235,6 +235,42 @@ func (repository *ProductRepository) DeleteProduct(ctx context.Context, productI
 	return nil
 }
 
+func (repository *ProductRepository) DeleteCombo(ctx context.Context, comboId uint) error {
+	tx := repository.db.WithContext(ctx).Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if err := tx.Error; err != nil {
+		return responses.GetDatabaseError(err)
+	}
+
+	err := tx.Where("combo_id = ?", comboId).Delete(&entities.ComboProduct{}).Error
+
+	if err != nil {
+		tx.Rollback()
+		return responses.GetDatabaseError(err)
+	}
+
+	err = tx.Delete(&entities.Combo{}, comboId).Error
+
+	if err != nil {
+		tx.Rollback()
+		return responses.GetDatabaseError(err)
+	}
+
+	err = tx.Commit().Error
+
+	if err != nil {
+		tx.Rollback()
+		return responses.GetDatabaseError(err)
+	}
+
+	return nil
+}
+
 func (repository *ProductRepository) UpdateProduct(ctx context.Context, product domain.Product) error {
 	productEntity := entities.Product{
 		Model:       gorm.Model{ID: product.Id},
@@ -242,6 +278,23 @@ func (repository *ProductRepository) UpdateProduct(ctx context.Context, product 
 		Description: product.Description,
 		Category:    product.Category,
 		Price:       product.Price,
+	}
+
+	err := repository.db.WithContext(ctx).Save(&productEntity).Error
+
+	if err != nil {
+		return responses.GetDatabaseError(err)
+	}
+
+	return nil
+}
+
+func (repository *ProductRepository) UpdateCombo(ctx context.Context, combo domain.ComboForm) error {
+	productEntity := entities.Combo{
+		Model:       gorm.Model{ID: combo.Id},
+		Name:        combo.Name,
+		Description: combo.Description,
+		Price:       combo.Price,
 	}
 
 	err := repository.db.WithContext(ctx).Save(&productEntity).Error

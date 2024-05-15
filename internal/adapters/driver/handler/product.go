@@ -62,7 +62,7 @@ func CreateProductHandler(productService *services.ProductService) http.HandlerF
 // @Success 200 {object} domain.ProductResponse
 // @Failure 400 "ComboForm has required fields"
 // @Failure 409 "This Combo is already added"
-// @Router /api/products/combo [post]
+// @Router /api/products/combos [post]
 func CreateComboHandler(productService *services.ProductService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var combo domain.ComboForm
@@ -137,7 +137,7 @@ func GetProductsByCategoryHandler(productService *services.ProductService) http.
 // @Accept json
 // @Produce json
 // @Success 200 {object} []domain.Combo
-// @Router /api/products/combo [get]
+// @Router /api/products/combos [get]
 func GetCombosHandler(productService *services.ProductService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		combos, err := productService.GetCombos(context.Background())
@@ -202,6 +202,53 @@ func DeleteProductHandler(productService *services.ProductService) http.HandlerF
 	}
 }
 
+// @Summary Delete a combo
+// @Description Delete a combo by ID
+// @Tags Product
+// @Param id path int true "12"
+// @Accept json
+// @Produce json
+// @Success 204
+// @Router /api/products/combos/{id} [delete]
+func DeleteComboHandler(productService *services.ProductService) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		comboIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
+
+		if err != nil {
+			log.Print("delete combo", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendBadRequestError(w, err)
+			return
+		}
+
+		comboId, err := strconv.Atoi(comboIdStr)
+
+		if err != nil {
+			log.Print("delete combo", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendBadRequestError(w, err)
+			return
+		}
+
+		err = productService.DeleteCombo(context.Background(), uint(comboId))
+
+		if err != nil {
+			log.Print("delete combo", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendResponseError(w, err)
+			return
+		}
+
+		httpserver.SendResponseNoContentSuccess(w)
+	}
+}
+
 // @Summary Update a product
 // @Description Update a product by ID
 // @Tags Product
@@ -252,6 +299,67 @@ func UpdateProductHandler(productService *services.ProductService) http.HandlerF
 
 		if err != nil {
 			log.Print("update product", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendResponseError(w, err)
+			return
+		}
+
+		httpserver.SendResponseNoContentSuccess(w)
+	}
+}
+
+// @Summary Update a combo
+// @Description Update a combo by ID
+// @Tags Product
+// @Param id path int true "12"
+// @Accept json
+// @Produce json
+// @Success 204
+// @Router /api/products/combos/{id} [put]
+func UpdateComboHandler(productService *services.ProductService) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		comboIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
+
+		if err != nil {
+			log.Print("update combo", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendBadRequestError(w, err)
+			return
+		}
+
+		comboId, err := strconv.Atoi(comboIdStr)
+
+		if err != nil {
+			log.Print("update combo", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendBadRequestError(w, err)
+			return
+		}
+
+		var combo domain.ComboForm
+
+		err = httpserver.DecodeJSONBody(w, r, &combo)
+
+		if err != nil {
+			log.Print("decoding combo body for update combo", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendResponseError(w, err)
+			return
+		}
+
+		combo.Id = uint(comboId)
+		err = productService.UpdateCombo(context.Background(), combo)
+
+		if err != nil {
+			log.Print("update combo", map[string]interface{}{
 				"error":  err.Error(),
 				"status": httpserver.GetStatusCodeFromError(err),
 			})

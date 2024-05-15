@@ -498,7 +498,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/products/combo": {
+        "/api/products/combos": {
             "get": {
                 "description": "List all combos with their products",
                 "consumes": [
@@ -558,6 +558,62 @@ const docTemplate = `{
                     },
                     "409": {
                         "description": "This Combo is already added"
+                    }
+                }
+            }
+        },
+        "/api/products/combos/{id}": {
+            "put": {
+                "description": "Update a combo by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Update a combo",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "12",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a combo by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Delete a combo",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "12",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
                     }
                 }
             }
@@ -689,6 +745,9 @@ const docTemplate = `{
             "properties": {
                 "description": {
                     "type": "string"
+                },
+                "id": {
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"

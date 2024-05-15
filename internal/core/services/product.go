@@ -78,6 +78,26 @@ func (service *ProductService) UpdateProduct(ctx context.Context, product domain
 	return nil
 }
 
+func (service *ProductService) DeleteCombo(ctx context.Context, comboId uint) error {
+	err := service.repository.DeleteCombo(ctx, comboId)
+
+	if err != nil {
+		return responses.GetResponseError(err, "ProductService")
+	}
+
+	return nil
+}
+
+func (service *ProductService) UpdateCombo(ctx context.Context, combo domain.ComboForm) error {
+	err := service.repository.UpdateCombo(ctx, combo)
+
+	if err != nil {
+		return responses.GetResponseError(err, "ProductService")
+	}
+
+	return nil
+}
+
 func (service *ProductService) GetCategories() []string {
 	return service.repository.GetCategories()
 }

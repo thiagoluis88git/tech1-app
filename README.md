@@ -49,7 +49,18 @@ We will divide in 2 sections: **Restaurant** owner and Customer **order**
 
 ## Section 1 - Restaurant owner
 
-This will be added later
+This section will be used by the restaurant owner to manage the restaurant products
+
+### 1. Create product (Owner view)
+
+- Cal the POST `http://localhost:3210/api/products` to create a Product
+- Cal the POST `http://localhost:3210/api/products/combos` to create a Combo
+- Cal the PUT `http://localhost:3210/api/products/{id}` to update a Product
+- Cal the PUT `http://localhost:3210/api/products/combos/{id}` to update a Combo
+- Cal the DELETE `http://localhost:3210/api/products/{id}` to delete a Product
+- Cal the DELETE `http://localhost:3210/api/products/combos/{id}` to delete a Combo
+
+With those endpoints we can follow to *Section 2* to start the ***Order flow***
 
 ## Section 2 - Customer order
 
@@ -69,7 +80,7 @@ or
 
 - Call the GET `http://localhost:3210/api/products/categories/{category}` to get all products by a category
 or
-- Call the GET `http://localhost:3210/api/products/combo` if the customer wants to see the Combo products
+- Call the GET `http://localhost:3210/api/products/combos` if the customer wants to see the Combo products
 
 With this endpoints we can simulate a screen producst selection by chosing all products IDs we want to deal and create a Order
 

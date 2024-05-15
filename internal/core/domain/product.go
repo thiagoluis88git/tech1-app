@@ -27,6 +27,7 @@ type ProducImage struct {
 }
 
 type ComboForm struct {
+	Id          uint   `json:"id"`
 	Name        string `json:"name" validate:"required"`
 	Description string `json:"description" validate:"required"`
 	Price       int    `json:"price" validate:"required"`
