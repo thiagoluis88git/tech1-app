@@ -13,6 +13,7 @@ All the Endpoints can be called by accessing `http://localhost:3210/api` API url
 
 To build and run this project. Follow the Docker section
 
+
 ## Docker build and run
 
 This project was built using Docker and Docker Compose. So, to build and run the API, we need to run:
@@ -36,6 +37,7 @@ After the containers shows these status:
 
 we can access `http://localhost:3210/api` endpoints
 
+
 ## How to use
 
 To use all the endpoints in this API, we can follow these sequence to simulate a customer making an order in a restaurant.
@@ -46,6 +48,7 @@ We can separate in three moments.
 - Order preparing and deliver. This is used by the chef and waiter to check the order status
 
 We will divide in 2 sections: **Restaurant** owner and Customer **order**
+
 
 ## Section 1 - Restaurant owner
 
@@ -61,6 +64,7 @@ This section will be used by the restaurant owner to manage the restaurant produ
 - Cal the DELETE `http://localhost:3210/api/products/combos/{id}` to delete a Combo
 
 With those endpoints we can follow to *Section 2* to start the ***Order flow***
+
 
 ## Section 2 - Customer order
 
@@ -118,6 +122,7 @@ This is used to 'finish' the order and can be used to track some convertion rate
 
 - Call the PUT `http://localhost:3210/api/orders/{id}/not-delivered` to set Not Delivered status to indicate that customer doesn not receive the meal.
 This is used to 'finish' the order and can be used to track some convertion rate
+
 
 ## Swagger
 
