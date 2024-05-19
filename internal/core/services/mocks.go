@@ -114,7 +114,7 @@ var (
 		PaymentDate:      time.Date(2024, 10, 10, 0, 0, 0, 0, time.Local),
 	}
 
-	productCreation = domain.Product{
+	productCreation = domain.ProductForm{
 		Name:        "Name",
 		Description: "Description",
 		Category:    "Category",
@@ -126,7 +126,7 @@ var (
 		},
 	}
 
-	productUpdate = domain.Product{
+	productUpdate = domain.ProductForm{
 		Id:          uint(12),
 		Name:        "Name",
 		Description: "Description",
@@ -154,7 +154,7 @@ var (
 		Products:    []uint{12, 23, 34},
 	}
 
-	productsByCategory = []domain.Product{
+	productsByCategory = []domain.ProductForm{
 		{
 			Id:          uint(12),
 			Name:        "Name",
@@ -400,7 +400,7 @@ func (mock *MockPaymentGatewayRepository) Pay(paymentResonse domain.PaymentRespo
 	return args.Get(0).(domain.PaymentGatewayResponse), nil
 }
 
-func (mock *MockProductRepository) CreateProduct(ctx context.Context, product domain.Product) (uint, error) {
+func (mock *MockProductRepository) CreateProduct(ctx context.Context, product domain.ProductForm) (uint, error) {
 	args := mock.Called(ctx, product)
 	err := args.Error(1)
 
@@ -422,48 +422,15 @@ func (mock *MockProductRepository) CreateCombo(ctx context.Context, combo domain
 	return args.Get(0).(uint), nil
 }
 
-func (mock *MockProductRepository) GetProductsByCategory(ctx context.Context, category string) ([]domain.Product, error) {
+func (mock *MockProductRepository) GetProductsByCategory(ctx context.Context, category string) ([]domain.ProductResponse, error) {
 	args := mock.Called(ctx, category)
 	err := args.Error(1)
 
 	if err != nil {
-		return []domain.Product{}, err
+		return []domain.ProductResponse{}, err
 	}
 
-	return args.Get(0).([]domain.Product), nil
-}
-
-func (mock *MockProductRepository) GetCombos(ctx context.Context) ([]domain.Combo, error) {
-	args := mock.Called(ctx)
-	err := args.Error(1)
-
-	if err != nil {
-		return []domain.Combo{}, err
-	}
-
-	return args.Get(0).([]domain.Combo), nil
-}
-
-func (mock *MockProductRepository) UpdateCombo(ctx context.Context, combo domain.ComboForm) error {
-	args := mock.Called(ctx, combo)
-	err := args.Error(0)
-
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (mock *MockProductRepository) DeleteCombo(ctx context.Context, comboId uint) error {
-	args := mock.Called(ctx, comboId)
-	err := args.Error(0)
-
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return args.Get(0).([]domain.ProductResponse), nil
 }
 
 func (mock *MockProductRepository) DeleteProduct(ctx context.Context, productId uint) error {
@@ -477,7 +444,7 @@ func (mock *MockProductRepository) DeleteProduct(ctx context.Context, productId 
 	return nil
 }
 
-func (mock *MockProductRepository) UpdateProduct(ctx context.Context, product domain.Product) error {
+func (mock *MockProductRepository) UpdateProduct(ctx context.Context, product domain.ProductForm) error {
 	args := mock.Called(ctx, product)
 	err := args.Error(0)
 

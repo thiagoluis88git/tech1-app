@@ -23,7 +23,7 @@ func (suite *RepositoryTestSuite) TestGetProductsWithSuccess() {
 
 	repo := NewProductRepository(suite.db)
 
-	newProduct := domain.Product{
+	newProduct := domain.ProductForm{
 		Name:        "New Product Created",
 		Description: "New Description Product Created",
 		Category:    "Lanches",
@@ -53,7 +53,7 @@ func (suite *RepositoryTestSuite) TestCreateProductWithSuccess() {
 	suite.Empty(products)
 
 	repo := NewProductRepository(suite.db)
-	newProduct := domain.Product{
+	newProduct := domain.ProductForm{
 		Name:        "New Product Created",
 		Description: "New Description Product Created",
 		Category:    "Category",
@@ -77,110 +77,6 @@ func (suite *RepositoryTestSuite) TestCreateProductWithSuccess() {
 	suite.Equal("New Description Product Created", products[0].Description)
 }
 
-func (suite *RepositoryTestSuite) TestCreateComboWithSuccess() {
-	// ensure that the postgres database is empty
-	var combos []entities.Combo
-	result := suite.db.Find(&combos)
-	suite.NoError(result.Error)
-	suite.Empty(combos)
-
-	repo := NewProductRepository(suite.db)
-
-	newProduct := domain.Product{
-		Name:        "New Product Created",
-		Description: "New Description Product Created",
-		Category:    "Category",
-		Price:       2990,
-		Images: []domain.ProducImage{
-			{
-				ImageUrl: "NewImageUrl",
-			},
-		},
-	}
-	newId, err := repo.CreateProduct(suite.ctx, newProduct)
-	suite.NoError(err)
-	suite.Equal(uint(1), newId)
-
-	newCombo := domain.ComboForm{
-		Name:        "New Combo Created",
-		Description: "New Description Combo Created",
-		Price:       2990,
-		Products:    []uint{1},
-	}
-
-	newId, err = repo.CreateCombo(suite.ctx, newCombo)
-	suite.NoError(err)
-	suite.Equal(uint(1), newId)
-
-	newCombos, err := repo.GetCombos(suite.ctx)
-
-	suite.NoError(err)
-	suite.NoError(result.Error)
-	suite.Equal(1, len(newCombos))
-	suite.Equal(uint(1), newCombos[0].Id)
-	suite.Equal("New Combo Created", newCombos[0].Name)
-	suite.Equal("New Description Combo Created", newCombos[0].Description)
-	suite.Equal(uint(1), newCombos[0].Products[0].Id)
-}
-
-func (suite *RepositoryTestSuite) TestUpdateComboWithSuccess() {
-	// ensure that the postgres database is empty
-	var combos []entities.Combo
-	result := suite.db.Find(&combos)
-	suite.NoError(result.Error)
-	suite.Empty(combos)
-
-	repo := NewProductRepository(suite.db)
-
-	newProduct := domain.Product{
-		Name:        "New Product Created",
-		Description: "New Description Product Created",
-		Category:    "Category",
-		Price:       2990,
-		Images: []domain.ProducImage{
-			{
-				ImageUrl: "NewImageUrl",
-			},
-		},
-	}
-	newId, err := repo.CreateProduct(suite.ctx, newProduct)
-	suite.NoError(err)
-	suite.Equal(uint(1), newId)
-
-	newCombo := domain.ComboForm{
-		Name:        "New Combo Created",
-		Description: "New Description Combo Created",
-		Price:       2990,
-		Products:    []uint{1},
-	}
-
-	newId, err = repo.CreateCombo(suite.ctx, newCombo)
-	suite.NoError(err)
-	suite.Equal(uint(1), newId)
-
-	updateCombo := domain.ComboForm{
-		Id:          uint(1),
-		Name:        "Updated Combo Created",
-		Description: "Updated Description Combo Created",
-		Price:       3990,
-		Products:    []uint{1},
-	}
-
-	err = repo.UpdateCombo(suite.ctx, updateCombo)
-	suite.NoError(err)
-
-	newCombos, err := repo.GetCombos(suite.ctx)
-
-	suite.NoError(err)
-	suite.NoError(result.Error)
-	suite.Equal(1, len(newCombos))
-	suite.Equal(uint(1), newCombos[0].Id)
-	suite.Equal("Updated Combo Created", newCombos[0].Name)
-	suite.Equal("Updated Description Combo Created", newCombos[0].Description)
-	suite.Equal(3990, newCombos[0].Price)
-	suite.Equal(uint(1), newCombos[0].Products[0].Id)
-}
-
 func (suite *RepositoryTestSuite) TestUpdateProductWithSuccess() {
 	// ensure that the postgres database is empty
 	var products []entities.Product
@@ -190,7 +86,7 @@ func (suite *RepositoryTestSuite) TestUpdateProductWithSuccess() {
 
 	// create repository and save new note
 	repo := NewProductRepository(suite.db)
-	newProduct := domain.Product{
+	newProduct := domain.ProductForm{
 		Name:        "New Product",
 		Description: "New Description Product",
 		Category:    "Category",
@@ -214,7 +110,7 @@ func (suite *RepositoryTestSuite) TestUpdateProductWithSuccess() {
 	suite.Equal("New Product", products[0].Name)
 	suite.Equal("New Description Product", products[0].Description)
 
-	updateProduct := domain.Product{
+	updateProduct := domain.ProductForm{
 		Id:          uint(1),
 		Name:        "Updated Product",
 		Description: "Updated Description Product",
@@ -249,7 +145,7 @@ func (suite *RepositoryTestSuite) TestCreateProductWithConflictError() {
 
 	// create repository and save new note
 	repo := NewProductRepository(suite.db)
-	newProduct := domain.Product{
+	newProduct := domain.ProductForm{
 		Name:        "New Product Created",
 		Description: "New Description Product Created",
 		Category:    "Category",

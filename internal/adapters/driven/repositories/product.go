@@ -31,7 +31,7 @@ func (repository *ProductRepository) GetCategories() []string {
 	}
 }
 
-func (repository *ProductRepository) CreateProduct(ctx context.Context, product domain.Product) (uint, error) {
+func (repository *ProductRepository) CreateProduct(ctx context.Context, product domain.ProductForm) (uint, error) {
 	tx := repository.db.WithContext(ctx).Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -66,6 +66,22 @@ func (repository *ProductRepository) CreateProduct(ctx context.Context, product 
 		})
 	}
 
+	if product.ComboProductsIds != nil {
+		for _, value := range *product.ComboProductsIds {
+			comboProductEntity := &entities.ComboProduct{
+				ProductID: value,
+				ComboID:   productEntity.ID,
+			}
+
+			err := tx.Create(comboProductEntity).Error
+
+			if err != nil {
+				tx.Rollback()
+				return 0, responses.GetDatabaseError(err)
+			}
+		}
+	}
+
 	err = tx.Create(productImages).Error
 
 	if err != nil {
@@ -83,120 +99,22 @@ func (repository *ProductRepository) CreateProduct(ctx context.Context, product 
 	return productEntity.ID, nil
 }
 
-func (repository *ProductRepository) CreateCombo(ctx context.Context, combo domain.ComboForm) (uint, error) {
-	tx := repository.db.WithContext(ctx).Begin()
-	defer func() {
-		if r := recover(); r != nil {
-			tx.Rollback()
-		}
-	}()
-
-	if err := tx.Error; err != nil {
-		return 0, responses.GetDatabaseError(err)
-	}
-
-	comboEntity := &entities.Combo{
-		Name:        combo.Name,
-		Description: combo.Description,
-		Price:       combo.Price,
-	}
-
-	err := tx.Create(comboEntity).Error
-
-	if err != nil {
-		tx.Rollback()
-		return 0, responses.GetDatabaseError(err)
-	}
-
-	for _, value := range combo.Products {
-		comboProductEntity := &entities.ComboProduct{
-			ProductID: value,
-			ComboID:   comboEntity.ID,
-		}
-
-		err := tx.Create(comboProductEntity).Error
-
-		if err != nil {
-			tx.Rollback()
-			return 0, responses.GetDatabaseError(err)
-		}
-	}
-
-	err = tx.Commit().Error
-
-	if err != nil {
-		tx.Rollback()
-		return 0, responses.GetDatabaseError(err)
-	}
-
-	return comboEntity.ID, nil
-}
-
-func (repository *ProductRepository) GetProductsByCategory(ctx context.Context, category string) ([]domain.Product, error) {
+func (repository *ProductRepository) GetProductsByCategory(ctx context.Context, category string) ([]domain.ProductResponse, error) {
 	var productEntities []entities.Product
 	err := repository.
 		db.WithContext(ctx).
 		Model(&entities.Product{}).
 		Preload("ProductImage").
+		Preload("ComboProducts").
 		Where("category = ?", category).
 		Find(&productEntities).
 		Error
 
 	if err != nil {
-		return []domain.Product{}, responses.GetDatabaseError(err)
+		return []domain.ProductResponse{}, responses.GetDatabaseError(err)
 	}
 
-	return repository.buildProducts(productEntities), nil
-}
-
-func (repository *ProductRepository) GetCombos(ctx context.Context) ([]domain.Combo, error) {
-	var comboEntities []entities.Combo
-	err := repository.
-		db.WithContext(ctx).
-		Model(&entities.Combo{}).
-		Preload("Products").
-		Find(&comboEntities).
-		Error
-
-	if err != nil {
-		return []domain.Combo{}, responses.GetDatabaseError(err)
-	}
-
-	combos := []domain.Combo{}
-
-	for _, value := range comboEntities {
-		combo := domain.Combo{
-			Id:          value.ID,
-			Name:        value.Name,
-			Description: value.Description,
-			Price:       value.Price,
-		}
-
-		products := []domain.Product{}
-
-		for _, value := range value.Products {
-			var productEntities []entities.Product
-			err := repository.
-				db.WithContext(ctx).
-				Model(&entities.Product{}).
-				Preload("ProductImage").
-				Where("id = ?", value.ProductID).
-				Find(&productEntities).
-				Limit(1).
-				Error
-
-			if err != nil {
-				return []domain.Combo{}, responses.GetDatabaseError(err)
-			}
-
-			products = append(products, repository.buildProduct(productEntities[0]))
-		}
-
-		combo.Products = products
-		combos = append(combos, combo)
-	}
-
-	return combos, nil
+	return repository.buildProducts(ctx, productEntities), nil
 }
 
 func (repository *ProductRepository) DeleteProduct(ctx context.Context, productId uint) error {
@@ -235,43 +153,7 @@ func (repository *ProductRepository) DeleteProduct(ctx context.Context, productI
 	return nil
 }
 
-func (repository *ProductRepository) DeleteCombo(ctx context.Context, comboId uint) error {
-	tx := repository.db.WithContext(ctx).Begin()
-	defer func() {
-		if r := recover(); r != nil {
-			tx.Rollback()
-		}
-	}()
-
-	if err := tx.Error; err != nil {
-		return responses.GetDatabaseError(err)
-	}
-
-	err := tx.Where("combo_id = ?", comboId).Delete(&entities.ComboProduct{}).Error
-
-	if err != nil {
-		tx.Rollback()
-		return responses.GetDatabaseError(err)
-	}
-
-	err = tx.Delete(&entities.Combo{}, comboId).Error
-
-	if err != nil {
-		tx.Rollback()
-		return responses.GetDatabaseError(err)
-	}
-
-	err = tx.Commit().Error
-
-	if err != nil {
-		tx.Rollback()
-		return responses.GetDatabaseError(err)
-	}
-
-	return nil
-}
-
-func (repository *ProductRepository) UpdateProduct(ctx context.Context, product domain.Product) error {
+func (repository *ProductRepository) UpdateProduct(ctx context.Context, product domain.ProductForm) error {
 	productEntity := entities.Product{
 		Model:       gorm.Model{ID: product.Id},
 		Name:        product.Name,
@@ -289,34 +171,17 @@ func (repository *ProductRepository) UpdateProduct(ctx context.Context, product 
 	return nil
 }
 
-func (repository *ProductRepository) UpdateCombo(ctx context.Context, combo domain.ComboForm) error {
-	productEntity := entities.Combo{
-		Model:       gorm.Model{ID: combo.Id},
-		Name:        combo.Name,
-		Description: combo.Description,
-		Price:       combo.Price,
-	}
-
-	err := repository.db.WithContext(ctx).Save(&productEntity).Error
-
-	if err != nil {
-		return responses.GetDatabaseError(err)
-	}
-
-	return nil
-}
-
-func (repository *ProductRepository) buildProducts(productEntities []entities.Product) []domain.Product {
-	products := []domain.Product{}
+func (repository *ProductRepository) buildProducts(ctx context.Context, productEntities []entities.Product) []domain.ProductResponse {
+	products := []domain.ProductResponse{}
 
 	for _, value := range productEntities {
-		products = append(products, repository.buildProduct(value))
+		products = append(products, repository.buildProduct(ctx, value))
 	}
 
 	return products
 }
 
-func (repository *ProductRepository) buildProduct(value entities.Product) domain.Product {
+func (repository *ProductRepository) buildProduct(ctx context.Context, value entities.Product) domain.ProductResponse {
 	images := []domain.ProducImage{}
 
 	for _, valueImage := range value.ProductImage {
@@ -325,12 +190,42 @@ func (repository *ProductRepository) buildProduct(value entities.Product) domain
 		})
 	}
 
-	return domain.Product{
-		Id:          value.ID,
-		Name:        value.Name,
-		Description: value.Description,
-		Category:    value.Category,
-		Price:       value.Price,
-		Images:      images,
+	var comboProducts *[]domain.ProductResponse
+
+	if value.ComboProducts != nil {
+		var comboProductEntities []entities.ComboProduct
+		err := repository.
+			db.WithContext(ctx).
+			Model(&entities.ComboProduct{}).
+			Where("combo_id = ?", value.ID).
+			Find(&comboProductEntities).
+			Error
+
+		if err == nil {
+			comboProducts := make([]domain.ProductResponse, 0)
+
+			for _, comboProduct := range comboProductEntities {
+				var product entities.Product
+
+				err := repository.db.
+					WithContext(ctx).
+					First(&product, comboProduct.ProductID).
+					Error
+
+				if err == nil {
+					comboProducts = append(comboProducts, repository.buildProduct(ctx, product))
+				}
+			}
+		}
+	}
+
+	return domain.ProductResponse{
+		Id:            value.ID,
+		Name:          value.Name,
+		Description:   value.Description,
+		Category:      value.Category,
+		Price:         value.Price,
+		Images:        images,
+		ComboProducts: comboProducts,
 	}
 }

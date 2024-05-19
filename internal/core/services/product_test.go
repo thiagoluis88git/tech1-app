@@ -116,51 +116,6 @@ func TestProductServices(t *testing.T) {
 		assert.Equal(t, http.StatusConflict, businessError.StatusCode)
 	})
 
-	t.Run("got success when creating combo in services", func(t *testing.T) {
-		t.Parallel()
-
-		mockRepo := new(MockProductRepository)
-		sut := NewProductService(mockRepo)
-
-		ctx := context.TODO()
-
-		mockRepo.On("CreateCombo", ctx, comboCreation).Return(uint(1), nil)
-
-		response, err := sut.CreateCombo(ctx, comboCreation)
-
-		mockRepo.AssertExpectations(t)
-
-		assert.NoError(t, err)
-		assert.NotEmpty(t, response)
-
-		assert.Equal(t, uint(1), response)
-	})
-
-	t.Run("got error when creating product in services", func(t *testing.T) {
-		t.Parallel()
-
-		mockRepo := new(MockProductRepository)
-		sut := NewProductService(mockRepo)
-
-		ctx := context.TODO()
-
-		mockRepo.On("CreateCombo", ctx, comboCreation).Return(uint(0), &responses.LocalError{
-			Code:    3,
-			Message: "DATABASE_CONFLICT_ERROR",
-		})
-
-		response, err := sut.CreateCombo(ctx, comboCreation)
-
-		mockRepo.AssertExpectations(t)
-
-		assert.Error(t, err)
-		assert.Empty(t, response)
-
-		var businessError *responses.BusinessResponse
-		assert.Equal(t, true, errors.As(err, &businessError))
-		assert.Equal(t, http.StatusConflict, businessError.StatusCode)
-	})
-
 	t.Run("got success when deleting product in services", func(t *testing.T) {
 		t.Parallel()
 
@@ -202,47 +157,6 @@ func TestProductServices(t *testing.T) {
 		assert.Equal(t, http.StatusConflict, businessError.StatusCode)
 	})
 
-	t.Run("got success when deleting combo in services", func(t *testing.T) {
-		t.Parallel()
-
-		mockRepo := new(MockProductRepository)
-		sut := NewProductService(mockRepo)
-
-		ctx := context.TODO()
-
-		mockRepo.On("DeleteCombo", ctx, uint(12)).Return(nil)
-
-		err := sut.DeleteCombo(ctx, uint(12))
-
-		mockRepo.AssertExpectations(t)
-
-		assert.NoError(t, err)
-	})
-
-	t.Run("got error when deleting combo in services", func(t *testing.T) {
-		t.Parallel()
-
-		mockRepo := new(MockProductRepository)
-		sut := NewProductService(mockRepo)
-
-		ctx := context.TODO()
-
-		mockRepo.On("DeleteCombo", ctx, uint(12)).Return(&responses.LocalError{
-			Code:    3,
-			Message: "DATABASE_CONFLICT_ERROR",
-		})
-
-		err := sut.DeleteCombo(ctx, uint(12))
-
-		mockRepo.AssertExpectations(t)
-
-		assert.Error(t, err)
-
-		var businessError *responses.BusinessResponse
-		assert.Equal(t, true, errors.As(err, &businessError))
-		assert.Equal(t, http.StatusConflict, businessError.StatusCode)
-	})
-
 	t.Run("got success when updating product in services", func(t *testing.T) {
 		t.Parallel()
 
@@ -274,47 +188,6 @@ func TestProductServices(t *testing.T) {
 		})
 
 		err := sut.UpdateProduct(ctx, productUpdate)
-
-		mockRepo.AssertExpectations(t)
-
-		assert.Error(t, err)
-
-		var businessError *responses.BusinessResponse
-		assert.Equal(t, true, errors.As(err, &businessError))
-		assert.Equal(t, http.StatusConflict, businessError.StatusCode)
-	})
-
-	t.Run("got success when updating combo in services", func(t *testing.T) {
-		t.Parallel()
-
-		mockRepo := new(MockProductRepository)
-		sut := NewProductService(mockRepo)
-
-		ctx := context.TODO()
-
-		mockRepo.On("UpdateCombo", ctx, comboUpdate).Return(nil)
-
-		err := sut.UpdateCombo(ctx, comboUpdate)
-
-		mockRepo.AssertExpectations(t)
-
-		assert.NoError(t, err)
-	})
-
-	t.Run("got error when updating combo in services", func(t *testing.T) {
-		t.Parallel()
-
-		mockRepo := new(MockProductRepository)
-		sut := NewProductService(mockRepo)
-
-		ctx := context.TODO()
-
-		mockRepo.On("UpdateCombo", ctx, comboUpdate).Return(&responses.LocalError{
-			Code:    3,
-			Message: "DATABASE_CONFLICT_ERROR",
-		})
-
-		err := sut.UpdateCombo(ctx, comboUpdate)
 
 		mockRepo.AssertExpectations(t)
 

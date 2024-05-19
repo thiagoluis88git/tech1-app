@@ -20,7 +20,7 @@ func (suite *RepositoryTestSuite) TestCreateOrderWithSuccess() {
 	suite.Empty(products)
 
 	repoProduct := NewProductRepository(suite.db)
-	newProduct := domain.Product{
+	newProduct := domain.ProductForm{
 		Name:        "New Product Created",
 		Description: "New Description Product Created",
 		Category:    "Category",

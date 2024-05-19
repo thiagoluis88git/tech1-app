@@ -12,25 +12,18 @@ const (
 
 type Product struct {
 	gorm.Model
-	Name         string `gorm:"unique"`
-	Description  string
-	Category     string
-	Price        int
-	ProductImage []ProductImage
+	Name          string `gorm:"unique"`
+	Description   string
+	Category      string
+	Price         int
+	ProductImage  []ProductImage
+	ComboProducts *[]ComboProduct
 }
 
 type ProductImage struct {
 	gorm.Model
 	ProductID uint
 	ImageUrl  string
-}
-
-type Combo struct {
-	gorm.Model
-	Name        string
-	Description string
-	Price       int
-	Products    []ComboProduct
 }
 
 type ComboProduct struct {

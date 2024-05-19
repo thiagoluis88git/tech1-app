@@ -23,7 +23,7 @@ import (
 // @Router /api/products [post]
 func CreateProductHandler(productService *services.ProductService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var product domain.Product
+		var product domain.ProductForm
 
 		err := httpserver.DecodeJSONBody(w, r, &product)
 
@@ -47,7 +47,7 @@ func CreateProductHandler(productService *services.ProductService) http.HandlerF
 			return
 		}
 
-		httpserver.SendResponseSuccess(w, domain.ProductResponse{
+		httpserver.SendResponseSuccess(w, domain.ProductCreationResponse{
 			Id: productId,
 		})
 	}
@@ -89,7 +89,7 @@ func CreateComboHandler(productService *services.ProductService) http.HandlerFun
 			return
 		}
 
-		httpserver.SendResponseSuccess(w, domain.ProductResponse{
+		httpserver.SendResponseSuccess(w, domain.ProductCreationResponse{
 			Id: productId,
 		})
 	}
@@ -281,7 +281,7 @@ func UpdateProductHandler(productService *services.ProductService) http.HandlerF
 			return
 		}
 
-		var product domain.Product
+		var product domain.ProductForm
 
 		err = httpserver.DecodeJSONBody(w, r, &product)
 

@@ -18,7 +18,7 @@ func NewProductService(repository ports.ProductRepository) *ProductService {
 	}
 }
 
-func (service *ProductService) CreateProduct(ctx context.Context, product domain.Product) (uint, error) {
+func (service *ProductService) CreateProduct(ctx context.Context, product domain.ProductForm) (uint, error) {
 	productId, err := service.repository.CreateProduct(ctx, product)
 
 	if err != nil {
@@ -38,11 +38,11 @@ func (service *ProductService) CreateCombo(ctx context.Context, combo domain.Com
 	return productId, nil
 }
 
-func (service *ProductService) GetProductsByCategory(ctx context.Context, category string) ([]domain.Product, error) {
+func (service *ProductService) GetProductsByCategory(ctx context.Context, category string) ([]domain.ProductForm, error) {
 	products, err := service.repository.GetProductsByCategory(ctx, category)
 
 	if err != nil {
-		return []domain.Product{}, responses.GetResponseError(err, "ProductService")
+		return []domain.ProductForm{}, responses.GetResponseError(err, "ProductService")
 	}
 
 	return products, nil
@@ -68,7 +68,7 @@ func (service *ProductService) DeleteProduct(ctx context.Context, productId uint
 	return nil
 }
 
-func (service *ProductService) UpdateProduct(ctx context.Context, product domain.Product) error {
+func (service *ProductService) UpdateProduct(ctx context.Context, product domain.ProductForm) error {
 	err := service.repository.UpdateProduct(ctx, product)
 
 	if err != nil {

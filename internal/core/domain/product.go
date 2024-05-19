@@ -1,6 +1,6 @@
 package domain
 
-type Product struct {
+type ProductForm struct {
 	Id               uint          `json:"id"`
 	Name             string        `json:"name" validate:"required"`
 	Description      string        `json:"description" validate:"required"`
@@ -11,6 +11,16 @@ type Product struct {
 }
 
 type ProductResponse struct {
+	Id            uint               `json:"id"`
+	Name          string             `json:"name" validate:"required"`
+	Description   string             `json:"description" validate:"required"`
+	Category      string             `json:"category" validate:"required"`
+	Price         int                `json:"price" validate:"required"`
+	Images        []ProducImage      `json:"images" validate:"required"`
+	ComboProducts *[]ProductResponse `json:"comboProducts"`
+}
+
+type ProductCreationResponse struct {
 	Id uint `json:"id"`
 }
 
@@ -27,9 +37,9 @@ type ComboForm struct {
 }
 
 type Combo struct {
-	Id          uint      `json:"id"`
-	Name        string    `json:"name"`
-	Description string    `json:"description"`
-	Price       int       `json:"price"`
-	Products    []Product `json:"products"`
+	Id          uint          `json:"id"`
+	Name        string        `json:"name"`
+	Description string        `json:"description"`
+	Price       int           `json:"price"`
+	Products    []ProductForm `json:"products"`
 }

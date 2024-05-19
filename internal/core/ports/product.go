@@ -7,13 +7,9 @@ import (
 )
 
 type ProductRepository interface {
-	CreateProduct(ctx context.Context, product domain.Product) (uint, error)
-	CreateCombo(ctx context.Context, combo domain.ComboForm) (uint, error)
-	UpdateCombo(ctx context.Context, combo domain.ComboForm) error
-	DeleteCombo(ctx context.Context, comboId uint) error
+	CreateProduct(ctx context.Context, product domain.ProductForm) (uint, error)
 	GetCategories() []string
-	GetProductsByCategory(ctx context.Context, category string) ([]domain.Product, error)
-	GetCombos(ctx context.Context) ([]domain.Combo, error)
+	GetProductsByCategory(ctx context.Context, category string) ([]domain.ProductResponse, error)
 	DeleteProduct(ctx context.Context, productId uint) error
-	UpdateProduct(ctx context.Context, product domain.Product) error
+	UpdateProduct(ctx context.Context, product domain.ProductForm) error
 }
