@@ -43,7 +43,7 @@ func TestProductServices(t *testing.T) {
 		assert.NoError(t, err)
 		assert.NotEmpty(t, response)
 
-		assert.Equal(t, 3, len((response)))
+		assert.Equal(t, 3, len(response))
 	})
 
 	t.Run("got error when getting products by category in services", func(t *testing.T) {
