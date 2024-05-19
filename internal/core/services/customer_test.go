@@ -53,8 +53,8 @@ func TestCustomerServices(t *testing.T) {
 
 		ctx := context.TODO()
 
-		mockRepo.On("CreateCustomer", ctx, saveCustomer).Return(uint(0), &responses.NetworkError{
-			Code:    409,
+		mockRepo.On("CreateCustomer", ctx, saveCustomer).Return(uint(0), &responses.LocalError{
+			Code:    responses.DATABASE_CONFLICT_ERROR,
 			Message: "Conflict",
 		})
 

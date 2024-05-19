@@ -49,6 +49,10 @@ func GetDatabaseError(err error) *LocalError {
 		code = NOT_FOUND_ERROR
 	}
 
+	if code == 23505 {
+		code = DATABASE_CONFLICT_ERROR
+	}
+
 	return &LocalError{
 		Message: message,
 		Code:    code,

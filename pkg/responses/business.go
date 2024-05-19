@@ -102,7 +102,7 @@ func getBusinessMessageError(statusCode int, service string) string {
 }
 
 func getBusinessStatusCode(localError LocalError) int {
-	if localError.Code == 23505 {
+	if localError.Code == DATABASE_CONFLICT_ERROR {
 		return http.StatusConflict
 	}
 

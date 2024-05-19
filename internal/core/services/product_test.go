@@ -68,7 +68,7 @@ func TestProductServices(t *testing.T) {
 
 		var businessError *responses.BusinessResponse
 		assert.Equal(t, true, errors.As(err, &businessError))
-		assert.Equal(t, http.StatusUnprocessableEntity, businessError.StatusCode)
+		assert.Equal(t, http.StatusConflict, businessError.StatusCode)
 	})
 
 	t.Run("got success when creating product in services", func(t *testing.T) {
@@ -113,7 +113,7 @@ func TestProductServices(t *testing.T) {
 
 		var businessError *responses.BusinessResponse
 		assert.Equal(t, true, errors.As(err, &businessError))
-		assert.Equal(t, http.StatusUnprocessableEntity, businessError.StatusCode)
+		assert.Equal(t, http.StatusConflict, businessError.StatusCode)
 	})
 
 	t.Run("got success when creating combo in services", func(t *testing.T) {
@@ -158,7 +158,7 @@ func TestProductServices(t *testing.T) {
 
 		var businessError *responses.BusinessResponse
 		assert.Equal(t, true, errors.As(err, &businessError))
-		assert.Equal(t, http.StatusUnprocessableEntity, businessError.StatusCode)
+		assert.Equal(t, http.StatusConflict, businessError.StatusCode)
 	})
 
 	t.Run("got success when deleting product in services", func(t *testing.T) {
@@ -199,7 +199,7 @@ func TestProductServices(t *testing.T) {
 
 		var businessError *responses.BusinessResponse
 		assert.Equal(t, true, errors.As(err, &businessError))
-		assert.Equal(t, http.StatusUnprocessableEntity, businessError.StatusCode)
+		assert.Equal(t, http.StatusConflict, businessError.StatusCode)
 	})
 
 	t.Run("got success when deleting combo in services", func(t *testing.T) {
@@ -240,7 +240,7 @@ func TestProductServices(t *testing.T) {
 
 		var businessError *responses.BusinessResponse
 		assert.Equal(t, true, errors.As(err, &businessError))
-		assert.Equal(t, http.StatusUnprocessableEntity, businessError.StatusCode)
+		assert.Equal(t, http.StatusConflict, businessError.StatusCode)
 	})
 
 	t.Run("got success when updating product in services", func(t *testing.T) {
@@ -281,7 +281,7 @@ func TestProductServices(t *testing.T) {
 
 		var businessError *responses.BusinessResponse
 		assert.Equal(t, true, errors.As(err, &businessError))
-		assert.Equal(t, http.StatusUnprocessableEntity, businessError.StatusCode)
+		assert.Equal(t, http.StatusConflict, businessError.StatusCode)
 	})
 
 	t.Run("got success when updating combo in services", func(t *testing.T) {
@@ -322,6 +322,6 @@ func TestProductServices(t *testing.T) {
 
 		var businessError *responses.BusinessResponse
 		assert.Equal(t, true, errors.As(err, &businessError))
-		assert.Equal(t, http.StatusUnprocessableEntity, businessError.StatusCode)
+		assert.Equal(t, http.StatusConflict, businessError.StatusCode)
 	})
 }

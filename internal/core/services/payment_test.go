@@ -73,7 +73,7 @@ func TestPaymentServices(t *testing.T) {
 
 		var businessError *responses.BusinessResponse
 		assert.Equal(t, true, errors.As(err, &businessError))
-		assert.Equal(t, http.StatusUnprocessableEntity, businessError.StatusCode)
+		assert.Equal(t, http.StatusConflict, businessError.StatusCode)
 	})
 
 	t.Run("got error when paying in services", func(t *testing.T) {
@@ -131,6 +131,6 @@ func TestPaymentServices(t *testing.T) {
 
 		var businessError *responses.BusinessResponse
 		assert.Equal(t, true, errors.As(err, &businessError))
-		assert.Equal(t, http.StatusUnprocessableEntity, businessError.StatusCode)
+		assert.Equal(t, http.StatusConflict, businessError.StatusCode)
 	})
 }
