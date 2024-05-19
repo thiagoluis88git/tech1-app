@@ -23,11 +23,11 @@ func NewProductRepository(db *gorm.DB) ports.ProductRepository {
 
 func (repository *ProductRepository) GetCategories() []string {
 	return []string{
-		domain.CategoryCombo,
-		domain.CategorySnack,
-		domain.CategoryBeverage,
-		domain.CategoryToppings,
-		domain.CategoryDesert,
+		entities.CategoryCombo,
+		entities.CategorySnack,
+		entities.CategoryBeverage,
+		entities.CategoryToppings,
+		entities.CategoryDesert,
 	}
 }
 

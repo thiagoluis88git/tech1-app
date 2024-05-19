@@ -2,6 +2,14 @@ package entities
 
 import "gorm.io/gorm"
 
+const (
+	CategorySnack    = "Lanche"
+	CategoryBeverage = "Bebida"
+	CategoryDesert   = "Sobremesa"
+	CategoryToppings = "Acompanhamento"
+	CategoryCombo    = "Combo"
+)
+
 type Product struct {
 	gorm.Model
 	Name         string `gorm:"unique"`

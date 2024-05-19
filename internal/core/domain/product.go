@@ -1,13 +1,5 @@
 package domain
 
-const (
-	CategorySnack    = "Lanche"
-	CategoryBeverage = "Bebida"
-	CategoryDesert   = "Sobremesa"
-	CategoryToppings = "Acompanhamento"
-	CategoryCombo    = "Combo"
-)
-
 type Product struct {
 	Id               uint          `json:"id"`
 	Name             string        `json:"name" validate:"required"`
