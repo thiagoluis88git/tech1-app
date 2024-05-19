@@ -113,6 +113,85 @@ var (
 		PaymentGatewayId: "1234",
 		PaymentDate:      time.Date(2024, 10, 10, 0, 0, 0, 0, time.Local),
 	}
+
+	productCreation = domain.Product{
+		Name:        "Name",
+		Description: "Description",
+		Category:    "Category",
+		Price:       23456,
+		Images: []domain.ProducImage{
+			{
+				ImageUrl: "imageUrl",
+			},
+		},
+	}
+
+	productUpdate = domain.Product{
+		Id:          uint(12),
+		Name:        "Name",
+		Description: "Description",
+		Category:    "Category",
+		Price:       23456,
+		Images: []domain.ProducImage{
+			{
+				ImageUrl: "imageUrl",
+			},
+		},
+	}
+
+	comboCreation = domain.ComboForm{
+		Name:        "Name Combo",
+		Description: "Description Combo",
+		Price:       12345,
+		Products:    []uint{12, 23, 34},
+	}
+
+	comboUpdate = domain.ComboForm{
+		Id:          uint(12),
+		Name:        "Name Combo",
+		Description: "Description Combo",
+		Price:       12345,
+		Products:    []uint{12, 23, 34},
+	}
+
+	productsByCategory = []domain.Product{
+		{
+			Id:          uint(12),
+			Name:        "Name",
+			Description: "Description",
+			Category:    "Category",
+			Price:       23456,
+			Images: []domain.ProducImage{
+				{
+					ImageUrl: "imageUrl",
+				},
+			},
+		},
+		{
+			Id:          uint(23),
+			Name:        "Name 2",
+			Description: "Description 2",
+			Category:    "Category 2",
+			Price:       23456,
+			Images: []domain.ProducImage{
+				{
+					ImageUrl: "imageUrl",
+				},
+			},
+		},
+		{
+			Id:          uint(34),
+			Name:        "Name 3",
+			Description: "Description 3",
+			Category:    "Category 3",
+			Price:       34567,
+			Images: []domain.ProducImage{
+				{
+					ImageUrl: "imageUrl",
+				},
+			},
+		},
+	}
 )
 
 type MockOrderRepository struct {
@@ -128,6 +207,10 @@ type MockPaymentRepository struct {
 }
 
 type MockPaymentGatewayRepository struct {
+	mock.Mock
+}
+
+type MockProductRepository struct {
 	mock.Mock
 }
 
@@ -315,4 +398,97 @@ func (mock *MockPaymentGatewayRepository) Pay(paymentResonse domain.PaymentRespo
 	}
 
 	return args.Get(0).(domain.PaymentGatewayResponse), nil
+}
+
+func (mock *MockProductRepository) CreateProduct(ctx context.Context, product domain.Product) (uint, error) {
+	args := mock.Called(ctx, product)
+	err := args.Error(1)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return args.Get(0).(uint), nil
+}
+
+func (mock *MockProductRepository) CreateCombo(ctx context.Context, combo domain.ComboForm) (uint, error) {
+	args := mock.Called(ctx, combo)
+	err := args.Error(1)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return args.Get(0).(uint), nil
+}
+
+func (mock *MockProductRepository) GetProductsByCategory(ctx context.Context, category string) ([]domain.Product, error) {
+	args := mock.Called(ctx, category)
+	err := args.Error(1)
+
+	if err != nil {
+		return []domain.Product{}, err
+	}
+
+	return args.Get(0).([]domain.Product), nil
+}
+
+func (mock *MockProductRepository) GetCombos(ctx context.Context) ([]domain.Combo, error) {
+	args := mock.Called(ctx)
+	err := args.Error(1)
+
+	if err != nil {
+		return []domain.Combo{}, err
+	}
+
+	return args.Get(0).([]domain.Combo), nil
+}
+
+func (mock *MockProductRepository) UpdateCombo(ctx context.Context, combo domain.ComboForm) error {
+	args := mock.Called(ctx, combo)
+	err := args.Error(0)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (mock *MockProductRepository) DeleteCombo(ctx context.Context, comboId uint) error {
+	args := mock.Called(ctx, comboId)
+	err := args.Error(0)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (mock *MockProductRepository) DeleteProduct(ctx context.Context, productId uint) error {
+	args := mock.Called(ctx, productId)
+	err := args.Error(0)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (mock *MockProductRepository) UpdateProduct(ctx context.Context, product domain.Product) error {
+	args := mock.Called(ctx, product)
+	err := args.Error(0)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (mock *MockProductRepository) GetCategories() []string {
+	args := mock.Called()
+	return args.Get(0).([]string)
 }
