@@ -5,9 +5,12 @@ that makes all steps of a fast food dish order, as:
 
 - Products creation/manipulation by the restaurant owner
 - Customer identification
+- Order creation with given products
 - Payment process
 - Order tracking by the chef
 - Order tracking by the waiter and the customer
+
+This projects only fits the Backend side, which means that customer needs to **choose** the products or combo by a interface previously. This Backend will only receive the *entire order with all chosen products or combos*. This Backend will not do a *step by step product selecion*.
 
 All the Endpoints can be called by accessing `http://localhost:3210/api` API url.
 
@@ -43,7 +46,7 @@ we can access `http://localhost:3210/api` endpoints
 To use all the endpoints in this API, we can follow these sequence to simulate a customer making an order in a restaurant.
 We can separate in three moments.
 
-- Restaurant products injestion. This is used by the restaurant owner to create all the product portfolio with its images and prices
+- Restaurant products manipulation. This is used by the restaurant owner to create all the product portfolio with its images and prices
 - Customer self service. This is used by the customer to choose the products, pay for it and create an order 
 - Order preparing and deliver. This is used by the chef and waiter to check the order status
 
