@@ -12,12 +12,12 @@ const (
 
 type Product struct {
 	gorm.Model
-	Name          string `gorm:"unique"`
-	Description   string
-	Category      string
-	Price         int
-	ProductImage  []ProductImage
-	ComboProducts *[]ComboProduct
+	Name         string `gorm:"unique"`
+	Description  string
+	Category     string
+	Price        int
+	ProductImage []ProductImage
+	ComboProduct []ComboProduct
 }
 
 type ProductImage struct {
@@ -28,6 +28,6 @@ type ProductImage struct {
 
 type ComboProduct struct {
 	gorm.Model
-	ProductID uint
-	ComboID   uint
+	ProductID      uint
+	ComboProductID uint
 }

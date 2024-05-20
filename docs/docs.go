@@ -478,7 +478,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Product"
+                            "$ref": "#/definitions/domain.ProductForm"
                         }
                     }
                 ],
@@ -498,9 +498,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/products/combos": {
+        "/api/products/categories": {
             "get": {
-                "description": "List all combos with their products",
+                "description": "Get all categories to filter in products by category",
                 "consumes": [
                     "application/json"
                 ],
@@ -510,110 +510,25 @@ const docTemplate = `{
                 "tags": [
                     "Product"
                 ],
-                "summary": "List all combos",
+                "summary": "Get all categories",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "12",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/domain.Combo"
+                                "type": "string"
                             }
                         }
-                    }
-                }
-            },
-            "post": {
-                "description": "Create new combo of products",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Product"
-                ],
-                "summary": "Create new combo",
-                "parameters": [
-                    {
-                        "description": "combo",
-                        "name": "product",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/domain.ComboForm"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/domain.ProductResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "ComboForm has required fields"
-                    },
-                    "409": {
-                        "description": "This Combo is already added"
-                    }
-                }
-            }
-        },
-        "/api/products/combos/{id}": {
-            "put": {
-                "description": "Update a combo by ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Product"
-                ],
-                "summary": "Update a combo",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "12",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No Content"
-                    }
-                }
-            },
-            "delete": {
-                "description": "Delete a combo by ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Product"
-                ],
-                "summary": "Delete a combo",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "12",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No Content"
                     }
                 }
             }
@@ -646,7 +561,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/domain.Product"
+                                "$ref": "#/definitions/domain.ProductForm"
                             }
                         }
                     }
@@ -711,58 +626,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "domain.Combo": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "price": {
-                    "type": "integer"
-                },
-                "products": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/domain.Product"
-                    }
-                }
-            }
-        },
-        "domain.ComboForm": {
-            "type": "object",
-            "required": [
-                "description",
-                "name",
-                "price",
-                "products"
-            ],
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "price": {
-                    "type": "integer"
-                },
-                "products": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                }
-            }
-        },
         "domain.Customer": {
             "type": "object",
             "required": [
@@ -915,7 +778,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.Product": {
+        "domain.ProductForm": {
             "type": "object",
             "required": [
                 "category",
@@ -956,8 +819,39 @@ const docTemplate = `{
         },
         "domain.ProductResponse": {
             "type": "object",
+            "required": [
+                "category",
+                "description",
+                "images",
+                "name",
+                "price"
+            ],
             "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "comboProducts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.ProductResponse"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
                 "id": {
+                    "type": "integer"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.ProducImage"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
                     "type": "integer"
                 }
             }

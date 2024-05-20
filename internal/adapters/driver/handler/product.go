@@ -16,7 +16,7 @@ import (
 // @Tags Product
 // @Accept json
 // @Produce json
-// @Param product body domain.Product true "product"
+// @Param product body domain.ProductForm true "product"
 // @Success 200 {object} domain.ProductResponse
 // @Failure 400 "Product has required fields"
 // @Failure 409 "This Product is already added"
@@ -59,7 +59,7 @@ func CreateProductHandler(productService *services.ProductService) http.HandlerF
 // @Param category path string true "Lanches"
 // @Accept json
 // @Produce json
-// @Success 200 {object} []domain.Product
+// @Success 200 {object} []domain.ProductForm
 // @Router /api/products/{category} [get]
 func GetProductsByCategoryHandler(productService *services.ProductService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -197,7 +197,15 @@ func UpdateProductHandler(productService *services.ProductService) http.HandlerF
 	}
 }
 
-func GetCategoryHandler(productService *services.ProductService) http.HandlerFunc {
+// @Summary Get all categories
+// @Description Get all categories to filter in products by category
+// @Tags Product
+// @Param id path int true "12"
+// @Accept json
+// @Produce json
+// @Success 200 {object} []string
+// @Router /api/products/categories [get]
+func GetCategoriesHandler(productService *services.ProductService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		httpserver.SendResponseSuccess(w, productService.GetCategories())
 	}

@@ -98,8 +98,8 @@ func (repository *ProductRepository) createComboIfProductsNedded(
 	if productWithCombo.ComboProductsIds != nil {
 		for _, value := range *productWithCombo.ComboProductsIds {
 			comboProductEntity := &entities.ComboProduct{
-				ProductID: value,
-				ComboID:   comboId,
+				ProductID:      comboId,
+				ComboProductID: value,
 			}
 
 			err := tx.Create(comboProductEntity).Error
@@ -120,7 +120,7 @@ func (repository *ProductRepository) GetProductsByCategory(ctx context.Context, 
 		db.WithContext(ctx).
 		Model(&entities.Product{}).
 		Preload("ProductImage").
-		Preload("ComboProducts").
+		Preload("ComboProduct").
 		Where("category = ?", category).
 		Find(&productEntities).
 		Error
@@ -221,15 +221,16 @@ func (repository *ProductRepository) buildProduct(ctx context.Context, value ent
 func (repository *ProductRepository) getComboProductsIfNedded(ctx context.Context, value entities.Product) *[]domain.ProductResponse {
 	var comboProducts []domain.ProductResponse
 
-	if value.ComboProducts != nil {
+	if value.ComboProduct != nil {
 		comboProducts = make([]domain.ProductResponse, 0)
 
-		for _, comboProduct := range *value.ComboProducts {
+		for _, comboProduct := range value.ComboProduct {
 			var product entities.Product
 
 			err := repository.db.
 				WithContext(ctx).
-				First(&product, comboProduct.ProductID).
+				Preload("ProductImage").
+				First(&product, comboProduct.ComboProductID).
 				Error
 
 			if err == nil {

@@ -1,40 +1,5 @@
 basePath: /
 definitions:
-  domain.Combo:
-    properties:
-      description:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-      price:
-        type: integer
-      products:
-        items:
-          $ref: '#/definitions/domain.Product'
-        type: array
-    type: object
-  domain.ComboForm:
-    properties:
-      description:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-      price:
-        type: integer
-      products:
-        items:
-          type: integer
-        type: array
-    required:
-    - description
-    - name
-    - price
-    - products
-    type: object
   domain.Customer:
     properties:
       cpf:
@@ -135,7 +100,7 @@ definitions:
     required:
     - imageUrl
     type: object
-  domain.Product:
+  domain.ProductForm:
     properties:
       category:
         type: string
@@ -164,8 +129,30 @@ definitions:
     type: object
   domain.ProductResponse:
     properties:
+      category:
+        type: string
+      comboProducts:
+        items:
+          $ref: '#/definitions/domain.ProductResponse'
+        type: array
+      description:
+        type: string
       id:
         type: integer
+      images:
+        items:
+          $ref: '#/definitions/domain.ProducImage'
+        type: array
+      name:
+        type: string
+      price:
+        type: integer
+    required:
+    - category
+    - description
+    - images
+    - name
+    - price
     type: object
 host: localshot:3210
 info:
@@ -486,7 +473,7 @@ paths:
         name: product
         required: true
         schema:
-          $ref: '#/definitions/domain.Product'
+          $ref: '#/definitions/domain.ProductForm'
       produces:
       - application/json
       responses:
@@ -519,7 +506,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/domain.Product'
+              $ref: '#/definitions/domain.ProductForm'
             type: array
       summary: List all products by a category
       tags:
@@ -561,11 +548,17 @@ paths:
       summary: Update a product
       tags:
       - Product
-  /api/products/combos:
+  /api/products/categories:
     get:
       consumes:
       - application/json
-      description: List all combos with their products
+      description: Get all categories to filter in products by category
+      parameters:
+      - description: "12"
+        in: path
+        name: id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -573,71 +566,9 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/domain.Combo'
+              type: string
             type: array
-      summary: List all combos
-      tags:
-      - Product
-    post:
-      consumes:
-      - application/json
-      description: Create new combo of products
-      parameters:
-      - description: combo
-        in: body
-        name: product
-        required: true
-        schema:
-          $ref: '#/definitions/domain.ComboForm'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/domain.ProductResponse'
-        "400":
-          description: ComboForm has required fields
-        "409":
-          description: This Combo is already added
-      summary: Create new combo
-      tags:
-      - Product
-  /api/products/combos/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Delete a combo by ID
-      parameters:
-      - description: "12"
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-      summary: Delete a combo
-      tags:
-      - Product
-    put:
-      consumes:
-      - application/json
-      description: Update a combo by ID
-      parameters:
-      - description: "12"
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-      summary: Update a combo
+      summary: Get all categories
       tags:
       - Product
 swagger: "2.0"
