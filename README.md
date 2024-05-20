@@ -69,7 +69,7 @@ This section will use all the Endpoints to make a entire order flow.
 
 ### 1. User identification (Customer view)
 
-- Call the GET `http://localhost:3210/api/customers/{cep}` to get this `[Customer ID]`
+- Call the GET `http://localhost:3210/api/customers/{cpf}` to get this `[Customer ID]`
 or
 - Cal the POST `http://localhost:3210/api/customers` to create a Customer and retrieve the `[Customer ID]`
 
