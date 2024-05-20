@@ -57,11 +57,8 @@ This section will be used by the restaurant owner to manage the restaurant produ
 ### 1. Create product (Owner view)
 
 - Cal the POST `http://localhost:3210/api/products` to create a Product
-- Cal the POST `http://localhost:3210/api/products/combos` to create a Combo
 - Cal the PUT `http://localhost:3210/api/products/{id}` to update a Product
-- Cal the PUT `http://localhost:3210/api/products/combos/{id}` to update a Combo
 - Cal the DELETE `http://localhost:3210/api/products/{id}` to delete a Product
-- Cal the DELETE `http://localhost:3210/api/products/combos/{id}` to delete a Combo
 
 With those endpoints we can follow to *Section 2* to start the ***Order flow***
 
@@ -72,9 +69,9 @@ This section will use all the Endpoints to make a entire order flow.
 
 ### 1. User identification (Customer view)
 
-- Call the GET `http://localhost:3210/api/customers/{cep}` to get this [Customer ID]
+- Call the GET `http://localhost:3210/api/customers/{cep}` to get this `[Customer ID]`
 or
-- Cal the POST `http://localhost:3210/api/customers` to create a Customer and retrieve the [Customer ID]
+- Cal the POST `http://localhost:3210/api/customers` to create a Customer and retrieve the `[Customer ID]`
 
 ### 2. List all the categories (Customer view)
 
@@ -83,22 +80,20 @@ or
 ### 3. List products by the chosen category (Customer view)
 
 - Call the GET `http://localhost:3210/api/products/categories/{category}` to get all products by a category
-or
-- Call the GET `http://localhost:3210/api/products/combos` if the customer wants to see the Combo products
 
 With this endpoints we can simulate a screen producst selection by chosing all products IDs we want to deal and create a Order
 
 ### 4. Pay the products amount (Customer view)
 
 - Call the GET `http://localhost:3210/api/payments/types` to show to customer which payment type to choose
-- Call the POST `http://localhost:3210/api/payments` to pay for the amount and receive the [Payment ID]
+- Call the POST `http://localhost:3210/api/payments` to pay for the amount and receive the `[Payment ID]`
 
 ### 5. Create an order (Customer view)
 
 - Call the POST `http://localhost:3210/api/orders` with:
-- - All the [Products IDs] chosen [*required]
-- - The [Payment ID] [*required]
-- - The [Customer ID] [optional]
+- - All the `[Products IDs]` chosen [*required]
+- - The `[Payment ID]` [*required*]
+- - The `[Customer ID]` [*optional*]
 - - Total price for the all products sum
 
 ### 6. List order to prepate (Chef view)
