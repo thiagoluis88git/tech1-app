@@ -139,22 +139,7 @@ var (
 		},
 	}
 
-	comboCreation = domain.ComboForm{
-		Name:        "Name Combo",
-		Description: "Description Combo",
-		Price:       12345,
-		Products:    []uint{12, 23, 34},
-	}
-
-	comboUpdate = domain.ComboForm{
-		Id:          uint(12),
-		Name:        "Name Combo",
-		Description: "Description Combo",
-		Price:       12345,
-		Products:    []uint{12, 23, 34},
-	}
-
-	productsByCategory = []domain.ProductForm{
+	productsByCategory = []domain.ProductResponse{
 		{
 			Id:          uint(12),
 			Name:        "Name",

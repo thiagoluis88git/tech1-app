@@ -80,10 +80,6 @@ func main() {
 	router.Get("/api/customers/{cpf}", handler.GetCustomerByCPFHandler(customerService))
 
 	router.Post("/api/products", handler.CreateProductHandler(productService))
-	router.Post("/api/products/combos", handler.CreateComboHandler(productService))
-	router.Put("/api/products/combos/{id}", handler.UpdateComboHandler(productService))
-	router.Delete("/api/products/combos/{id}", handler.DeleteComboHandler(productService))
-	router.Get("/api/products/combos", handler.GetCombosHandler(productService))
 	router.Delete("/api/products/{id}", handler.DeleteProductHandler(productService))
 	router.Put("/api/products/{id}", handler.UpdateProductHandler(productService))
 	router.Get("/api/products/categories", handler.GetCategoryHandler(productService))

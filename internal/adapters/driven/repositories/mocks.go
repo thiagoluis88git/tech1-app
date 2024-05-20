@@ -61,7 +61,6 @@ func (suite *RepositoryTestSuite) SetupTest() {
 	err := suite.db.AutoMigrate(
 		&entities.Product{},
 		&entities.ProductImage{},
-		&entities.Combo{},
 		&entities.ComboProduct{},
 		&entities.Order{},
 		&entities.OrderProduct{},
@@ -73,7 +72,6 @@ func (suite *RepositoryTestSuite) SetupTest() {
 func (suite *RepositoryTestSuite) TearDownTest() {
 	suite.db.Exec("DROP TABLE IF EXISTS products CASCADE;")
 	suite.db.Exec("DROP TABLE IF EXISTS product_images CASCADE;")
-	suite.db.Exec("DROP TABLE IF EXISTS combos CASCADE;")
 	suite.db.Exec("DROP TABLE IF EXISTS combo_products CASCADE;")
 	suite.db.Exec("DROP TABLE IF EXISTS orders CASCADE;")
 	suite.db.Exec("DROP TABLE IF EXISTS order_products CASCADE;")
