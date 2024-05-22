@@ -14,7 +14,7 @@
   - [4 Pay the products amount](#4-pay-the-products-amount)
   - [5 Create an order](#5-create-an-order)
   - [6 List orders to follow](#6-list-orders-to-follow)
-  - [7 List orders to prepate](#7-list-orders-to-prepate)
+  - [7 List orders to prepare](#7-list-orders-to-prepare)
   - [8 Update order to preparing](#8-update-order-to-preparing)
   - [9 Update order to done](#9-update-order-to-done)
   - [9 Update order to done](#9-update-order-to-done)
@@ -138,7 +138,7 @@ With this endpoints we can simulate a screen producst selection by chosing all p
 The order can be followed by its ID:
 - Call the GET `http://localhost:3210/api/orders/{id}` to show a an Orders to be followed by Customer and Waiter
 
-### 7 List orders to prepate
+### 7 List orders to prepare
 ***(Chef view)***
 
 - Call the GET `http://localhost:3210/api/orders/to-prepare` to list the Orders with its [Order ID]
