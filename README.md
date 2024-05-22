@@ -19,7 +19,7 @@
   - [9 Update order to done](#9-update-order-to-done)
   - [9 Update order to done](#9-update-order-to-done)
   - [10 Update order to delivered](#10-update-order-to-delivered)
-  - [11 Update order to not delivered](#10-update-order-to-not-delivered)
+  - [11 Update order to not delivered](#11-update-order-to-not-delivered)
 - [Documentation](#documentation)
   - [Postman collection](#postman-collection)
   - [Swagger](#swagger)
