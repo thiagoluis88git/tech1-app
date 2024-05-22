@@ -173,8 +173,8 @@ two different ways:
 
 ### Event Storming
 
-This project was guided by the DDD Event Storming. This document was made in Miro
-[Event Storming](https://miro.com/welcomeonboard/NU9HT081SExIOEkyYUNZOGxVNGQyQ2h3NjFxRjNTUlB2MUZVV2xaZmF4Q0RYV1lIajlvOERFbGo2Mmx6clBvVXwzNDU4NzY0NTg4MDA1OTg4NTQwfDI=?share_link_id=625787819956)
+This project was guided by the DDD Event Storming. This document was made in Miro. The file `event_storming.pdf` is in the root of this project.
+We can algo see the Miro project by accessing the link:[Event Storming](https://miro.com/welcomeonboard/NU9HT081SExIOEkyYUNZOGxVNGQyQ2h3NjFxRjNTUlB2MUZVV2xaZmF4Q0RYV1lIajlvOERFbGo2Mmx6clBvVXwzNDU4NzY0NTg4MDA1OTg4NTQwfDI=?share_link_id=625787819956)
 
 ### Postman collection
 
