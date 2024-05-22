@@ -1,0 +1,617 @@
+{
+	"info": {
+		"_postman_id": "af5fc0ae-2b7d-479a-8824-df6e7126be3c",
+		"name": "Fiap Tech 1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34427842"
+	},
+	"item": [
+		{
+			"name": "Customer",
+			"item": [
+				{
+					"name": "Create Customer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Cliente 1\",\n    \"cpf\": \"23423456789\",\n    \"email\": \"teste2@teste2.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3210/api/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3210",
+							"path": [
+								"api",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customer By CPF",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Batata\",\n    \"description\": \"Batata frita 300g\",\n    \"category\": \"Acompanhamento\",\n    \"price\": 939,\n    \"images\": [\n        {\n            \"imageUrl\": \"url1\",\n            \"imageUrl\": \"url2\",\n            \"imageUrl\": \"url3\",\n            \"imageUrl\": \"url4\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3210/api/customers/345456",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3210",
+							"path": [
+								"api",
+								"customers",
+								"345456"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Customer",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Cliente 1\",\n    \"cpf\": \"23423456789\",\n    \"email\": \"teste2@teste2.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3210/api/customers/42",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3210",
+							"path": [
+								"api",
+								"customers",
+								"42"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "Get All Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3210/api/products/categories",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3210",
+							"path": [
+								"api",
+								"products",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Hamburguer Angus 3\",\n    \"description\": \"Hamburguer Angus com 2 carnes de 120g com cebola roxa, queijo cheddar, bacon, ovo e rúcula\",\n    \"category\": \"Lanche\",\n    \"price\": 2499,\n    \"images\": [\n        {\n            \"imageUrl\": \"url1\"\n        },\n        {\n            \"imageUrl\": \"url2\"\n        },\n        {\n            \"imageUrl\": \"url3\"\n        },\n        {\n            \"imageUrl\": \"url4\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3210/api/products/32",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3210",
+							"path": [
+								"api",
+								"products",
+								"32"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Combo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Combo 2\",\n    \"description\": \"Combo 1 mais 1 sorvete\",\n    \"category\": \"Combo\",\n    \"price\": 499,\n    \"images\": [\n        {\n            \"imageUrl\": \"url1\"\n        },\n        {\n            \"imageUrl\": \"url2\"\n        }\n    ],\n    \"comboProductsIds\": [3,4,8]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3210/api/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3210",
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Hamburger 1\",\n    \"description\": \"Hamburger com pão de brioche, queijo prato e cebola roxa\",\n    \"category\": \"Lanche\",\n    \"price\": 1349,\n    \"images\": [\n        {\n            \"imageUrl\": \"url1\"\n        },\n                {\n            \"imageUrl\": \"url1\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3210/api/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3210",
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Hamburguer Angus 3\",\n    \"description\": \"Hamburguer Angus com 2 carnes de 120g com cebola roxa, queijo cheddar, bacon, ovo e rúcula\",\n    \"category\": \"Lanche\",\n    \"price\": 2499,\n    \"images\": [\n        {\n            \"imageUrl\": \"url1\"\n        },\n        {\n            \"imageUrl\": \"url2\"\n        },\n        {\n            \"imageUrl\": \"url3\"\n        },\n        {\n            \"imageUrl\": \"url4\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3210/api/products/32",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3210",
+							"path": [
+								"api",
+								"products",
+								"32"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Products by category",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Batata\",\n    \"description\": \"Batata frita 300g\",\n    \"category\": \"Acompanhamento\",\n    \"price\": 939,\n    \"images\": [\n        {\n            \"imageUrl\": \"url1\",\n            \"imageUrl\": \"url2\",\n            \"imageUrl\": \"url3\",\n            \"imageUrl\": \"url4\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3210/api/products/categories/Acompanhamento",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3210",
+							"path": [
+								"api",
+								"products",
+								"categories",
+								"Acompanhamento"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "Get Order By Id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"totalPrice\": 4590,\n    \"paymentKind\": \"Voucher\",\n    \"customerId\": 13,\n    \"orderProducts\": [\n        {\n            \"productId\": 30\n        },\n        {\n            \"productId\": 33\n        },\n        {\n            \"productId\": 2\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3210/api/orders/8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3210",
+							"path": [
+								"api",
+								"orders",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Orders to Prepare",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"totalPrice\": 4590,\n    \"paymentKind\": \"Voucher\",\n    \"customerId\": 13,\n    \"orderProducts\": [\n        {\n            \"productId\": 30\n        },\n        {\n            \"productId\": 33\n        },\n        {\n            \"productId\": 2\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3210/api/orders/to-prepare",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3210",
+							"path": [
+								"api",
+								"orders",
+								"to-prepare"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Orders to Follow",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"totalPrice\": 4590,\n    \"paymentKind\": \"Voucher\",\n    \"customerId\": 13,\n    \"orderProducts\": [\n        {\n            \"productId\": 30\n        },\n        {\n            \"productId\": 33\n        },\n        {\n            \"productId\": 2\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3210/api/orders/follow",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3210",
+							"path": [
+								"api",
+								"orders",
+								"follow"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Order to Preparing",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"totalPrice\": 4590,\n    \"paymentKind\": \"Voucher\",\n    \"customerId\": 13,\n    \"orderProducts\": [\n        {\n            \"productId\": 30\n        },\n        {\n            \"productId\": 33\n        },\n        {\n            \"productId\": 2\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3210/api/orders/1/preparing",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3210",
+							"path": [
+								"api",
+								"orders",
+								"1",
+								"preparing"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Order to Done",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"totalPrice\": 4590,\n    \"paymentKind\": \"Voucher\",\n    \"customerId\": 13,\n    \"orderProducts\": [\n        {\n            \"productId\": 30\n        },\n        {\n            \"productId\": 33\n        },\n        {\n            \"productId\": 2\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3210/api/orders/1/done",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3210",
+							"path": [
+								"api",
+								"orders",
+								"1",
+								"done"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Order to Delivered",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"totalPrice\": 4590,\n    \"paymentKind\": \"Voucher\",\n    \"customerId\": 13,\n    \"orderProducts\": [\n        {\n            \"productId\": 30\n        },\n        {\n            \"productId\": 33\n        },\n        {\n            \"productId\": 2\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3210/api/orders/1/delivered",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3210",
+							"path": [
+								"api",
+								"orders",
+								"1",
+								"delivered"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Order to Not Delivered",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"totalPrice\": 4590,\n    \"paymentKind\": \"Voucher\",\n    \"customerId\": 13,\n    \"orderProducts\": [\n        {\n            \"productId\": 30\n        },\n        {\n            \"productId\": 33\n        },\n        {\n            \"productId\": 2\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3210/api/orders/1/delivered",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3210",
+							"path": [
+								"api",
+								"orders",
+								"1",
+								"delivered"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Order",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"totalPrice\": 5990,\n    \"paymentId\": 4,\n    \"orderProducts\": [\n        {\n            \"productId\": 30\n        },\n        {\n            \"productId\": 33\n        },\n        {\n            \"productId\": 2\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3210/api/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3210",
+							"path": [
+								"api",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payment",
+			"item": [
+				{
+					"name": "Pay",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"paymentType\": \"Crédito\",\n    \"totalPrice\": 5690\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3210/api/payments",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3210",
+							"path": [
+								"api",
+								"payments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Payment Types",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3210/api/payments/types",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3210",
+							"path": [
+								"api",
+								"payments",
+								"types"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3210/api/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3210",
+					"path": [
+						"api",
+						"health"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
