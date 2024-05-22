@@ -20,6 +20,7 @@
   - [10 Update order to delivered](#10-update-order-to-delivered)
   - [11 Update order to not delivered](#11-update-order-to-not-delivered)
 - [Documentation](#documentation)
+  - [Event storming](#event-storming)
   - [Postman collection](#postman-collection)
   - [Swagger](#swagger)
   - [Redoc](#redoc)
