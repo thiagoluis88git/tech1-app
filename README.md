@@ -17,7 +17,6 @@
   - [7 List orders to prepare](#7-list-orders-to-prepare)
   - [8 Update order to preparing](#8-update-order-to-preparing)
   - [9 Update order to done](#9-update-order-to-done)
-  - [9 Update order to done](#9-update-order-to-done)
   - [10 Update order to delivered](#10-update-order-to-delivered)
   - [11 Update order to not delivered](#11-update-order-to-not-delivered)
 - [Documentation](#documentation)
@@ -171,6 +170,11 @@ This is used to 'finish' the order and can be used to track some convertion rate
 This project uses Swagger to show an site with all Endpoints used by this project to make an order in a Fast Food place. 
 To create/update all Endpoints documentation just run `swag init -g cmd/api/main.go`. By doing this, we can see the documentation in
 two different ways:
+
+### Event Storming
+
+This project was guided by the DDD Event Storming. This document was made in Miro
+[Event Storming](https://miro.com/app/board/uXjVKL0pb-w=/?moveToViewport=-6195,3235,3661,2047&embedId=583634681732)
 
 ### Postman collection
 
