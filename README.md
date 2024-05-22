@@ -193,3 +193,10 @@ http://localhost:3210/swagger/index.html
 ### Redoc
 
 http://localhost:3211/docs
+
+
+## Opportunities
+
+Even though this project was made by following some Design Patterns like `Use Case` and `Repository` it does not separate the Data Source from the Repository. In the future it will be good to use `Data Source` Pattern to separate **Local** and **Remote** from the Repository to make a better separation of concern principle.
+
+It will also a good opportunity to increase the `Unit Test` coverage.
