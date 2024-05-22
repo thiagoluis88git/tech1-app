@@ -3,6 +3,7 @@
 ## Table of Contents
 
 - [Table of Contents](#table-of-contents)
+- [Description](#description)
 - [Docker build and run](#docker-build-and-run)
 - [How to use](#how-to-use)
 - [Section 1 - Restaurant owner](#section-1-restaurant-owner)
@@ -24,6 +25,8 @@
   - [Postman collection](#postman-collection)
   - [Swagger](#swagger)
   - [Redoc](#redoc)
+
+## Description
 
 The Tech Challenge 1 aims to do a solution for a Fast Food restaurant. With this software, the rastaurant can do a all the process of for a place
 that makes all steps of a fast food dish order, as:
