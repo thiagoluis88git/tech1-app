@@ -33,6 +33,7 @@ type OrderProduct struct {
 	gorm.Model
 	OrderID   uint
 	ProductID uint
+	Product   Product
 }
 
 type OrderTicketNumber struct {

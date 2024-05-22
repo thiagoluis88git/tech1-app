@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/thiagoluis88git/tech1/internal/adapters/driven/entities"
@@ -85,7 +84,7 @@ func (repository *OrderRespository) GetOrderById(ctx context.Context, orderId ui
 	err := repository.
 		db.WithContext(ctx).
 		Model(&entities.Order{}).
-		Preload("OrderProduct").
+		Preload("OrderProduct.Product").
 		Preload("Customer").
 		Where("id = ?", orderId).
 		Find(&orderEntity).
@@ -101,7 +100,8 @@ func (repository *OrderRespository) GetOrderById(ctx context.Context, orderId ui
 	for _, value := range orderEntity.OrderProduct {
 		orderProduct = append(orderProduct, domain.OrderProductResponse{
 			ProductID:   orderId,
-			ProductName: fmt.Sprintf("FALTA BUSCAR: %d", value.ID),
+			ProductName: value.Product.Name,
+			Description: value.Product.Description,
 		})
 	}
 
@@ -112,12 +112,16 @@ func (repository *OrderRespository) GetOrderById(ctx context.Context, orderId ui
 	}
 
 	return domain.OrderResponse{
-		OrderId:      orderId,
-		OrderDate:    orderEntity.CreatedAt,
-		TicketNumber: orderEntity.TicketNumber,
-		OrderStatus:  orderEntity.OrderStatus,
-		OrderProduct: orderProduct,
-		CustomerName: customerName,
+		OrderId:        orderEntity.ID,
+		OrderDate:      orderEntity.CreatedAt,
+		PreparingAt:    orderEntity.PreparingAt,
+		DoneAt:         orderEntity.DoneAt,
+		DeliveredAt:    orderEntity.DeliveredAt,
+		NotDeliveredAt: orderEntity.NotDeliveredAt,
+		TicketNumber:   orderEntity.TicketNumber,
+		OrderStatus:    orderEntity.OrderStatus,
+		OrderProduct:   orderProduct,
+		CustomerName:   customerName,
 	}, nil
 }
 
@@ -126,7 +130,7 @@ func (repository *OrderRespository) GetOrdersToPrepare(ctx context.Context) ([]d
 	err := repository.
 		db.WithContext(ctx).
 		Model(&entities.Order{}).
-		Preload("OrderProduct").
+		Preload("OrderProduct.Product").
 		Preload("Customer").
 		Where("order_status = ?", entities.OrderStatusCreated).
 		Find(&orderEntity).
@@ -144,7 +148,8 @@ func (repository *OrderRespository) GetOrdersToPrepare(ctx context.Context) ([]d
 		for _, value := range value.OrderProduct {
 			orderProduct = append(orderProduct, domain.OrderProductResponse{
 				ProductID:   value.ProductID,
-				ProductName: fmt.Sprintf("FALTA BUSCAR: %d", value.ID),
+				ProductName: value.Product.Name,
+				Description: value.Product.Description,
 			})
 		}
 
@@ -167,14 +172,14 @@ func (repository *OrderRespository) GetOrdersToPrepare(ctx context.Context) ([]d
 	return orders, nil
 }
 
-func (repository *OrderRespository) GetOrdersStatus(ctx context.Context) ([]domain.OrderResponse, error) {
+func (repository *OrderRespository) GetOrdersToFollow(ctx context.Context) ([]domain.OrderResponse, error) {
 	var orderEntity []entities.Order
 	err := repository.
 		db.WithContext(ctx).
 		Model(&entities.Order{}).
-		Preload("OrderProduct").
+		Preload("OrderProduct.Product").
 		Preload("Customer").
-		Where("order_status in ?", entities.OrderStatusPreparing, entities.OrderStatusDone).
+		Where("order_status in (?,?)", entities.OrderStatusPreparing, entities.OrderStatusDone).
 		Find(&orderEntity).
 		Error
 
@@ -190,7 +195,8 @@ func (repository *OrderRespository) GetOrdersStatus(ctx context.Context) ([]doma
 		for _, value := range value.OrderProduct {
 			orderProduct = append(orderProduct, domain.OrderProductResponse{
 				ProductID:   value.ProductID,
-				ProductName: fmt.Sprintf("FALTA BUSCAR: %d", value.ID),
+				ProductName: value.Product.Name,
+				Description: value.Product.Description,
 			})
 		}
 
@@ -201,12 +207,16 @@ func (repository *OrderRespository) GetOrdersStatus(ctx context.Context) ([]doma
 		}
 
 		orders = append(orders, domain.OrderResponse{
-			OrderId:      value.ID,
-			OrderDate:    value.CreatedAt,
-			TicketNumber: value.TicketNumber,
-			OrderStatus:  value.OrderStatus,
-			OrderProduct: orderProduct,
-			CustomerName: customerName,
+			OrderId:        value.ID,
+			OrderDate:      value.CreatedAt,
+			PreparingAt:    value.PreparingAt,
+			DoneAt:         value.DoneAt,
+			DeliveredAt:    value.DeliveredAt,
+			NotDeliveredAt: value.NotDeliveredAt,
+			TicketNumber:   value.TicketNumber,
+			OrderStatus:    value.OrderStatus,
+			OrderProduct:   orderProduct,
+			CustomerName:   customerName,
 		})
 	}
 

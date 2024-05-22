@@ -91,7 +91,7 @@ func main() {
 	router.Post("/api/orders", handler.CreateOrderHandler(orderService))
 	router.Get("/api/orders/{id}", handler.GetOrderByIdHandler(orderService))
 	router.Get("/api/orders/to-prepare", handler.GetOrdersToPrepareHandler(orderService))
-	router.Get("/api/orders/status", handler.GetOrdersStatusHandler(orderService))
+	router.Get("/api/orders/follow", handler.GetOrdersToFollowHandler(orderService))
 	router.Put("/api/orders/{id}/preparing", handler.UpdateOrderPreparingHandler(orderService))
 	router.Put("/api/orders/{id}/done", handler.UpdateOrderDoneHandler(orderService))
 	router.Put("/api/orders/{id}/delivered", handler.UpdateOrderDeliveredHandler(orderService))

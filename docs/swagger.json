@@ -695,6 +695,9 @@
         "domain.OrderProductResponse": {
             "type": "object",
             "properties": {
+                "description": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
@@ -707,6 +710,15 @@
             "type": "object",
             "properties": {
                 "customerName": {
+                    "type": "string"
+                },
+                "deliveredAt": {
+                    "type": "string"
+                },
+                "doneAt": {
+                    "type": "string"
+                },
+                "notDeliveredAt": {
                     "type": "string"
                 },
                 "orderDate": {
@@ -722,6 +734,9 @@
                     }
                 },
                 "orderStatus": {
+                    "type": "string"
+                },
+                "preparingAt": {
                     "type": "string"
                 },
                 "ticketNumber": {

@@ -701,6 +701,9 @@ const docTemplate = `{
         "domain.OrderProductResponse": {
             "type": "object",
             "properties": {
+                "description": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
@@ -713,6 +716,15 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "customerName": {
+                    "type": "string"
+                },
+                "deliveredAt": {
+                    "type": "string"
+                },
+                "doneAt": {
+                    "type": "string"
+                },
+                "notDeliveredAt": {
                     "type": "string"
                 },
                 "orderDate": {
@@ -728,6 +740,9 @@ const docTemplate = `{
                     }
                 },
                 "orderStatus": {
+                    "type": "string"
+                },
+                "preparingAt": {
                     "type": "string"
                 },
                 "ticketNumber": {

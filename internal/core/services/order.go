@@ -74,8 +74,8 @@ func (service *OrderService) GetOrdersToPrepare(ctx context.Context) ([]domain.O
 	return response, nil
 }
 
-func (service *OrderService) GetOrdersStatus(ctx context.Context) ([]domain.OrderResponse, error) {
-	response, err := service.orderRepo.GetOrdersStatus(ctx)
+func (service *OrderService) GetOrdersToFollow(ctx context.Context) ([]domain.OrderResponse, error) {
+	response, err := service.orderRepo.GetOrdersToFollow(ctx)
 
 	if err != nil {
 		return []domain.OrderResponse{}, responses.GetResponseError(err, "OrderService -> GetOrdersStatus")

@@ -141,9 +141,9 @@ func GetOrdersToPrepareHandler(orderService *services.OrderService) http.Handler
 // @Produce json
 // @Success 200 {object} []domain.OrderResponse
 // @Router /api/orders/status [get]
-func GetOrdersStatusHandler(orderService *services.OrderService) http.HandlerFunc {
+func GetOrdersToFollowHandler(orderService *services.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		response, err := orderService.GetOrdersStatus(context.Background())
+		response, err := orderService.GetOrdersToFollow(context.Background())
 
 		if err != nil {
 			log.Print("get orders status", map[string]interface{}{

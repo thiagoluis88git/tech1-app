@@ -276,7 +276,7 @@ func (mock *MockOrderRepository) GetOrdersToPrepare(ctx context.Context) ([]doma
 	return args.Get(0).([]domain.OrderResponse), nil
 }
 
-func (mock *MockOrderRepository) GetOrdersStatus(ctx context.Context) ([]domain.OrderResponse, error) {
+func (mock *MockOrderRepository) GetOrdersToFollow(ctx context.Context) ([]domain.OrderResponse, error) {
 	args := mock.Called(ctx)
 	err := args.Error(1)
 

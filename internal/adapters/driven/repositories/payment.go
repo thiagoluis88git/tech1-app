@@ -23,9 +23,8 @@ func NewPaymentRepository(db *gorm.DB) ports.PaymentRepository {
 
 func (repository *PaymentRepository) GetPaymentTypes() []string {
 	return []string{
-		entities.PaymentCreditCardType,
-		entities.PaymentDebitType,
-		entities.PaymentVoucherType,
+		entities.PaymentQRCodeType,
+		entities.PaymentMercadoPagoType,
 	}
 }
 

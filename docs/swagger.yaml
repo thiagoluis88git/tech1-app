@@ -50,6 +50,8 @@ definitions:
     type: object
   domain.OrderProductResponse:
     properties:
+      description:
+        type: string
       id:
         type: integer
       name:
@@ -58,6 +60,12 @@ definitions:
   domain.OrderResponse:
     properties:
       customerName:
+        type: string
+      deliveredAt:
+        type: string
+      doneAt:
+        type: string
+      notDeliveredAt:
         type: string
       orderDate:
         type: string
@@ -68,6 +76,8 @@ definitions:
           $ref: '#/definitions/domain.OrderProductResponse'
         type: array
       orderStatus:
+        type: string
+      preparingAt:
         type: string
       ticketNumber:
         type: integer

@@ -16,15 +16,20 @@ type OrderProduct struct {
 }
 
 type OrderResponse struct {
-	OrderId      uint                   `json:"orderId"`
-	OrderDate    time.Time              `json:"orderDate"`
-	TicketNumber int                    `json:"ticketNumber"`
-	CustomerName *string                `json:"customerName"`
-	OrderStatus  string                 `json:"orderStatus"`
-	OrderProduct []OrderProductResponse `json:"orderProducts"`
+	OrderId        uint                   `json:"orderId"`
+	OrderDate      time.Time              `json:"orderDate"`
+	PreparingAt    *time.Time             `json:"preparingAt"`
+	DoneAt         *time.Time             `json:"doneAt"`
+	DeliveredAt    *time.Time             `json:"deliveredAt"`
+	NotDeliveredAt *time.Time             `json:"notDeliveredAt"`
+	TicketNumber   int                    `json:"ticketNumber"`
+	CustomerName   *string                `json:"customerName"`
+	OrderStatus    string                 `json:"orderStatus"`
+	OrderProduct   []OrderProductResponse `json:"orderProducts"`
 }
 
 type OrderProductResponse struct {
 	ProductID   uint   `json:"id"`
 	ProductName string `json:"name"`
+	Description string `json:"description"`
 }

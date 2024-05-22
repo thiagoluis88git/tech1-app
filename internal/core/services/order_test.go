@@ -205,9 +205,9 @@ func TestOrderServices(t *testing.T) {
 
 		ctx := context.TODO()
 
-		mockRepo.On("GetOrdersStatus", ctx).Return(ordersList, nil)
+		mockRepo.On("GetOrdersToFollow", ctx).Return(ordersList, nil)
 
-		response, err := sut.GetOrdersStatus(ctx)
+		response, err := sut.GetOrdersToFollow(ctx)
 
 		assert.NoError(t, err)
 		assert.NotEmpty(t, response)
@@ -224,12 +224,12 @@ func TestOrderServices(t *testing.T) {
 
 		ctx := context.TODO()
 
-		mockRepo.On("GetOrdersStatus", ctx).Return(domain.OrderResponse{}, &responses.NetworkError{
+		mockRepo.On("GetOrdersToFollow", ctx).Return(domain.OrderResponse{}, &responses.NetworkError{
 			Code:    404,
 			Message: "Not Found",
 		})
 
-		response, err := sut.GetOrdersStatus(ctx)
+		response, err := sut.GetOrdersToFollow(ctx)
 
 		assert.Error(t, err)
 		assert.Empty(t, response)
