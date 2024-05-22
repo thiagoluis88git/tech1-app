@@ -6,8 +6,8 @@
 - [Docker build and run](#docker-build-and-run)
 - [How to use](#how-to-use)
 - [Section 1 - Restaurant owner](#section-1-restaurant-owner)
-  - [1. Create product (Owner view)](#1.-create-product-(owner-view))
-  - [2. List all the categories (Customer view)](#2.-list-all-the-categories-(customer-view))
+  - [1. Create product (Owner view)](#1-create-product-(owner-view))
+  - [2. List all the categories (Customer view)](#2-list-all-the-categories-(customer-view))
 
 The Tech Challenge 1 aims to do a solution for a Fast Food restaurant. With this software, the rastaurant can do a all the process of for a place
 that makes all steps of a fast food dish order, as:
@@ -62,11 +62,11 @@ We can separate in three moments.
 We will divide in 2 sections: **Restaurant** owner and Customer **order**
 
 
-## Section 1 - Restaurant owner
+## Section 1 Restaurant owner
 
 This section will be used by the restaurant owner to manage the restaurant products
 
-### 1. Create product (Owner view)
+### 1 Create product (Owner view)
 
 - Cal the POST `http://localhost:3210/api/products` to create a Product
 - Cal the PUT `http://localhost:3210/api/products/{id}` to update a Product
@@ -75,32 +75,32 @@ This section will be used by the restaurant owner to manage the restaurant produ
 With those endpoints we can follow to *Section 2* to start the ***Order flow***
 
 
-## Section 2 - Customer order
+## Section 2 Customer order
 
 This section will use all the Endpoints to make a entire order flow.
 
-### 1. User identification (Customer view)
+### 1 User identification (Customer view)
 
 - Call the GET `http://localhost:3210/api/customers/{cpf}` to login and get this `[Customer ID]`
 or
 - Cal the POST `http://localhost:3210/api/customers` to create a Customer and retrieve the `[Customer ID]`
 
-### 2. List all the categories (Customer view)
+### 2 List all the categories (Customer view)
 
 - Call the GET `http://localhost:3210/api/products/categories` to get a string array with all created categories
 
-### 3. List products by the chosen category (Customer view)
+### 3 List products by the chosen category (Customer view)
 
 - Call the GET `http://localhost:3210/api/products/categories/{category}` to get all products by a category
 
 With this endpoints we can simulate a screen producst selection by chosing all products IDs we want to deal and create a Order
 
-### 4. Pay the products amount (Customer view)
+### 4 Pay the products amount (Customer view)
 
 - Call the GET `http://localhost:3210/api/payments/types` to show to customer which payment type to choose
 - Call the POST `http://localhost:3210/api/payments` to pay for the amount and receive the `[Payment ID]`
 
-### 5. Create an order (Customer view)
+### 5 Create an order (Customer view)
 
 - Call the POST `http://localhost:3210/api/orders` with:
 - - All the `[Products IDs]` chosen [*required]
@@ -108,31 +108,31 @@ With this endpoints we can simulate a screen producst selection by chosing all p
 - - The `[Customer ID]` [*optional*]
 - - Total price for the all products sum
 
-### 6. List orders to follow (Customer and Waiter)
+### 6 List orders to follow (Customer and Waiter)
 
 - Call the GET `http://localhost:3210/api/orders/follow` to show a list of Orders to be followed by Customer and Waiter
 
 The order can be followed by its ID:
 - Call the GET `http://localhost:3210/api/orders/{id}` to show a an Orders to be followed by Customer and Waiter
 
-### 7. List orders to prepate (Chef view)
+### 7 List orders to prepate (Chef view)
 
 - Call the GET `http://localhost:3210/api/orders/to-prepare` to list the Orders with its [Order ID]
 
-### 8. Update order to preparing (Chef view)
+### 8 Update order to preparing (Chef view)
 
 - Call the PUT `http://localhost:3210/api/orders/{id}/preparing` to set Preparing status
 
-### 9. Update order to done (Chef view)
+### 9 Update order to done (Chef view)
 
 - Call the PUT `http://localhost:3210/api/orders/{id}/done` to set Done status
 
-### 10. Update order to delivered (Waiter view)
+### 10 Update order to delivered (Waiter view)
 
 - Call the PUT `http://localhost:3210/api/orders/{id}/delivered` to set Delivered status to indicate that customer receive the meal. 
 This is used to 'finish' the order and can be used to track some convertion rate
 
-### 11. Update order to not delivered (Waiter view)
+### 11 Update order to not delivered (Waiter view)
 
 - Call the PUT `http://localhost:3210/api/orders/{id}/not-delivered` to set Not Delivered status to indicate that customer doesn not receive the meal.
 This is used to 'finish' the order and can be used to track some convertion rate
