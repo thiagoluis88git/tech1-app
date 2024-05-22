@@ -2,10 +2,12 @@
 
 ## Table of Contents
 
-- [Docker] (#docker-build-and-run)
-- [How to use] (#how-to-use)
-- [Section 1 - Restaurant owner] (#section-1-restaurant-owner)
-  - [1. Create product (Owner view)] (#1.-create-product-(owner-view))
+- [Table of Contents](#table-of-contents)
+- [Docker build and run](#docker-build-and-run)
+- [How to use](#how-to-use)
+- [Section 1 - Restaurant owner](#section-1-restaurant-owner)
+  - [1. Create product (Owner view)](#1.-create-product-(owner-view))
+  - [2. List all the categories (Customer view)](#2.-list-all-the-categories-(customer-view))
 
 The Tech Challenge 1 aims to do a solution for a Fast Food restaurant. With this software, the rastaurant can do a all the process of for a place
 that makes all steps of a fast food dish order, as:
