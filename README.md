@@ -80,7 +80,7 @@ We can separate in three moments.
 - Customer self service. This is used by the `customer` to choose the products, pay for it and create an order 
 - Order preparing and deliver. This is used by the `chef` and `waiter` to check the order status
 
-We will divide in 2 sections: **Restaurant** owner and Customer **order**
+We will divide in 2 sections: **Restaurant owner** and **Customer order**
 
 
 ## Section 1 Restaurant owner
