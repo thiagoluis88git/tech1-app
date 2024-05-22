@@ -72,7 +72,7 @@ This section will use all the Endpoints to make a entire order flow.
 
 ### 1. User identification (Customer view)
 
-- Call the GET `http://localhost:3210/api/customers/{cpf}` to get this `[Customer ID]`
+- Call the GET `http://localhost:3210/api/customers/{cpf}` to login and get this `[Customer ID]`
 or
 - Cal the POST `http://localhost:3210/api/customers` to create a Customer and retrieve the `[Customer ID]`
 
@@ -99,24 +99,31 @@ With this endpoints we can simulate a screen producst selection by chosing all p
 - - The `[Customer ID]` [*optional*]
 - - Total price for the all products sum
 
-### 6. List order to prepate (Chef view)
+### 6. List orders to follow (Customer and Waiter)
+
+- Call the GET `http://localhost:3210/api/orders/follow` to show a list of Orders to be followed by Customer and Waiter
+
+The order can be followed by its ID:
+- Call the GET `http://localhost:3210/api/orders/{id}` to show a an Orders to be followed by Customer and Waiter
+
+### 7. List orders to prepate (Chef view)
 
 - Call the GET `http://localhost:3210/api/orders/to-prepare` to list the Orders with its [Order ID]
 
-### 7. Update order to preparing (Chef view)
+### 8. Update order to preparing (Chef view)
 
 - Call the PUT `http://localhost:3210/api/orders/{id}/preparing` to set Preparing status
 
-### 8. Update order to done (Chef view)
+### 9. Update order to done (Chef view)
 
 - Call the PUT `http://localhost:3210/api/orders/{id}/done` to set Done status
 
-### 9. Update order to delivered (Waiter view)
+### 10. Update order to delivered (Waiter view)
 
 - Call the PUT `http://localhost:3210/api/orders/{id}/delivered` to set Delivered status to indicate that customer receive the meal. 
 This is used to 'finish' the order and can be used to track some convertion rate
 
-### 10. Update order to not delivered (Waiter view)
+### 11. Update order to not delivered (Waiter view)
 
 - Call the PUT `http://localhost:3210/api/orders/{id}/not-delivered` to set Not Delivered status to indicate that customer doesn not receive the meal.
 This is used to 'finish' the order and can be used to track some convertion rate
