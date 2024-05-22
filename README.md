@@ -25,6 +25,7 @@
   - [Postman collection](#postman-collection)
   - [Swagger](#swagger)
   - [Redoc](#redoc)
+- [Opportunities](#opportunities)
 
 ## Description
 
