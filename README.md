@@ -47,26 +47,28 @@ To build and run this project. Follow the Docker section
 
 ## Docker build and run
 
-This project was built using Docker and Docker Compose. So, to build and run the API, we need to run:
+This project was built using Docker and Docker Compose. So, to build and run the API, we need to run in the root of the project:
 
 ```
 $ docker compose build
 ```
 
-After the image build finish, run run:
+After the image build finish, run:
 
 ```
 $ docker compose up -d
 ```
 
-After the containers shows these status:
+The command above may take a while.
+
+After all the containers shows these below status:
 
 ```
  ✔ Container fastfood-database  Started
  ✔ Container fastfood-app       Started 
 ```
 
-we can access `http://localhost:3210/api` endpoints
+we can access `http://localhost:3210/api` endpoints.
 
 
 ## How to use
@@ -74,9 +76,9 @@ we can access `http://localhost:3210/api` endpoints
 To use all the endpoints in this API, we can follow these sequence to simulate a customer making an order in a restaurant.
 We can separate in three moments.
 
-- Restaurant products manipulation. This is used by the restaurant owner to create all the product portfolio with its images and prices
-- Customer self service. This is used by the customer to choose the products, pay for it and create an order 
-- Order preparing and deliver. This is used by the chef and waiter to check the order status
+- Restaurant products manipulation. This is used by the `restaurant owner` to create all the product portfolio with its images and prices
+- Customer self service. This is used by the `customer` to choose the products, pay for it and create an order 
+- Order preparing and deliver. This is used by the `chef` and `waiter` to check the order status
 
 We will divide in 2 sections: **Restaurant** owner and Customer **order**
 
