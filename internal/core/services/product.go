@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/thiagoluis88git/tech1/internal/core/domain"
 	"github.com/thiagoluis88git/tech1/internal/core/ports"
@@ -9,16 +10,25 @@ import (
 )
 
 type ProductService struct {
-	repository ports.ProductRepository
+	repository      ports.ProductRepository
+	validateUseCase *ValidateProductCategoryUseCase
 }
 
-func NewProductService(repository ports.ProductRepository) *ProductService {
+func NewProductService(validateUseCase *ValidateProductCategoryUseCase, repository ports.ProductRepository) *ProductService {
 	return &ProductService{
-		repository: repository,
+		repository:      repository,
+		validateUseCase: validateUseCase,
 	}
 }
 
 func (service *ProductService) CreateProduct(ctx context.Context, product domain.ProductForm) (uint, error) {
+	if !service.validateUseCase.Execute(product) {
+		return 0, &responses.BusinessResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    "Combo needs products",
+		}
+	}
+
 	productId, err := service.repository.CreateProduct(ctx, product)
 
 	if err != nil {

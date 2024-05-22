@@ -10,12 +10,16 @@ import (
 	"github.com/thiagoluis88git/tech1/pkg/responses"
 )
 
+var (
+	uc = NewValidateProductCategoryUseCase()
+)
+
 func TestProductServices(t *testing.T) {
 	t.Run("got success when getting product categories in services", func(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockProductRepository)
-		sut := NewProductService(mockRepo)
+		sut := NewProductService(uc, mockRepo)
 
 		mockRepo.On("GetCategories").Return([]string{"Combo", "Bebidas", "Lanches"})
 
@@ -30,7 +34,7 @@ func TestProductServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockProductRepository)
-		sut := NewProductService(mockRepo)
+		sut := NewProductService(uc, mockRepo)
 
 		ctx := context.TODO()
 
@@ -50,7 +54,7 @@ func TestProductServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockProductRepository)
-		sut := NewProductService(mockRepo)
+		sut := NewProductService(uc, mockRepo)
 
 		ctx := context.TODO()
 
@@ -75,7 +79,7 @@ func TestProductServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockProductRepository)
-		sut := NewProductService(mockRepo)
+		sut := NewProductService(uc, mockRepo)
 
 		ctx := context.TODO()
 
@@ -95,7 +99,7 @@ func TestProductServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockProductRepository)
-		sut := NewProductService(mockRepo)
+		sut := NewProductService(uc, mockRepo)
 
 		ctx := context.TODO()
 
@@ -120,7 +124,7 @@ func TestProductServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockProductRepository)
-		sut := NewProductService(mockRepo)
+		sut := NewProductService(uc, mockRepo)
 
 		ctx := context.TODO()
 
@@ -137,7 +141,7 @@ func TestProductServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockProductRepository)
-		sut := NewProductService(mockRepo)
+		sut := NewProductService(uc, mockRepo)
 
 		ctx := context.TODO()
 
@@ -161,7 +165,7 @@ func TestProductServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockProductRepository)
-		sut := NewProductService(mockRepo)
+		sut := NewProductService(uc, mockRepo)
 
 		ctx := context.TODO()
 
@@ -178,7 +182,7 @@ func TestProductServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockProductRepository)
-		sut := NewProductService(mockRepo)
+		sut := NewProductService(uc, mockRepo)
 
 		ctx := context.TODO()
 

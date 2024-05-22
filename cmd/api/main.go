@@ -60,7 +60,8 @@ func main() {
 	paymentService := services.NewPaymentService(paymentRepo, paymentGateway)
 
 	productRepo := repositories.NewProductRepository(db)
-	productService := services.NewProductService(productRepo)
+	validateProductCategoryUseCase := services.NewValidateProductCategoryUseCase()
+	productService := services.NewProductService(validateProductCategoryUseCase, productRepo)
 
 	customerRepo := repositories.NewCustomerRepository(db)
 	customerService := services.NewCustomerService(customerRepo)
