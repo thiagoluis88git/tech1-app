@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/thiagoluis88git/tech1/internal/core/domain"
 	"github.com/thiagoluis88git/tech1/internal/core/ports"
@@ -9,16 +10,28 @@ import (
 )
 
 type CustomerService struct {
-	repository ports.CustomerRepository
+	validateCPFUseCase *ValidateCPFUseCase
+	repository         ports.CustomerRepository
 }
 
-func NewCustomerService(repository ports.CustomerRepository) *CustomerService {
+func NewCustomerService(validateCPFUseCase *ValidateCPFUseCase, repository ports.CustomerRepository) *CustomerService {
 	return &CustomerService{
-		repository: repository,
+		validateCPFUseCase: validateCPFUseCase,
+		repository:         repository,
 	}
 }
 
 func (service *CustomerService) CreateCustomer(ctx context.Context, customer domain.Customer) (domain.CustomerResponse, error) {
+	cleanedCPF, validate := service.validateCPFUseCase.Execute(customer.CPF)
+
+	if !validate {
+		return domain.CustomerResponse{}, &responses.BusinessResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    "Invalid CPF",
+		}
+	}
+
+	customer.CPF = cleanedCPF
 	customerId, err := service.repository.CreateCustomer(ctx, customer)
 
 	if err != nil {
@@ -31,6 +44,16 @@ func (service *CustomerService) CreateCustomer(ctx context.Context, customer dom
 }
 
 func (service *CustomerService) UpdateCustomer(ctx context.Context, customer domain.Customer) error {
+	cleanedCPF, validate := service.validateCPFUseCase.Execute(customer.CPF)
+
+	if !validate {
+		return &responses.BusinessResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    "Invalid CPF",
+		}
+	}
+
+	customer.CPF = cleanedCPF
 	err := service.repository.UpdateCustomer(ctx, customer)
 
 	if err != nil {
@@ -41,7 +64,16 @@ func (service *CustomerService) UpdateCustomer(ctx context.Context, customer dom
 }
 
 func (service *CustomerService) GetCustomerByCPF(ctx context.Context, cpf string) (domain.Customer, error) {
-	customer, err := service.repository.GetCustomerByCPF(ctx, cpf)
+	cleanedCPF, validate := service.validateCPFUseCase.Execute(cpf)
+
+	if !validate {
+		return domain.Customer{}, &responses.BusinessResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    "Invalid CPF",
+		}
+	}
+
+	customer, err := service.repository.GetCustomerByCPF(ctx, cleanedCPF)
 
 	if err != nil {
 		return domain.Customer{}, responses.GetResponseError(err, "CustomerService")

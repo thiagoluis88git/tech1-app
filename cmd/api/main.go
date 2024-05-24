@@ -64,7 +64,8 @@ func main() {
 	productService := services.NewProductService(validateProductCategoryUseCase, productRepo)
 
 	customerRepo := repositories.NewCustomerRepository(db)
-	customerService := services.NewCustomerService(customerRepo)
+	validateCPFUseCase := services.NewValidateCPFUseCase()
+	customerService := services.NewCustomerService(validateCPFUseCase, customerRepo)
 
 	orderRepo := repositories.NewOrderRespository(db)
 	orderService := services.NewOrderService(orderRepo, customerRepo)

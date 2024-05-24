@@ -129,6 +129,13 @@ This section will use all the Endpoints to make a entire order flow.
 or
 - Cal the POST `http://localhost:3210/api/customers` to create a Customer and retrieve the `[Customer ID]`
 
+> [!IMPORTANT]
+> These endpoints have a CPF validation. So be aware that it is needed to pass a correct CPF number.
+
+> [!NOTE]  
+> The CPF does not need to be formatted.
+
+
 ### 2 List all the categories
 ***(Customer view)***
 

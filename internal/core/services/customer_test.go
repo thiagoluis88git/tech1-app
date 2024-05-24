@@ -12,16 +12,23 @@ import (
 )
 
 var (
-	saveCustomer = domain.Customer{
+	validateCPFUseCase = NewValidateCPFUseCase()
+	saveCustomer       = domain.Customer{
 		Name:  "Name",
-		CPF:   "12345678900",
+		CPF:   "171.079.720-73",
+		Email: "teste@teste.com",
+	}
+
+	mockedSaveCustomer = domain.Customer{
+		Name:  "Name",
+		CPF:   "17107972073",
 		Email: "teste@teste.com",
 	}
 
 	customerByCPF = domain.Customer{
 		ID:    1,
 		Name:  "Name",
-		CPF:   "12345678900",
+		CPF:   "171.079.720-73",
 		Email: "teste@teste.com",
 	}
 )
@@ -31,11 +38,11 @@ func TestCustomerServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockCustomerRepository)
-		sut := NewCustomerService(mockRepo)
+		sut := NewCustomerService(validateCPFUseCase, mockRepo)
 
 		ctx := context.TODO()
 
-		mockRepo.On("CreateCustomer", ctx, saveCustomer).Return(uint(1), nil)
+		mockRepo.On("CreateCustomer", ctx, mockedSaveCustomer).Return(uint(1), nil)
 
 		response, err := sut.CreateCustomer(ctx, saveCustomer)
 
@@ -49,11 +56,11 @@ func TestCustomerServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockCustomerRepository)
-		sut := NewCustomerService(mockRepo)
+		sut := NewCustomerService(validateCPFUseCase, mockRepo)
 
 		ctx := context.TODO()
 
-		mockRepo.On("CreateCustomer", ctx, saveCustomer).Return(uint(0), &responses.LocalError{
+		mockRepo.On("CreateCustomer", ctx, mockedSaveCustomer).Return(uint(0), &responses.LocalError{
 			Code:    responses.DATABASE_CONFLICT_ERROR,
 			Message: "Conflict",
 		})
@@ -72,11 +79,11 @@ func TestCustomerServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockCustomerRepository)
-		sut := NewCustomerService(mockRepo)
+		sut := NewCustomerService(validateCPFUseCase, mockRepo)
 
 		ctx := context.TODO()
 
-		mockRepo.On("UpdateCustomer", ctx, saveCustomer).Return(nil)
+		mockRepo.On("UpdateCustomer", ctx, mockedSaveCustomer).Return(nil)
 
 		err := sut.UpdateCustomer(ctx, saveCustomer)
 
@@ -87,11 +94,11 @@ func TestCustomerServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockCustomerRepository)
-		sut := NewCustomerService(mockRepo)
+		sut := NewCustomerService(validateCPFUseCase, mockRepo)
 
 		ctx := context.TODO()
 
-		mockRepo.On("UpdateCustomer", ctx, saveCustomer).Return(&responses.NetworkError{
+		mockRepo.On("UpdateCustomer", ctx, mockedSaveCustomer).Return(&responses.NetworkError{
 			Code:    404,
 			Message: "Not Found",
 		})
@@ -109,20 +116,20 @@ func TestCustomerServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockCustomerRepository)
-		sut := NewCustomerService(mockRepo)
+		sut := NewCustomerService(validateCPFUseCase, mockRepo)
 
 		ctx := context.TODO()
 
-		mockRepo.On("GetCustomerByCPF", ctx, "12345678900").Return(customerByCPF, nil)
+		mockRepo.On("GetCustomerByCPF", ctx, "17107972073").Return(customerByCPF, nil)
 
-		response, err := sut.GetCustomerByCPF(ctx, "12345678900")
+		response, err := sut.GetCustomerByCPF(ctx, "171.079.720-73")
 
 		assert.NoError(t, err)
 		assert.NotEmpty(t, response)
 
 		assert.Equal(t, uint(1), response.ID)
 		assert.Equal(t, "Name", response.Name)
-		assert.Equal(t, "12345678900", response.CPF)
+		assert.Equal(t, "171.079.720-73", response.CPF)
 		assert.Equal(t, "teste@teste.com", response.Email)
 	})
 
@@ -130,16 +137,16 @@ func TestCustomerServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockCustomerRepository)
-		sut := NewCustomerService(mockRepo)
+		sut := NewCustomerService(validateCPFUseCase, mockRepo)
 
 		ctx := context.TODO()
 
-		mockRepo.On("GetCustomerByCPF", ctx, "12345678900").Return(domain.Customer{}, &responses.NetworkError{
+		mockRepo.On("GetCustomerByCPF", ctx, "17107972073").Return(domain.Customer{}, &responses.NetworkError{
 			Code:    404,
 			Message: "Not Found",
 		})
 
-		response, err := sut.GetCustomerByCPF(ctx, "12345678900")
+		response, err := sut.GetCustomerByCPF(ctx, "171.079.720-73")
 
 		assert.Error(t, err)
 		assert.Empty(t, response)
