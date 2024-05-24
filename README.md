@@ -4,10 +4,11 @@
 
 - [Table of Contents](#table-of-contents)
 - [Description](#description)
+- [Architecture](#architecture)
 - [Docker build and run](#docker-build-and-run)
 - [How to use](#how-to-use)
 - [Section 1 - Restaurant owner](#section-1-restaurant-owner)
-  - [1. Create product](#1-create-product)
+  - [1 Create product](#1-create-product)
 - [Section 2 Customer order](#section-2-customer-order)
   - [1 User identification](#1-user-identification)
   - [2 List all the categories](#2-list-all-the-categories)
@@ -44,6 +45,25 @@ This projects only fits the Backend side, which means that customer needs to **c
 All the Endpoints can be called by accessing `http://localhost:3210/api` API url.
 
 To build and run this project. Follow the Docker section
+
+## Architecture
+
+To design this application was chosen `DDD (Domain Drive Design)` architecture to follow the principle of **protecting the model**.
+The folder project was created to follow DDD principle:
+
+- cmd/api: The application entrypoint
+- docs: OpenAPI documentation
+- internal: All the application data like services, repositories, entities, etc
+- internal/core: The Domain of this project
+- internal/core/domain: All the domain structures representing the classes and aggregates
+- internal/core/ports: All the domain interfaces. With this, we can protect the domain from external classes
+- internal/core/services: All the business logic (Services or Use Cases).
+- internal/adapters: The folder to represent all the adapters for the DDD principle
+- internal/adapters/driven: The driven adapter to comunicate with external dependencies, like databases and REST apis
+- internal/adapters/driven/entities: All the structures to represent Database Entities
+- internal/adapters/driven/external: REST Api consumers
+- internal/adapters/driven/repositores: The clue between Core Ports and External Dependencies. Here we have the implementations of the Core Ports interfaces
+- internal/adapters/driver/handler: This is the driver adapter of the DDD principle. Here resides the REST handlers to be consumed by the client
 
 
 ## Docker build and run
