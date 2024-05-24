@@ -135,6 +135,7 @@ or
 > [!NOTE]  
 > The CPF does not need to be formatted.
 
+We can use this site [CPF generator](https://www.4devs.com.br/gerador_de_cpf) to easly generate a new CPF whenever we need.
 
 ### 2 List all the categories
 ***(Customer view)***
