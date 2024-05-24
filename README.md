@@ -196,7 +196,7 @@ This is used to 'finish' the order and can be used to track some convertion rate
 ### 11 Update order to not delivered
 ***(Waiter view)***
 
-- Call the PUT `http://localhost:3210/api/orders/{id}/not-delivered` to set Not Delivered status to indicate that customer doesn not receive the meal.
+- Call the PUT `http://localhost:3210/api/orders/{id}/not-delivered` to set Not Delivered status to indicate that customer does not receive the meal.
 This is used to 'finish' the order and can be used to track some convertion rate
 
 
