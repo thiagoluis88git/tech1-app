@@ -92,13 +92,13 @@ This will run all the **Services** unit tests and **Repository** unit Database t
 This project was built using Docker and Docker Compose. So, to build and run the API, we need to run in the root of the project:
 
 ```
-$ docker compose build
+docker compose build
 ```
 
 After the image build finish, run:
 
 ```
-$ docker compose up -d
+docker compose up -d
 ```
 
 The command above may take a while.
