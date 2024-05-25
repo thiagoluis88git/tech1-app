@@ -6,6 +6,7 @@
 - [Description](#description)
 - [Architecture](#architecture)
 - [Design Patterns](#design-patterns)
+- [Unit Testing](#unit-testing)
 - [Docker build and run](#docker-build-and-run)
 - [How to use](#how-to-use)
 - [Section 1 - Restaurant owner](#section-1-restaurant-owner)
@@ -75,6 +76,16 @@ To improve and make a good standard project pattern, some `Design Patterns` were
 - Decorator: To inject **Services** inside **Driver Adapter** *handler*. By doing this, we *decorate* the Handler with a Service
 - Services or Use Cases: Centralize all the business logic of of the application
 - Repository: Used to integrate with all **Driven Adapter** like *Databases and External Endpoints*
+
+## Unit Testing
+
+To run all the Unit Testing for this project, just run:
+
+```
+go test ./...
+```
+
+This will run all the **Services** unit tests and **Repository** unit Database tests running [Testcontainers](https://testcontainers.com/) database container mocks.
 
 ## Docker build and run
 
