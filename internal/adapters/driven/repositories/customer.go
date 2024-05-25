@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+
 	"github.com/thiagoluis88git/tech1/internal/adapters/driven/entities"
 	"github.com/thiagoluis88git/tech1/internal/core/domain"
 	"github.com/thiagoluis88git/tech1/internal/core/ports"
@@ -53,18 +54,6 @@ func (repository *CustomerRepository) UpdateCustomer(ctx context.Context, custom
 	return nil
 }
 
-func (repository *CustomerRepository) GetCustomerByCPF(ctx context.Context, cpf string) (domain.Customer, error) {
-	var customerEntity entities.Customer
-	err := repository.db.WithContext(ctx).Where("cpf = ?", cpf).First(&customerEntity).Error
-
-	if err != nil {
-		return domain.Customer{}, responses.GetDatabaseError(err)
-	}
-
-	return repository.populateCustomer(customerEntity), nil
-}
-
-// GetCustomerById implements ports.CustomerRepository.
 func (repository *CustomerRepository) GetCustomerById(ctx context.Context, id uint) (domain.Customer, error) {
 	var customerEntity entities.Customer
 

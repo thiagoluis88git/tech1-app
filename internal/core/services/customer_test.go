@@ -120,9 +120,9 @@ func TestCustomerServices(t *testing.T) {
 
 		ctx := context.TODO()
 
-		mockRepo.On("GetCustomerByCPF", ctx, "17107972073").Return(customerByCPF, nil)
+		mockRepo.On("GetCustomerById", ctx, uint(1)).Return(customerByCPF, nil)
 
-		response, err := sut.GetCustomerByCPF(ctx, "171.079.720-73")
+		response, err := sut.GetCustomerById(ctx, uint(1))
 
 		assert.NoError(t, err)
 		assert.NotEmpty(t, response)
@@ -141,12 +141,12 @@ func TestCustomerServices(t *testing.T) {
 
 		ctx := context.TODO()
 
-		mockRepo.On("GetCustomerByCPF", ctx, "17107972073").Return(domain.Customer{}, &responses.NetworkError{
+		mockRepo.On("GetCustomerById", ctx, uint(1)).Return(domain.Customer{}, &responses.NetworkError{
 			Code:    404,
 			Message: "Not Found",
 		})
 
-		response, err := sut.GetCustomerByCPF(ctx, "171.079.720-73")
+		response, err := sut.GetCustomerById(ctx, uint(1))
 
 		assert.Error(t, err)
 		assert.Empty(t, response)

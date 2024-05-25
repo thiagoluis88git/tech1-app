@@ -146,7 +146,7 @@ This section will use all the Endpoints to make a entire order flow.
 ### 1 User identification
 ***(Customer view)***
 
-- Call the GET `http://localhost:3210/api/customers/{cpf}` to login and get this `[Customer ID]`
+- Call the GET `http://localhost:3210/api/customers/{id}` to login and get this `[Customer ID]`
 or
 - Cal the POST `http://localhost:3210/api/customers` to create a Customer and retrieve the `[Customer ID]`
 
@@ -155,6 +155,8 @@ or
 
 > [!NOTE]  
 > The CPF does not need to be formatted.
+
+- Call the PUT `http://localhost:3210/api/customers/{id}` to update Customer
 
 We can use this site [CPF generator](https://www.4devs.com.br/gerador_de_cpf) to easly generate a new CPF whenever we need.
 

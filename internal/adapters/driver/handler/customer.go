@@ -114,32 +114,43 @@ func UpdateCustomerHandler(customerService *services.CustomerService) http.Handl
 	}
 }
 
-// @Summary Get customer by CPF
-// @Description Get customer by CPF
+// @Summary Get customer by ID
+// @Description Get customer by ID
 // @Tags Customer
 // @Accept json
 // @Produce json
-// @Param CPF path string true "12345678910"
+// @Param Id path string true "12"
 // @Success 200 {object} domain.Customer
 // @Failure 404 "Customer not found"
-// @Router /api/customers/{cpf} [get]
-func GetCustomerByCPFHandler(customerService *services.CustomerService) http.HandlerFunc {
+// @Router /api/customers/{id} [get]
+func GetCustomerByIdHandler(customerService *services.CustomerService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		cpf, err := httpserver.GetPathParamFromRequest(r, "cpf")
+		customerIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
 		if err != nil {
-			log.Print("get customer by cpf", map[string]interface{}{
+			log.Print("get customer by id", map[string]interface{}{
 				"error":  err.Error(),
 				"status": httpserver.GetStatusCodeFromError(err),
 			})
-			httpserver.SendResponseError(w, err)
+			httpserver.SendBadRequestError(w, err)
 			return
 		}
 
-		customer, err := customerService.GetCustomerByCPF(context.Background(), cpf)
+		customerId, err := strconv.Atoi(customerIdStr)
 
 		if err != nil {
-			log.Print("get customer by cpf", map[string]interface{}{
+			log.Print("get customer by id", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendBadRequestError(w, err)
+			return
+		}
+
+		customer, err := customerService.GetCustomerById(context.Background(), uint(customerId))
+
+		if err != nil {
+			log.Print("get customer by id", map[string]interface{}{
 				"error":  err.Error(),
 				"status": httpserver.GetStatusCodeFromError(err),
 			})

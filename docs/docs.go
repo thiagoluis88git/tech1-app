@@ -64,9 +64,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/customers/{cpf}": {
+        "/api/customers/{id}": {
             "get": {
-                "description": "Get customer by CPF",
+                "description": "Get customer by ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -76,12 +76,12 @@ const docTemplate = `{
                 "tags": [
                     "Customer"
                 ],
-                "summary": "Get customer by CPF",
+                "summary": "Get customer by ID",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "12345678910",
-                        "name": "CPF",
+                        "description": "12",
+                        "name": "Id",
                         "in": "path",
                         "required": true
                     }
@@ -97,9 +97,7 @@ const docTemplate = `{
                         "description": "Customer not found"
                     }
                 }
-            }
-        },
-        "/api/customers/{id}": {
+            },
             "put": {
                 "description": "Update customer",
                 "consumes": [

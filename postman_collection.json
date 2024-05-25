@@ -39,7 +39,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Customer By CPF",
+					"name": "Get Customer By ID",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
