@@ -5,6 +5,7 @@
 - [Table of Contents](#table-of-contents)
 - [Description](#description)
 - [Architecture](#architecture)
+- [Design Patterns](#design-patterns)
 - [Docker build and run](#docker-build-and-run)
 - [How to use](#how-to-use)
 - [Section 1 - Restaurant owner](#section-1-restaurant-owner)
@@ -65,6 +66,15 @@ The folder project was created to follow DDD principle:
 - - - - internal/adapters/driven/repositores: The clue between Core Ports and External Dependencies. Here we have the implementations of the Core Ports interfaces
 - - - internal/adapters/driver/handler: This is the driver adapter of the DDD principle. Here resides the REST handlers to be consumed by the client
 
+## Design Patterns
+
+To improve and make a good standard project pattern, some `Design Patterns` were used in this application.
+
+- Strategy: All the business logic must be protected by the external implementations. To do it, we use a combo with **Interfaces** and **Dependency Inversion solid principle** to inject only *interfaces* and not *real implementations*
+- Dependency Injection: Is used in application bootstrap (main.go) to inject all the interfaces implementations.
+- Decorator: To inject **Services** inside **Driver Adapter** *handler*. By doing this, we *decorate* the Handler with a Service
+- Services or Use Cases: Centralize all the business logic of of the application
+- Repository: Used to integrate with all **Driven Adapter** like *Databases and External Endpoints*
 
 ## Docker build and run
 
