@@ -132,6 +132,23 @@ func (repository *ProductRepository) GetProductsByCategory(ctx context.Context, 
 	return repository.buildProducts(ctx, productEntities), nil
 }
 
+func (repository *ProductRepository) GetProductById(ctx context.Context, id uint) (domain.ProductResponse, error) {
+	var productEntity entities.Product
+	err := repository.
+		db.WithContext(ctx).
+		Model(&entities.Product{}).
+		Preload("ProductImage").
+		Preload("ComboProduct").
+		First(&productEntity, id).
+		Error
+
+	if err != nil {
+		return domain.ProductResponse{}, responses.GetDatabaseError(err)
+	}
+
+	return repository.buildProduct(ctx, productEntity), nil
+}
+
 func (repository *ProductRepository) DeleteProduct(ctx context.Context, productId uint) error {
 	tx := repository.db.WithContext(ctx).Begin()
 	defer func() {
@@ -145,6 +162,13 @@ func (repository *ProductRepository) DeleteProduct(ctx context.Context, productI
 	}
 
 	err := tx.Where("product_id = ?", productId).Delete(&entities.ProductImage{}).Error
+
+	if err != nil {
+		tx.Rollback()
+		return responses.GetDatabaseError(err)
+	}
+
+	err = tx.Where("product_id = ?", productId).Delete(&entities.ComboProduct{}).Error
 
 	if err != nil {
 		tx.Rollback()

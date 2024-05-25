@@ -59,7 +59,7 @@ func CreateProductHandler(productService *services.ProductService) http.HandlerF
 // @Param category path string true "Lanches"
 // @Accept json
 // @Produce json
-// @Success 200 {object} []domain.ProductForm
+// @Success 200 {object} []domain.ProductResponse
 // @Router /api/products/{category} [get]
 func GetProductsByCategoryHandler(productService *services.ProductService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -86,6 +86,53 @@ func GetProductsByCategoryHandler(productService *services.ProductService) http.
 		}
 
 		httpserver.SendResponseSuccess(w, products)
+	}
+}
+
+// @Summary Get product by ID
+// @Description Get product by ID
+// @Tags Product
+// @Param id path int true "12"
+// @Accept json
+// @Produce json
+// @Success 200 {object} domain.ProductResponse
+// @Router /api/products/{category} [get]
+func GetProductsByIdHandler(productService *services.ProductService) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		productIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
+
+		if err != nil {
+			log.Print("get product by id", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendBadRequestError(w, err)
+			return
+		}
+
+		productId, err := strconv.Atoi(productIdStr)
+
+		if err != nil {
+			log.Print("get product by id", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendBadRequestError(w, err)
+			return
+		}
+
+		product, err := productService.GetProductById(context.Background(), uint(productId))
+
+		if err != nil {
+			log.Print("get product by id", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendResponseError(w, err)
+			return
+		}
+
+		httpserver.SendResponseSuccess(w, product)
 	}
 }
 

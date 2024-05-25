@@ -10,7 +10,7 @@
 - [Docker build and run](#docker-build-and-run)
 - [How to use](#how-to-use)
 - [Section 1 - Restaurant owner](#section-1-restaurant-owner)
-  - [1 Create product](#1-create-product)
+  - [1 Product manipulation](#1-product-manipulation)
 - [Section 2 Customer order](#section-2-customer-order)
   - [1 User identification](#1-user-identification)
   - [2 List all the categories](#2-list-all-the-categories)
@@ -129,11 +129,14 @@ We will divide in 2 sections: **Restaurant owner** and **Customer order**
 
 This section will be used by the restaurant owner to manage the restaurant products
 
-### 1 Create product
+### 1 Product manipulation
 ***(Owner view)***
 
 - Cal the POST `http://localhost:3210/api/products` to create a Product
 - Cal the PUT `http://localhost:3210/api/products/{id}` to update a Product
+- Cal the GET `http://localhost:3210/api/products/{id}` to get a Product
+- Cal the GET `http://localhost:3210/api/products/categories` to list all Product Categories
+- Cal the GET `http://localhost:3210/api/products/categories/{category}` to list all Products by a category
 - Cal the DELETE `http://localhost:3210/api/products/{id}` to delete a Product
 
 With those endpoints we can follow to *Section 2* to start the ***Order flow***

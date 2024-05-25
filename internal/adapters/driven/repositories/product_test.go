@@ -45,6 +45,36 @@ func (suite *RepositoryTestSuite) TestGetProductsWithSuccess() {
 	suite.Equal("New Product Created", createdProducts[0].Name)
 }
 
+func (suite *RepositoryTestSuite) TestGetProductByIdWithSuccess() {
+	// ensure that the postgres database is empty
+	var products []entities.Product
+	result := suite.db.Find(&products)
+	suite.NoError(result.Error)
+	suite.Empty(products)
+
+	repo := NewProductRepository(suite.db)
+
+	newProduct := domain.ProductForm{
+		Name:        "New Product Created",
+		Description: "New Description Product Created",
+		Category:    "Lanches",
+		Price:       2990,
+		Images: []domain.ProducImage{
+			{
+				ImageUrl: "NewImageUrl",
+			},
+		},
+	}
+	newId, err := repo.CreateProduct(suite.ctx, newProduct)
+	suite.NoError(err)
+	suite.Equal(uint(1), newId)
+
+	createdProduct, err := repo.GetProductById(suite.ctx, uint(1))
+
+	suite.NoError(err)
+	suite.Equal("New Product Created", createdProduct.Name)
+}
+
 func (suite *RepositoryTestSuite) TestCreateProductWithSuccess() {
 	// ensure that the postgres database is empty
 	var products []entities.Product

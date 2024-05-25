@@ -48,6 +48,16 @@ func (service *ProductService) GetProductsByCategory(ctx context.Context, catego
 	return products, nil
 }
 
+func (service *ProductService) GetProductById(ctx context.Context, id uint) (domain.ProductResponse, error) {
+	products, err := service.repository.GetProductById(ctx, id)
+
+	if err != nil {
+		return domain.ProductResponse{}, responses.GetResponseError(err, "ProductService")
+	}
+
+	return products, nil
+}
+
 func (service *ProductService) DeleteProduct(ctx context.Context, productId uint) error {
 	err := service.repository.DeleteProduct(ctx, productId)
 

@@ -533,7 +533,7 @@ const docTemplate = `{
         },
         "/api/products/{category}": {
             "get": {
-                "description": "List all products by a category",
+                "description": "Get product by ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -543,12 +543,12 @@ const docTemplate = `{
                 "tags": [
                     "Product"
                 ],
-                "summary": "List all products by a category",
+                "summary": "Get product by ID",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Lanches",
-                        "name": "category",
+                        "type": "integer",
+                        "description": "12",
+                        "name": "id",
                         "in": "path",
                         "required": true
                     }
@@ -557,10 +557,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/domain.ProductForm"
-                            }
+                            "$ref": "#/definitions/domain.ProductResponse"
                         }
                     }
                 }

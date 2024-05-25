@@ -10,6 +10,7 @@ type ProductRepository interface {
 	CreateProduct(ctx context.Context, product domain.ProductForm) (uint, error)
 	GetCategories() []string
 	GetProductsByCategory(ctx context.Context, category string) ([]domain.ProductResponse, error)
+	GetProductById(ctx context.Context, id uint) (domain.ProductResponse, error)
 	DeleteProduct(ctx context.Context, productId uint) error
 	UpdateProduct(ctx context.Context, product domain.ProductForm) error
 }

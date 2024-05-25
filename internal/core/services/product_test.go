@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/thiagoluis88git/tech1/internal/core/domain"
 	"github.com/thiagoluis88git/tech1/pkg/responses"
 )
 
@@ -64,6 +65,51 @@ func TestProductServices(t *testing.T) {
 		})
 
 		response, err := sut.GetProductsByCategory(ctx, "category")
+
+		mockRepo.AssertExpectations(t)
+
+		assert.Error(t, err)
+		assert.Empty(t, response)
+
+		var businessError *responses.BusinessResponse
+		assert.Equal(t, true, errors.As(err, &businessError))
+		assert.Equal(t, http.StatusConflict, businessError.StatusCode)
+	})
+
+	t.Run("got success when getting product by id in services", func(t *testing.T) {
+		t.Parallel()
+
+		mockRepo := new(MockProductRepository)
+		sut := NewProductService(uc, mockRepo)
+
+		ctx := context.TODO()
+
+		mockRepo.On("GetProductById", ctx, uint(1)).Return(productById, nil)
+
+		response, err := sut.GetProductById(ctx, uint(1))
+
+		mockRepo.AssertExpectations(t)
+
+		assert.NoError(t, err)
+		assert.NotEmpty(t, response)
+
+		assert.Equal(t, uint(12), response.Id)
+	})
+
+	t.Run("got error when getting product by id in services", func(t *testing.T) {
+		t.Parallel()
+
+		mockRepo := new(MockProductRepository)
+		sut := NewProductService(uc, mockRepo)
+
+		ctx := context.TODO()
+
+		mockRepo.On("GetProductById", ctx, uint(1)).Return(domain.ProductResponse{}, &responses.LocalError{
+			Code:    3,
+			Message: "DATABASE_CONFLICT_ERROR",
+		})
+
+		response, err := sut.GetProductById(ctx, uint(1))
 
 		mockRepo.AssertExpectations(t)
 

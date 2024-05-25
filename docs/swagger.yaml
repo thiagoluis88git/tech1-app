@@ -501,23 +501,21 @@ paths:
     get:
       consumes:
       - application/json
-      description: List all products by a category
+      description: Get product by ID
       parameters:
-      - description: Lanches
+      - description: "12"
         in: path
-        name: category
+        name: id
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/domain.ProductForm'
-            type: array
-      summary: List all products by a category
+            $ref: '#/definitions/domain.ProductResponse'
+      summary: Get product by ID
       tags:
       - Product
   /api/products/{id}:

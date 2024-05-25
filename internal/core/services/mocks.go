@@ -177,6 +177,19 @@ var (
 			},
 		},
 	}
+
+	productById = domain.ProductResponse{
+		Id:          uint(12),
+		Name:        "Name",
+		Description: "Description",
+		Category:    "Category",
+		Price:       23456,
+		Images: []domain.ProducImage{
+			{
+				ImageUrl: "imageUrl",
+			},
+		},
+	}
 )
 
 type MockOrderRepository struct {
@@ -396,17 +409,6 @@ func (mock *MockProductRepository) CreateProduct(ctx context.Context, product do
 	return args.Get(0).(uint), nil
 }
 
-func (mock *MockProductRepository) CreateCombo(ctx context.Context, combo domain.ComboForm) (uint, error) {
-	args := mock.Called(ctx, combo)
-	err := args.Error(1)
-
-	if err != nil {
-		return 0, err
-	}
-
-	return args.Get(0).(uint), nil
-}
-
 func (mock *MockProductRepository) GetProductsByCategory(ctx context.Context, category string) ([]domain.ProductResponse, error) {
 	args := mock.Called(ctx, category)
 	err := args.Error(1)
@@ -416,6 +418,17 @@ func (mock *MockProductRepository) GetProductsByCategory(ctx context.Context, ca
 	}
 
 	return args.Get(0).([]domain.ProductResponse), nil
+}
+
+func (mock *MockProductRepository) GetProductById(ctx context.Context, id uint) (domain.ProductResponse, error) {
+	args := mock.Called(ctx, id)
+	err := args.Error(1)
+
+	if err != nil {
+		return domain.ProductResponse{}, err
+	}
+
+	return args.Get(0).(domain.ProductResponse), nil
 }
 
 func (mock *MockProductRepository) DeleteProduct(ctx context.Context, productId uint) error {
