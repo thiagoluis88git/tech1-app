@@ -99,7 +99,7 @@ func (repository *OrderRespository) GetOrderById(ctx context.Context, orderId ui
 
 	for _, value := range orderEntity.OrderProduct {
 		orderProduct = append(orderProduct, domain.OrderProductResponse{
-			ProductID:   orderId,
+			ProductID:   value.ProductID,
 			ProductName: value.Product.Name,
 			Description: value.Product.Description,
 		})
@@ -179,7 +179,7 @@ func (repository *OrderRespository) GetOrdersToFollow(ctx context.Context) ([]do
 		Model(&entities.Order{}).
 		Preload("OrderProduct.Product").
 		Preload("Customer").
-		Where("order_status in (?,?)", entities.OrderStatusPreparing, entities.OrderStatusDone).
+		Where("order_status in (?, ?,?)", entities.OrderStatusCreated, entities.OrderStatusPreparing, entities.OrderStatusDone).
 		Find(&orderEntity).
 		Error
 

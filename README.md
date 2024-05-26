@@ -194,7 +194,7 @@ With this endpoints we can simulate a screen producst selection by chosing all p
 ### 6 List orders to follow
 ***(Customer and Waiter)***
 
-- Call the GET `http://localhost:3210/api/orders/follow` to show a list of Orders to be followed by Customer and Waiter
+- Call the GET `http://localhost:3210/api/orders/follow` to show a list of Orders to be followed by Customer and Waiter. This will list only, `CREATED`, `PREPARING` and `DONE`.
 
 The order can be followed by its ID:
 - Call the GET `http://localhost:3210/api/orders/{id}` to show a an Orders to be followed by Customer and Waiter
