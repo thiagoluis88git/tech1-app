@@ -69,6 +69,22 @@ func (repository *CustomerRepository) GetCustomerById(ctx context.Context, id ui
 	return repository.populateCustomer(customerEntity), nil
 }
 
+func (repository *CustomerRepository) GetCustomerByCPF(ctx context.Context, cpf string) (domain.Customer, error) {
+	var customerEntity entities.Customer
+
+	err := repository.
+		db.WithContext(ctx).
+		Where("cpf = ?", cpf).
+		First(&customerEntity).
+		Error
+
+	if err != nil {
+		return domain.Customer{}, responses.GetDatabaseError(err)
+	}
+
+	return repository.populateCustomer(customerEntity), nil
+}
+
 func (repository *CustomerRepository) populateCustomer(customerEntity entities.Customer) domain.Customer {
 	return domain.Customer{
 		ID:    customerEntity.ID,

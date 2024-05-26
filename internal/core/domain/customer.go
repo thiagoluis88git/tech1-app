@@ -7,6 +7,10 @@ type Customer struct {
 	Email string `json:"email" validate:"required"`
 }
 
+type CustomerForm struct {
+	CPF string `json:"cpf" validate:"required"`
+}
+
 type CustomerResponse struct {
 	Id uint `json:"id"`
 }

@@ -15,6 +15,13 @@ definitions:
     - email
     - name
     type: object
+  domain.CustomerForm:
+    properties:
+      cpf:
+        type: string
+    required:
+    - cpf
+    type: object
   domain.CustomerResponse:
     properties:
       id:
@@ -253,6 +260,30 @@ paths:
         "404":
           description: Customer not found
       summary: Update customer
+      tags:
+      - Customer
+  /api/customers/login:
+    get:
+      consumes:
+      - application/json
+      description: Get customer by CPF. This Endpoint can be used as a Login
+      parameters:
+      - description: customerForm
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/domain.CustomerForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Customer'
+        "404":
+          description: Customer not found
+      summary: Get customer by CPF
       tags:
       - Customer
   /api/orders:
@@ -497,7 +528,25 @@ paths:
       summary: Create new product
       tags:
       - Product
-  /api/products/{category}:
+  /api/products/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a product by ID
+      parameters:
+      - description: "12"
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Delete a product
+      tags:
+      - Product
     get:
       consumes:
       - application/json
@@ -516,25 +565,6 @@ paths:
           schema:
             $ref: '#/definitions/domain.ProductResponse'
       summary: Get product by ID
-      tags:
-      - Product
-  /api/products/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Delete a product by ID
-      parameters:
-      - description: "12"
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-      summary: Delete a product
       tags:
       - Product
     put:
@@ -576,6 +606,29 @@ paths:
               type: string
             type: array
       summary: Get all categories
+      tags:
+      - Product
+  /api/products/categories/{category}:
+    get:
+      consumes:
+      - application/json
+      description: List all products by a category
+      parameters:
+      - description: Lanches
+        in: path
+        name: category
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.ProductResponse'
+            type: array
+      summary: List all products by a category
       tags:
       - Product
 swagger: "2.0"

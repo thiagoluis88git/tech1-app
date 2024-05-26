@@ -161,3 +161,42 @@ func GetCustomerByIdHandler(customerService *services.CustomerService) http.Hand
 		httpserver.SendResponseSuccess(w, customer)
 	}
 }
+
+// @Summary Get customer by CPF
+// @Description Get customer by CPF. This Endpoint can be used as a Login
+// @Tags Customer
+// @Accept json
+// @Produce json
+// @Param customer body domain.CustomerForm true "customerForm"
+// @Success 200 {object} domain.Customer
+// @Failure 404 "Customer not found"
+// @Router /api/customers/login [get]
+func GetCustomerByCPFHandler(customerService *services.CustomerService) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var customerForm domain.CustomerForm
+
+		err := httpserver.DecodeJSONBody(w, r, &customerForm)
+
+		if err != nil {
+			log.Print("decoding product body", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendBadRequestError(w, err)
+			return
+		}
+
+		customer, err := customerService.GetCustomerByCPF(context.Background(), customerForm.CPF)
+
+		if err != nil {
+			log.Print("get customer by id", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendResponseError(w, err)
+			return
+		}
+
+		httpserver.SendResponseSuccess(w, customer)
+	}
+}

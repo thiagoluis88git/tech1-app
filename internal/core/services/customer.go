@@ -72,3 +72,22 @@ func (service *CustomerService) GetCustomerById(ctx context.Context, id uint) (d
 
 	return customer, nil
 }
+
+func (service *CustomerService) GetCustomerByCPF(ctx context.Context, cpf string) (domain.Customer, error) {
+	cleanedCPF, validate := service.validateCPFUseCase.Execute(cpf)
+
+	if !validate {
+		return domain.Customer{}, &responses.BusinessResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    "Invalid CPF",
+		}
+	}
+
+	customer, err := service.repository.GetCustomerByCPF(ctx, cleanedCPF)
+
+	if err != nil {
+		return domain.Customer{}, responses.GetResponseError(err, "CustomerService")
+	}
+
+	return customer, nil
+}

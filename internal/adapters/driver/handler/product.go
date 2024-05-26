@@ -60,7 +60,7 @@ func CreateProductHandler(productService *services.ProductService) http.HandlerF
 // @Accept json
 // @Produce json
 // @Success 200 {object} []domain.ProductResponse
-// @Router /api/products/{category} [get]
+// @Router /api/products/categories/{category} [get]
 func GetProductsByCategoryHandler(productService *services.ProductService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		category, err := httpserver.GetPathParamFromRequest(r, "category")
@@ -96,7 +96,7 @@ func GetProductsByCategoryHandler(productService *services.ProductService) http.
 // @Accept json
 // @Produce json
 // @Success 200 {object} domain.ProductResponse
-// @Router /api/products/{category} [get]
+// @Router /api/products/{id} [get]
 func GetProductsByIdHandler(productService *services.ProductService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		productIdStr, err := httpserver.GetPathParamFromRequest(r, "id")

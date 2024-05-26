@@ -64,6 +64,43 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/customers/login": {
+            "get": {
+                "description": "Get customer by CPF. This Endpoint can be used as a Login",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "Get customer by CPF",
+                "parameters": [
+                    {
+                        "description": "customerForm",
+                        "name": "customer",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.CustomerForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Customer"
+                        }
+                    },
+                    "404": {
+                        "description": "Customer not found"
+                    }
+                }
+            }
+        },
         "/api/customers/{id}": {
             "get": {
                 "description": "Get customer by ID",
@@ -531,7 +568,42 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/products/{category}": {
+        "/api/products/categories/{category}": {
+            "get": {
+                "description": "List all products by a category",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "List all products by a category",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Lanches",
+                        "name": "category",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.ProductResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/products/{id}": {
             "get": {
                 "description": "Get product by ID",
                 "consumes": [
@@ -561,9 +633,7 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/api/products/{id}": {
+            },
             "put": {
                 "description": "Update a product by ID",
                 "consumes": [
@@ -639,6 +709,17 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.CustomerForm": {
+            "type": "object",
+            "required": [
+                "cpf"
+            ],
+            "properties": {
+                "cpf": {
                     "type": "string"
                 }
             }

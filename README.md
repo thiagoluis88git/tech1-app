@@ -149,15 +149,16 @@ This section will use all the Endpoints to make a entire order flow.
 ### 1 User identification
 ***(Customer view)***
 
-- Call the GET `http://localhost:3210/api/customers/{id}` to login and get this `[Customer ID]`
-or
-- Cal the POST `http://localhost:3210/api/customers` to create a Customer and retrieve the `[Customer ID]`
-
 > [!IMPORTANT]
 > These endpoints have a CPF validation. So be aware that it is needed to pass a correct CPF number.
 
 > [!NOTE]  
 > The CPF does not need to be formatted.
+
+- Cal the POST `http://localhost:3210/api/customers` to create a Customer and retrieve the `[Customer ID]`
+
+- Call the GET `http://localhost:3210/api/customers/login` to login and get the Customer
+- Call the GET `http://localhost:3210/api/customers/{id}` to get the Customer by this `[Customer ID]`
 
 - Call the PUT `http://localhost:3210/api/customers/{id}` to update Customer
 
