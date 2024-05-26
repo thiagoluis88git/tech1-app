@@ -244,7 +244,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Hamburger 1\",\n    \"description\": \"Hamburger com pão de brioche, queijo prato e cebola roxa\",\n    \"category\": \"Lanche\",\n    \"price\": 1349,\n    \"images\": [\n        {\n            \"imageUrl\": \"url1\"\n        },\n                {\n            \"imageUrl\": \"url1\"\n        }\n    ]\n}",
+							"raw": "{\n    \"name\": \"Coca Cola lata\",\n    \"description\": \"Refrigerante Coca Cola lata de 200ml\",\n    \"category\": \"Lanche\",\n    \"price\": 699,\n    \"images\": [\n        {\n            \"imageUrl\": \"url1\"\n        },\n        {\n            \"imageUrl\": \"url1\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
