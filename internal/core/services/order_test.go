@@ -21,8 +21,9 @@ func TestOrderServices(t *testing.T) {
 		mockCustomerRepo := new(MockCustomerRepository)
 		validateToPrepare := NewValidateOrderToPrepareUseCase(mockRepo)
 		validateToDone := NewValidateOrderToDoneUseCase(mockRepo)
+		validateToDeliveredOrNot := NewValidateOrderToDeliveredOrNotUseCase(mockRepo)
 
-		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone)
+		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone, validateToDeliveredOrNot)
 
 		ctx := context.TODO()
 
@@ -42,8 +43,9 @@ func TestOrderServices(t *testing.T) {
 		mockCustomerRepo := new(MockCustomerRepository)
 		validateToPrepare := NewValidateOrderToPrepareUseCase(mockRepo)
 		validateToDone := NewValidateOrderToDoneUseCase(mockRepo)
+		validateToDeliveredOrNot := NewValidateOrderToDeliveredOrNotUseCase(mockRepo)
 
-		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone)
+		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone, validateToDeliveredOrNot)
 
 		ctx := context.TODO()
 
@@ -69,8 +71,9 @@ func TestOrderServices(t *testing.T) {
 		mockCustomerRepo := new(MockCustomerRepository)
 		validateToPrepare := NewValidateOrderToPrepareUseCase(mockRepo)
 		validateToDone := NewValidateOrderToDoneUseCase(mockRepo)
+		validateToDeliveredOrNot := NewValidateOrderToDeliveredOrNotUseCase(mockRepo)
 
-		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone)
+		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone, validateToDeliveredOrNot)
 
 		ctx := context.TODO()
 
@@ -97,8 +100,9 @@ func TestOrderServices(t *testing.T) {
 		mockCustomerRepo := new(MockCustomerRepository)
 		validateToPrepare := NewValidateOrderToPrepareUseCase(mockRepo)
 		validateToDone := NewValidateOrderToDoneUseCase(mockRepo)
+		validateToDeliveredOrNot := NewValidateOrderToDeliveredOrNotUseCase(mockRepo)
 
-		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone)
+		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone, validateToDeliveredOrNot)
 
 		ctx := context.TODO()
 
@@ -131,8 +135,9 @@ func TestOrderServices(t *testing.T) {
 		mockCustomerRepo := new(MockCustomerRepository)
 		validateToPrepare := NewValidateOrderToPrepareUseCase(mockRepo)
 		validateToDone := NewValidateOrderToDoneUseCase(mockRepo)
+		validateToDeliveredOrNot := NewValidateOrderToDeliveredOrNotUseCase(mockRepo)
 
-		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone)
+		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone, validateToDeliveredOrNot)
 
 		ctx := context.TODO()
 
@@ -151,8 +156,9 @@ func TestOrderServices(t *testing.T) {
 		mockCustomerRepo := new(MockCustomerRepository)
 		validateToPrepare := NewValidateOrderToPrepareUseCase(mockRepo)
 		validateToDone := NewValidateOrderToDoneUseCase(mockRepo)
+		validateToDeliveredOrNot := NewValidateOrderToDeliveredOrNotUseCase(mockRepo)
 
-		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone)
+		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone, validateToDeliveredOrNot)
 
 		ctx := context.TODO()
 
@@ -178,8 +184,9 @@ func TestOrderServices(t *testing.T) {
 		mockCustomerRepo := new(MockCustomerRepository)
 		validateToPrepare := NewValidateOrderToPrepareUseCase(mockRepo)
 		validateToDone := NewValidateOrderToDoneUseCase(mockRepo)
+		validateToDeliveredOrNot := NewValidateOrderToDeliveredOrNotUseCase(mockRepo)
 
-		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone)
+		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone, validateToDeliveredOrNot)
 
 		ctx := context.TODO()
 
@@ -203,8 +210,9 @@ func TestOrderServices(t *testing.T) {
 		mockCustomerRepo := new(MockCustomerRepository)
 		validateToPrepare := NewValidateOrderToPrepareUseCase(mockRepo)
 		validateToDone := NewValidateOrderToDoneUseCase(mockRepo)
+		validateToDeliveredOrNot := NewValidateOrderToDeliveredOrNotUseCase(mockRepo)
 
-		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone)
+		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone, validateToDeliveredOrNot)
 
 		ctx := context.TODO()
 
@@ -233,8 +241,9 @@ func TestOrderServices(t *testing.T) {
 		mockCustomerRepo := new(MockCustomerRepository)
 		validateToPrepare := NewValidateOrderToPrepareUseCase(mockRepo)
 		validateToDone := NewValidateOrderToDoneUseCase(mockRepo)
+		validateToDeliveredOrNot := NewValidateOrderToDeliveredOrNotUseCase(mockRepo)
 
-		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone)
+		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone, validateToDeliveredOrNot)
 
 		ctx := context.TODO()
 
@@ -255,8 +264,9 @@ func TestOrderServices(t *testing.T) {
 		mockCustomerRepo := new(MockCustomerRepository)
 		validateToPrepare := NewValidateOrderToPrepareUseCase(mockRepo)
 		validateToDone := NewValidateOrderToDoneUseCase(mockRepo)
+		validateToDeliveredOrNot := NewValidateOrderToDeliveredOrNotUseCase(mockRepo)
 
-		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone)
+		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone, validateToDeliveredOrNot)
 
 		ctx := context.TODO()
 
@@ -282,11 +292,15 @@ func TestOrderServices(t *testing.T) {
 		mockCustomerRepo := new(MockCustomerRepository)
 		validateToPrepare := NewValidateOrderToPrepareUseCase(mockRepo)
 		validateToDone := NewValidateOrderToDoneUseCase(mockRepo)
+		validateToDeliveredOrNot := NewValidateOrderToDeliveredOrNotUseCase(mockRepo)
 
-		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone)
+		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone, validateToDeliveredOrNot)
 
 		ctx := context.TODO()
 
+		mockRepo.On("GetOrderById", ctx, uint(1)).Return(domain.OrderResponse{
+			OrderStatus: "Finalizado",
+		}, nil)
 		mockRepo.On("UpdateToDelivered", ctx, uint(1)).Return(nil)
 
 		err := sut.UpdateToDelivered(ctx, uint(1))
@@ -301,11 +315,15 @@ func TestOrderServices(t *testing.T) {
 		mockCustomerRepo := new(MockCustomerRepository)
 		validateToPrepare := NewValidateOrderToPrepareUseCase(mockRepo)
 		validateToDone := NewValidateOrderToDoneUseCase(mockRepo)
+		validateToDeliveredOrNot := NewValidateOrderToDeliveredOrNotUseCase(mockRepo)
 
-		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone)
+		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone, validateToDeliveredOrNot)
 
 		ctx := context.TODO()
 
+		mockRepo.On("GetOrderById", ctx, uint(1)).Return(domain.OrderResponse{
+			OrderStatus: "Finalizado",
+		}, nil)
 		mockRepo.On("UpdateToDelivered", ctx, uint(1)).Return(&responses.NetworkError{
 			Code:    404,
 			Message: "Not Found",
@@ -327,8 +345,9 @@ func TestOrderServices(t *testing.T) {
 		mockCustomerRepo := new(MockCustomerRepository)
 		validateToPrepare := NewValidateOrderToPrepareUseCase(mockRepo)
 		validateToDone := NewValidateOrderToDoneUseCase(mockRepo)
+		validateToDeliveredOrNot := NewValidateOrderToDeliveredOrNotUseCase(mockRepo)
 
-		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone)
+		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone, validateToDeliveredOrNot)
 
 		ctx := context.TODO()
 
@@ -349,8 +368,9 @@ func TestOrderServices(t *testing.T) {
 		mockCustomerRepo := new(MockCustomerRepository)
 		validateToPrepare := NewValidateOrderToPrepareUseCase(mockRepo)
 		validateToDone := NewValidateOrderToDoneUseCase(mockRepo)
+		validateToDeliveredOrNot := NewValidateOrderToDeliveredOrNotUseCase(mockRepo)
 
-		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone)
+		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone, validateToDeliveredOrNot)
 
 		ctx := context.TODO()
 
@@ -378,11 +398,15 @@ func TestOrderServices(t *testing.T) {
 		mockCustomerRepo := new(MockCustomerRepository)
 		validateToPrepare := NewValidateOrderToPrepareUseCase(mockRepo)
 		validateToDone := NewValidateOrderToDoneUseCase(mockRepo)
+		validateToDeliveredOrNot := NewValidateOrderToDeliveredOrNotUseCase(mockRepo)
 
-		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone)
+		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone, validateToDeliveredOrNot)
 
 		ctx := context.TODO()
 
+		mockRepo.On("GetOrderById", ctx, uint(1)).Return(domain.OrderResponse{
+			OrderStatus: "Finalizado",
+		}, nil)
 		mockRepo.On("UpdateToNotDelivered", ctx, uint(1)).Return(nil)
 
 		err := sut.UpdateToNotDelivered(ctx, uint(1))
@@ -397,11 +421,15 @@ func TestOrderServices(t *testing.T) {
 		mockCustomerRepo := new(MockCustomerRepository)
 		validateToPrepare := NewValidateOrderToPrepareUseCase(mockRepo)
 		validateToDone := NewValidateOrderToDoneUseCase(mockRepo)
+		validateToDeliveredOrNot := NewValidateOrderToDeliveredOrNotUseCase(mockRepo)
 
-		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone)
+		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone, validateToDeliveredOrNot)
 
 		ctx := context.TODO()
 
+		mockRepo.On("GetOrderById", ctx, uint(1)).Return(domain.OrderResponse{
+			OrderStatus: "Finalizado",
+		}, nil)
 		mockRepo.On("UpdateToNotDelivered", ctx, uint(1)).Return(&responses.NetworkError{
 			Code:    404,
 			Message: "Not Found",
@@ -423,8 +451,9 @@ func TestOrderServices(t *testing.T) {
 		mockCustomerRepo := new(MockCustomerRepository)
 		validateToPrepare := NewValidateOrderToPrepareUseCase(mockRepo)
 		validateToDone := NewValidateOrderToDoneUseCase(mockRepo)
+		validateToDeliveredOrNot := NewValidateOrderToDeliveredOrNotUseCase(mockRepo)
 
-		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone)
+		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone, validateToDeliveredOrNot)
 
 		ctx := context.TODO()
 
@@ -445,8 +474,9 @@ func TestOrderServices(t *testing.T) {
 		mockCustomerRepo := new(MockCustomerRepository)
 		validateToPrepare := NewValidateOrderToPrepareUseCase(mockRepo)
 		validateToDone := NewValidateOrderToDoneUseCase(mockRepo)
+		validateToDeliveredOrNot := NewValidateOrderToDeliveredOrNotUseCase(mockRepo)
 
-		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone)
+		sut := NewOrderService(mockRepo, mockCustomerRepo, validateToPrepare, validateToDone, validateToDeliveredOrNot)
 
 		ctx := context.TODO()
 

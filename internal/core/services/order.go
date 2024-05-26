@@ -10,10 +10,11 @@ import (
 )
 
 type OrderService struct {
-	orderRepo         ports.OrderRepository
-	customerRepo      ports.CustomerRepository
-	validateToPrepare *ValidateOrderToPrepareUseCase
-	validateToDone    *ValidateOrderToDoneUseCase
+	orderRepo                ports.OrderRepository
+	customerRepo             ports.CustomerRepository
+	validateToPrepare        *ValidateOrderToPrepareUseCase
+	validateToDone           *ValidateOrderToDoneUseCase
+	validateToDeliveredOrNot *ValidateOrderToDeliveredOrNotUseCase
 }
 
 func NewOrderService(
@@ -21,12 +22,14 @@ func NewOrderService(
 	customerRepo ports.CustomerRepository,
 	validateToPrepate *ValidateOrderToPrepareUseCase,
 	validateToDone *ValidateOrderToDoneUseCase,
+	validateToDeliveredOrNot *ValidateOrderToDeliveredOrNotUseCase,
 ) *OrderService {
 	return &OrderService{
-		orderRepo:         orderRepo,
-		customerRepo:      customerRepo,
-		validateToPrepare: validateToPrepate,
-		validateToDone:    validateToDone,
+		orderRepo:                orderRepo,
+		customerRepo:             customerRepo,
+		validateToPrepare:        validateToPrepate,
+		validateToDone:           validateToDone,
+		validateToDeliveredOrNot: validateToDeliveredOrNot,
 	}
 }
 
@@ -110,7 +113,7 @@ func (service *OrderService) UpdateToDone(ctx context.Context, orderId uint) err
 	err := service.validateToDone.Execute(ctx, orderId)
 
 	if err != nil {
-		return responses.GetResponseError(err, "OrderService -> UpdateToPreparing")
+		return responses.GetResponseError(err, "OrderService -> UpdateToDone")
 	}
 
 	err = service.orderRepo.UpdateToDone(ctx, orderId)
@@ -123,7 +126,13 @@ func (service *OrderService) UpdateToDone(ctx context.Context, orderId uint) err
 }
 
 func (service *OrderService) UpdateToDelivered(ctx context.Context, orderId uint) error {
-	err := service.orderRepo.UpdateToDelivered(ctx, orderId)
+	err := service.validateToDeliveredOrNot.Execute(ctx, orderId)
+
+	if err != nil {
+		return responses.GetResponseError(err, "OrderService -> UpdateToDelivered")
+	}
+
+	err = service.orderRepo.UpdateToDelivered(ctx, orderId)
 
 	if err != nil {
 		return responses.GetResponseError(err, "OrderService -> UpdateToDelivered")
@@ -133,7 +142,13 @@ func (service *OrderService) UpdateToDelivered(ctx context.Context, orderId uint
 }
 
 func (service *OrderService) UpdateToNotDelivered(ctx context.Context, orderId uint) error {
-	err := service.orderRepo.UpdateToNotDelivered(ctx, orderId)
+	err := service.validateToDeliveredOrNot.Execute(ctx, orderId)
+
+	if err != nil {
+		return responses.GetResponseError(err, "OrderService -> UpdateToNotDelivered")
+	}
+
+	err = service.orderRepo.UpdateToNotDelivered(ctx, orderId)
 
 	if err != nil {
 		return responses.GetResponseError(err, "OrderService -> UpdateToNotDelivered")

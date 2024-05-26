@@ -264,6 +264,7 @@ func UpdateOrderDoneHandler(orderService *services.OrderService) http.HandlerFun
 // @Param id path int true "12"
 // @Success 204
 // @Failure 404 "Order not found"
+// @Failure 428 "Precondition failed: Need to be with status Finalizado"
 // @Router /api/orders/{id}/delivered [put]
 func UpdateOrderDeliveredHandler(orderService *services.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -312,6 +313,7 @@ func UpdateOrderDeliveredHandler(orderService *services.OrderService) http.Handl
 // @Param id path int true "12"
 // @Success 204
 // @Failure 404 "Order not found"
+// @Failure 428 "Precondition failed: Need to be with status Finalizado"
 // @Router /api/orders/{id}/not-delivered [put]
 func UpdateOrderNotDeliveredandler(orderService *services.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

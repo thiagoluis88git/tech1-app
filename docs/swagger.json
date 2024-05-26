@@ -324,6 +324,9 @@
                     },
                     "404": {
                         "description": "Order not found"
+                    },
+                    "428": {
+                        "description": "Precondition failed: Need to be with status Finalizado"
                     }
                 }
             }
@@ -391,6 +394,9 @@
                     },
                     "404": {
                         "description": "Order not found"
+                    },
+                    "428": {
+                        "description": "Precondition failed: Need to be with status Finalizado"
                     }
                 }
             }

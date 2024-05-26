@@ -70,7 +70,14 @@ func main() {
 	orderRepo := repositories.NewOrderRespository(db)
 	validateToPreare := services.NewValidateOrderToPrepareUseCase(orderRepo)
 	validateToDone := services.NewValidateOrderToDoneUseCase(orderRepo)
-	orderService := services.NewOrderService(orderRepo, customerRepo, validateToPreare, validateToDone)
+	validateToDeliveredOrNot := services.NewValidateOrderToDeliveredOrNotUseCase(orderRepo)
+	orderService := services.NewOrderService(
+		orderRepo,
+		customerRepo,
+		validateToPreare,
+		validateToDone,
+		validateToDeliveredOrNot,
+	)
 
 	router.Get("/api/health", func(w http.ResponseWriter, r *http.Request) {
 		httpserver.SendResponseSuccess(w, &responses.BusinessResponse{
