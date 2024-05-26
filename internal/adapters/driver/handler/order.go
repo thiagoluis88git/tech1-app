@@ -166,6 +166,7 @@ func GetOrdersToFollowHandler(orderService *services.OrderService) http.HandlerF
 // @Param id path int true "12"
 // @Success 204
 // @Failure 404 "Order not found"
+// @Failure 428 "Precondition failed: Need to be with status Criado"
 // @Router /api/orders/{id}/preparing [put]
 func UpdateOrderPreparingHandler(orderService *services.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -214,6 +215,7 @@ func UpdateOrderPreparingHandler(orderService *services.OrderService) http.Handl
 // @Param id path int true "12"
 // @Success 204
 // @Failure 404 "Order not found"
+// @Failure 428 "Precondition failed: Need to be with status Preparando"
 // @Router /api/orders/{id}/done [put]
 func UpdateOrderDoneHandler(orderService *services.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

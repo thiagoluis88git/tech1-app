@@ -202,7 +202,7 @@ The order can be followed by its ID:
 ### 7 List orders to prepare
 ***(Chef view)***
 
-- Call the GET `http://localhost:3210/api/orders/to-prepare` to list the Orders with its [Order ID]
+- Call the GET `http://localhost:3210/api/orders/to-prepare` to list the Orders with its [Order ID]. This endpoint will be used by the **Chef**
 
 ### 8 Update order to preparing
 ***(Chef view)***

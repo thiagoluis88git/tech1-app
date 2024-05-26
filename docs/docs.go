@@ -362,6 +362,9 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Order not found"
+                    },
+                    "428": {
+                        "description": "Precondition failed: Need to be with status Preparando"
                     }
                 }
             }
@@ -426,6 +429,9 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Order not found"
+                    },
+                    "428": {
+                        "description": "Precondition failed: Need to be with status Criado"
                     }
                 }
             }

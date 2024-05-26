@@ -10,17 +10,23 @@ import (
 )
 
 type OrderService struct {
-	orderRepo    ports.OrderRepository
-	customerRepo ports.CustomerRepository
+	orderRepo         ports.OrderRepository
+	customerRepo      ports.CustomerRepository
+	validateToPrepare *ValidateOrderToPrepareUseCase
+	validateToDone    *ValidateOrderToDoneUseCase
 }
 
 func NewOrderService(
 	orderRepo ports.OrderRepository,
 	customerRepo ports.CustomerRepository,
+	validateToPrepate *ValidateOrderToPrepareUseCase,
+	validateToDone *ValidateOrderToDoneUseCase,
 ) *OrderService {
 	return &OrderService{
-		orderRepo:    orderRepo,
-		customerRepo: customerRepo,
+		orderRepo:         orderRepo,
+		customerRepo:      customerRepo,
+		validateToPrepare: validateToPrepate,
+		validateToDone:    validateToDone,
 	}
 }
 
@@ -85,7 +91,13 @@ func (service *OrderService) GetOrdersToFollow(ctx context.Context) ([]domain.Or
 }
 
 func (service *OrderService) UpdateToPreparing(ctx context.Context, orderId uint) error {
-	err := service.orderRepo.UpdateToPreparing(ctx, orderId)
+	err := service.validateToPrepare.Execute(ctx, orderId)
+
+	if err != nil {
+		return responses.GetResponseError(err, "OrderService -> UpdateToPreparing")
+	}
+
+	err = service.orderRepo.UpdateToPreparing(ctx, orderId)
 
 	if err != nil {
 		return responses.GetResponseError(err, "OrderService -> UpdateToPreparing")
@@ -95,7 +107,13 @@ func (service *OrderService) UpdateToPreparing(ctx context.Context, orderId uint
 }
 
 func (service *OrderService) UpdateToDone(ctx context.Context, orderId uint) error {
-	err := service.orderRepo.UpdateToDone(ctx, orderId)
+	err := service.validateToDone.Execute(ctx, orderId)
+
+	if err != nil {
+		return responses.GetResponseError(err, "OrderService -> UpdateToPreparing")
+	}
+
+	err = service.orderRepo.UpdateToDone(ctx, orderId)
 
 	if err != nil {
 		return responses.GetResponseError(err, "OrderService -> UpdateToDone")
