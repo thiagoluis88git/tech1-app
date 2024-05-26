@@ -170,7 +170,7 @@ func GetCustomerByIdHandler(customerService *services.CustomerService) http.Hand
 // @Param customer body domain.CustomerForm true "customerForm"
 // @Success 200 {object} domain.Customer
 // @Failure 404 "Customer not found"
-// @Router /api/customers/login [get]
+// @Router /api/customers/login [post]
 func GetCustomerByCPFHandler(customerService *services.CustomerService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var customerForm domain.CustomerForm

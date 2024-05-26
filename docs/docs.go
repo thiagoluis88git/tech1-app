@@ -65,7 +65,7 @@ const docTemplate = `{
             }
         },
         "/api/customers/login": {
-            "get": {
+            "post": {
                 "description": "Get customer by CPF. This Endpoint can be used as a Login",
                 "consumes": [
                     "application/json"

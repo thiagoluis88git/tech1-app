@@ -157,7 +157,7 @@ This section will use all the Endpoints to make a entire order flow.
 
 - Cal the POST `http://localhost:3210/api/customers` to create a Customer and retrieve the `[Customer ID]`
 
-- Call the GET `http://localhost:3210/api/customers/login` to login and get the Customer
+- Call the POST `http://localhost:3210/api/customers/login` to login and get the Customer
 - Call the GET `http://localhost:3210/api/customers/{id}` to get the Customer by this `[Customer ID]`
 
 - Call the PUT `http://localhost:3210/api/customers/{id}` to update Customer
