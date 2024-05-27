@@ -9,6 +9,7 @@
 - [Unit Testing](#unit-testing)
 - [Docker build and run](#docker-build-and-run)
 - [How to use](#how-to-use)
+  - [Branchs](#branchs)
 - [Section 1 - Restaurant owner](#section-1-restaurant-owner)
   - [1 Product manipulation](#1-product-manipulation)
 - [Section 2 Customer order](#section-2-customer-order)
@@ -124,6 +125,10 @@ We can separate in three moments.
 
 We will divide in 2 sections: **Restaurant owner** and **Customer order**
 
+### Branchs
+
+To use a clean database, we can select `main` branch.
+But, if we want to use a database with some data inserted, we can change to `feat/data-inserted` branch.
 
 ## Section 1 Restaurant owner
 
