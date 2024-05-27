@@ -52,6 +52,7 @@ To build and run this project. Follow the Docker section
 ## Architecture
 
 To design this application was chosen `DDD (Domain Drive Design)` architecture to follow the principle of **protecting the model**.
+
 ![ddd_image](https://github.com/thiagoluis88git/tech1/assets/166969350/2016bfff-3c19-4172-837f-8d5d428525f7)
 
 
