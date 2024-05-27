@@ -9,7 +9,7 @@
 - [Unit Testing](#unit-testing)
 - [Docker build and run](#docker-build-and-run)
 - [How to use](#how-to-use)
-  - [Branchs](#branchs)
+  - [Check app status](#check-app-status)
 - [Section 1 - Restaurant owner](#section-1-restaurant-owner)
   - [1 Product manipulation](#1-product-manipulation)
 - [Section 2 Customer order](#section-2-customer-order)
@@ -125,10 +125,19 @@ We can separate in three moments.
 
 We will divide in 2 sections: **Restaurant owner** and **Customer order**
 
-### Branchs
+### Check app status
 
-To use a clean database, we can select `main` branch.
-But, if we want to use a database with some data inserted, we can change to `feat/data-inserted` branch.
+After running `Docker` commands, you can check the application status running:
+
+```
+docker compose logs app
+```
+
+We can see some database errors but at the end of the logs we can see:
+
+```
+fastfood-app  | 2024/05/27 22:57:35 API Tech 1 has started
+```
 
 ## Section 1 Restaurant owner
 
