@@ -36,7 +36,7 @@ spec:
     spec:
       containers:
       - name: fastfood-app
-        image: thiagoluis88/fastfood-app:0.0.9
+        image: thiagoluis88/fastfood-app:0.0.10
         ports:
         - containerPort: 3210
           name: app
