@@ -11,7 +11,13 @@ import (
 )
 
 func ConfigDatabase() *gorm.DB {
-	dsn := fmt.Sprintf("host=%v user=fastfood password=fastfood1234 dbname=fastfood_db port=5432 sslmode=disable", *environment.DbHost)
+	dsn := fmt.Sprintf("host=%v user=%v password=%v dbname=%v port=%v sslmode=disable",
+		*environment.DbHost,
+		*environment.DbUser,
+		*environment.DbPassword,
+		*environment.DbName,
+		*environment.DbPort,
+	)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
