@@ -47,3 +47,20 @@ spec:
           name: app
         - containerPort: 3211
           name: redoc
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3210
+          periodSeconds: 10
+          failureThreshold: 3
+          initialDelaySeconds: 15
+        readnessProbe:
+          httpGet:
+            path: /health
+            port: 3210
+          periodSeconds: 10
+          failureThreshold: 5
+          initialDelaySeconds: 3
+        resources:
+          requests:
+            cpu: 1m
