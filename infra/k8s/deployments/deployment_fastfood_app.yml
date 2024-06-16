@@ -25,7 +25,6 @@ metadata:
   labels:
     app: fastfood-app
 spec:
-  replicas: 3
   selector:
     matchLabels:
       app: fastfood-app
@@ -49,18 +48,19 @@ spec:
           name: redoc
         livenessProbe:
           httpGet:
-            path: /health
+            path: /api/health
             port: 3210
           periodSeconds: 10
           failureThreshold: 3
           initialDelaySeconds: 15
-        readnessProbe:
+        readinessProbe:
           httpGet:
-            path: /health
+            path: /api/health
             port: 3210
           periodSeconds: 10
           failureThreshold: 5
+          successThreshold: 1
           initialDelaySeconds: 3
         resources:
           requests:
-            cpu: 1m
+            cpu: 50m
