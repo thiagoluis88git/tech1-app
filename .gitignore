@@ -1,3 +1,4 @@
 /data/*
 cmd/api/__debug_*
 .env
+infra/k8s/secret/*

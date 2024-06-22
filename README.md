@@ -143,6 +143,15 @@ We can see some database errors but at the end of the logs we can see:
 fastfood-app  | 2024/05/27 22:57:35 API Tech 1 has started
 ```
 
+## Kubernetes
+
+### Secrets
+This kustomization.yaml will not be in Github
+
+```
+kubectl apply -k infra/k8s/secret/
+```
+
 ## Section 1 Restaurant owner
 
 This section will be used by the restaurant owner to manage the restaurant products
