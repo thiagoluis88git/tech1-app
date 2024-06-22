@@ -1,10 +1,11 @@
 package main
 
 import (
-	"flag"
 	"net/http"
 
 	"github.com/thiagoluis88git/tech1/internal/adapters/driven/external"
+	"github.com/thiagoluis88git/tech1/internal/adapters/driven/external/remote"
+	extRepo "github.com/thiagoluis88git/tech1/internal/adapters/driven/external/repositories"
 	"github.com/thiagoluis88git/tech1/internal/adapters/driven/repositories"
 	"github.com/thiagoluis88git/tech1/internal/adapters/driver/handler"
 	"github.com/thiagoluis88git/tech1/internal/core/services"
@@ -38,7 +39,7 @@ import (
 // @host localshot:3210
 // @BasePath /
 func main() {
-	flag.Parse()
+	environment.LoadEnvironmentVariables()
 
 	doc := redoc.Redoc{
 		Title:       "Example API",
@@ -54,6 +55,11 @@ func main() {
 	router.Use(chiMiddleware.RequestID)
 	router.Use(chiMiddleware.RealIP)
 	router.Use(chiMiddleware.Recoverer)
+
+	httpClient := httpserver.NewHTTPClient()
+	qrCodeRemoteDataSource := remote.NewMercadoLivreQRCOdeGeneratorDataSource(httpClient)
+	extQRCodeGeneratorRepository := extRepo.NewQRCodeGeneratorRepository(qrCodeRemoteDataSource)
+	qrCodeGeneratorService := services.NewQRCodeGeneratorService(extQRCodeGeneratorRepository)
 
 	paymentRepo := repositories.NewPaymentRepository(db)
 	paymentGateway := external.NewPaymentGateway()
@@ -85,6 +91,8 @@ func main() {
 			Message:    "ok",
 		})
 	})
+
+	router.Post("/api/qrcode/generate", handler.GenerateQRCodeHandler(qrCodeGeneratorService))
 
 	router.Post("/api/customers", handler.CreateCustomerHandler(customerService))
 	router.Put("/api/customers/{id}", handler.UpdateCustomerHandler(customerService))

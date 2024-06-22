@@ -11,7 +11,7 @@
                 "-DB_HOST", 
                 "localhost",
                 "-DB_PORT", 
-                "5432",
+                "31002",
                 "-POSTGRES_USER", 
                 "fastfood",
                 "-POSTGRES_DB", 
@@ -20,6 +20,8 @@
                 "fastfood1234",
                 "-PATH_REDOC_FOLDER",
                 "./docs/swagger.json",
+                "-localDev",
+                "true"
             ],
             "cwd": "${workspaceFolder}"
         }

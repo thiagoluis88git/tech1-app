@@ -1,2 +1,3 @@
 /data/*
 cmd/api/__debug_*
+.env
