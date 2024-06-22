@@ -10,11 +10,6 @@ import (
 )
 
 var (
-	DbHost          *string = flag.String("DB_HOST", "service-database-internal", "Database host")
-	DbPort          *string = flag.String("DB_PORT", "5432", "Database Port")
-	DbUser          *string = flag.String("POSTGRES_USER", "fastfood", "Database Port")
-	DbName          *string = flag.String("POSTGRES_DB", "fastfood_db", "Database Port")
-	DbPassword      *string = flag.String("POSTGRES_PASSWORD", "fastfood1234", "Database Port")
 	RedocFolderPath *string = flag.String("PATH_REDOC_FOLDER", "/docs/swagger.json", "Swagger docs folder")
 
 	localDev = flag.String("localDev", "false", "local development")
@@ -25,11 +20,21 @@ var (
 const (
 	QRCodeGatewayRootURL = "QR_CODE_GATEWAY_ROOT_URL"
 	QRCodeGatewayToken   = "QR_CODE_GATEWAY_TOKEN"
+	DBHost               = "DB_HOST"
+	DBUser               = "DB_USER"
+	DBPassword           = "DB_PASSWORD"
+	DBPort               = "DB_PORT"
+	DBName               = "DB_NAME"
 )
 
 type Environment struct {
 	qrCodeGatewayRootURL string
 	qrCodeGatewayToken   string
+	dbHost               string
+	dbPort               string
+	dbName               string
+	dbUser               string
+	dbPassword           string
 }
 
 func LoadEnvironmentVariables() {
@@ -45,6 +50,11 @@ func LoadEnvironmentVariables() {
 
 	qrCodeGatewayRootURL := getEnvironmentVariable(QRCodeGatewayRootURL)
 	qrCodeGatewayToken := getEnvironmentVariable(QRCodeGatewayToken)
+	dbHost := getEnvironmentVariable(DBHost)
+	dbPort := getEnvironmentVariable(DBPort)
+	dbUser := getEnvironmentVariable(DBUser)
+	dbPassword := getEnvironmentVariable(DBPassword)
+	dbName := getEnvironmentVariable(DBName)
 
 	once := &sync.Once{}
 
@@ -52,6 +62,11 @@ func LoadEnvironmentVariables() {
 		singleton = &Environment{
 			qrCodeGatewayRootURL: qrCodeGatewayRootURL,
 			qrCodeGatewayToken:   qrCodeGatewayToken,
+			dbHost:               dbHost,
+			dbPort:               dbPort,
+			dbUser:               dbUser,
+			dbPassword:           dbPassword,
+			dbName:               dbName,
 		}
 	})
 }
@@ -80,4 +95,44 @@ func GetQRCodeGatewayToken() string {
 	}
 
 	return getEnvironmentVariable(QRCodeGatewayToken)
+}
+
+func GetDBHost() string {
+	if singleton != nil {
+		return singleton.dbHost
+	}
+
+	return getEnvironmentVariable(DBHost)
+}
+
+func GetDBPort() string {
+	if singleton != nil {
+		return singleton.dbPort
+	}
+
+	return getEnvironmentVariable(DBPort)
+}
+
+func GetDBName() string {
+	if singleton != nil {
+		return singleton.dbName
+	}
+
+	return getEnvironmentVariable(DBName)
+}
+
+func GetDBUser() string {
+	if singleton != nil {
+		return singleton.dbUser
+	}
+
+	return getEnvironmentVariable(DBUser)
+}
+
+func GetDBPassword() string {
+	if singleton != nil {
+		return singleton.dbPassword
+	}
+
+	return getEnvironmentVariable(DBPassword)
 }

@@ -12,11 +12,11 @@ import (
 
 func ConfigDatabase() *gorm.DB {
 	dsn := fmt.Sprintf("host=%v user=%v password=%v dbname=%v port=%v sslmode=disable",
-		*environment.DbHost,
-		*environment.DbUser,
-		*environment.DbPassword,
-		*environment.DbName,
-		*environment.DbPort,
+		environment.GetDBHost(),
+		environment.GetDBUser(),
+		environment.GetDBPassword(),
+		environment.GetDBName(),
+		environment.GetDBPort(),
 	)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
