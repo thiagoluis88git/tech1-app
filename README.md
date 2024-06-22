@@ -144,10 +144,13 @@ fastfood-app  | 2024/05/27 22:57:35 API Tech 1 has started
 ```
 
 ## Kubernetes
+This application has all the K8S YAMLs to be applied in any cluster.
 
 ### Secrets
-This kustomization.yaml will not be in Github
+Some environments are secret and don't have to be in Github. So, to avoid exposing data
+it need to apply some local secrets to be stored in cluster before the deployments settlement 
 
+Run this command after all the Deployments applied
 ```
 kubectl apply -k infra/k8s/secret/
 ```
