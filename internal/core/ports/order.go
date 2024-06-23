@@ -8,6 +8,8 @@ import (
 
 type OrderRepository interface {
 	CreateOrder(ctx context.Context, order domain.Order) (domain.OrderResponse, error)
+	CreatePayingOrder(ctx context.Context, order domain.Order) (domain.OrderResponse, error)
+	DeleteOrder(ctx context.Context, orderID uint) error
 	GetOrderById(ctx context.Context, orderId uint) (domain.OrderResponse, error)
 	GetOrdersToPrepare(ctx context.Context) ([]domain.OrderResponse, error)
 	GetOrdersToFollow(ctx context.Context) ([]domain.OrderResponse, error)

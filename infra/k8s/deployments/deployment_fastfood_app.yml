@@ -7,12 +7,11 @@ metadata:
   labels:
     app: service-fastfood-app
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
   - port: 80
     name: service-fastfood-app
     targetPort: 3210
-    nodePort: 32000
   selector:
     app: fastfood-app
 

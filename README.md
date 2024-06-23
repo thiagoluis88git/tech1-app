@@ -10,6 +10,9 @@
 - [Docker build and run](#docker-build-and-run)
 - [How to use](#how-to-use)
   - [Check app status](#check-app-status)
+- [Kubernetes](#kubernetes)
+  - [Secrets](#secrets)
+  - [Update Kubeconfig](#update-kubeconfig)
 - [Section 1 - Restaurant owner](#section-1-restaurant-owner)
   - [1 Product manipulation](#1-product-manipulation)
 - [Section 2 Customer order](#section-2-customer-order)
@@ -144,15 +147,25 @@ fastfood-app  | 2024/05/27 22:57:35 API Tech 1 has started
 ```
 
 ## Kubernetes
+
 This application has all the K8S YAMLs to be applied in any cluster.
 
 ### Secrets
+
 Some environments are secret and don't have to be in Github. So, to avoid exposing data
 it need to apply some local secrets to be stored in cluster before the deployments settlement 
 
 Run this command after all the Deployments applied
 ```
 kubectl apply -k infra/k8s/secret/
+```
+
+### Update Kubeconfig
+
+To add a new appointment to the EKS Cluster, we need to run this command:
+
+```
+aws eks update-kubeconfig --region us-east-1 --name cluster-fastfood
 ```
 
 ## Section 1 Restaurant owner

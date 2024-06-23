@@ -21,7 +21,7 @@ import (
 // @Router /api/qrcode/generate [post]
 func GenerateQRCodeHandler(qrCodeGeneratorService *services.QRCodeGeneratorService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var form domain.QRCodeForm
+		var form domain.Order
 
 		err := httpserver.DecodeJSONBody(w, r, &form)
 
@@ -35,7 +35,7 @@ func GenerateQRCodeHandler(qrCodeGeneratorService *services.QRCodeGeneratorServi
 		}
 
 		token := environment.GetQRCodeGatewayToken()
-		response, err := qrCodeGeneratorService.GenerateQRCode(token, form)
+		response, err := qrCodeGeneratorService.GenerateQRCode(r.Context(), token, form)
 
 		if err != nil {
 			log.Print("generate qrcode", map[string]interface{}{

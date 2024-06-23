@@ -23,6 +23,14 @@ func NewOrderRespository(db *gorm.DB) ports.OrderRepository {
 }
 
 func (repository *OrderRespository) CreateOrder(ctx context.Context, order domain.Order) (domain.OrderResponse, error) {
+	return repository.createOrder(ctx, order, entities.OrderStatusCreated)
+}
+
+func (repository *OrderRespository) CreatePayingOrder(ctx context.Context, order domain.Order) (domain.OrderResponse, error) {
+	return repository.createOrder(ctx, order, entities.OrderStatusPaying)
+}
+
+func (repository *OrderRespository) createOrder(ctx context.Context, order domain.Order, status string) (domain.OrderResponse, error) {
 	tx := repository.db.WithContext(ctx).Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -35,7 +43,7 @@ func (repository *OrderRespository) CreateOrder(ctx context.Context, order domai
 	}
 
 	orderEntity := &entities.Order{
-		OrderStatus:  entities.OrderStatusCreated,
+		OrderStatus:  status,
 		TotalPrice:   order.TotalPrice,
 		CustomerID:   order.CustomerID,
 		PaymentID:    order.PaymentID,
@@ -77,6 +85,42 @@ func (repository *OrderRespository) CreateOrder(ctx context.Context, order domai
 		OrderDate:    orderEntity.CreatedAt,
 		TicketNumber: orderEntity.TicketNumber,
 	}, nil
+}
+
+func (repository *OrderRespository) DeleteOrder(ctx context.Context, orderID uint) error {
+	tx := repository.db.WithContext(ctx).Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if err := tx.Error; err != nil {
+		return responses.GetDatabaseError(err)
+	}
+
+	err := tx.Where("order_id = ?", orderID).Delete(&entities.OrderProduct{}).Error
+
+	if err != nil {
+		tx.Rollback()
+		return responses.GetDatabaseError(err)
+	}
+
+	err = tx.Delete(&entities.Order{}, orderID).Error
+
+	if err != nil {
+		tx.Rollback()
+		return responses.GetDatabaseError(err)
+	}
+
+	err = tx.Commit().Error
+
+	if err != nil {
+		tx.Rollback()
+		return responses.GetDatabaseError(err)
+	}
+
+	return nil
 }
 
 func (repository *OrderRespository) GetOrderById(ctx context.Context, orderId uint) (domain.OrderResponse, error) {

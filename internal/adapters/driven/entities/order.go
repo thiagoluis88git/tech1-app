@@ -7,6 +7,7 @@ import (
 )
 
 const (
+	OrderStatusPaying       = "Em pagamento"
 	OrderStatusCreated      = "Criado"
 	OrderStatusPreparing    = "Preparando"
 	OrderStatusDone         = "Finalizado"

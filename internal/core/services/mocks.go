@@ -267,6 +267,28 @@ func (mock *MockOrderRepository) CreateOrder(ctx context.Context, order domain.O
 	return args.Get(0).(domain.OrderResponse), nil
 }
 
+func (mock *MockOrderRepository) CreatePayingOrder(ctx context.Context, order domain.Order) (domain.OrderResponse, error) {
+	args := mock.Called(ctx, order)
+	err := args.Error(1)
+
+	if err != nil {
+		return domain.OrderResponse{}, err
+	}
+
+	return args.Get(0).(domain.OrderResponse), nil
+}
+
+func (mock *MockOrderRepository) DeleteOrder(ctx context.Context, orderID uint) error {
+	args := mock.Called(ctx, orderID)
+	err := args.Error(0)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (mock *MockOrderRepository) GetOrderById(ctx context.Context, orderId uint) (domain.OrderResponse, error) {
 	args := mock.Called(ctx, orderId)
 	err := args.Error(1)

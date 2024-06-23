@@ -1,6 +1,9 @@
 package repositories
 
 import (
+	"strconv"
+	"time"
+
 	"github.com/thiagoluis88git/tech1/internal/adapters/driven/external/model"
 	"github.com/thiagoluis88git/tech1/internal/adapters/driven/external/remote"
 	"github.com/thiagoluis88git/tech1/internal/core/domain"
@@ -17,20 +20,21 @@ func NewQRCodeGeneratorRepository(ds remote.QRCodeGeneratorDataSource) ports.QRC
 	}
 }
 
-func (repo *QRCodeGeneratorRepositoryImpl) Generate(token string, form domain.QRCodeForm) (domain.QRCodeDataResponse, error) {
+func (repo *QRCodeGeneratorRepositoryImpl) Generate(token string, form domain.Order, orderID int) (domain.QRCodeDataResponse, error) {
 	items := make([]model.Item, 0)
 
-	for _, value := range form.Items {
-		items = append(items, model.Item(value))
+	for _, value := range form.OrderProduct {
+		items = append(items, model.Item{
+			SkuNumber: strconv.Itoa(int(value.ProductID)),
+		})
 	}
 
+	expirationDate := time.Now().Local().Add(time.Hour + time.Duration(10))
+
 	input := model.QRCodeInput{
-		Description:       form.Description,
-		ExpirationDate:    form.ExpirationDate,
-		ExternalReference: form.ExternalReference,
-		NotificationURL:   form.NotificationURL,
-		Title:             form.Title,
-		TotalAmount:       form.TotalAmount,
+		TotalAmount:       form.TotalPrice,
+		ExpirationDate:    expirationDate,
+		ExternalReference: strconv.Itoa(orderID),
 		Items:             items,
 	}
 

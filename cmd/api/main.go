@@ -57,9 +57,6 @@ func main() {
 	router.Use(chiMiddleware.Recoverer)
 
 	httpClient := httpserver.NewHTTPClient()
-	qrCodeRemoteDataSource := remote.NewMercadoLivreQRCOdeGeneratorDataSource(httpClient)
-	extQRCodeGeneratorRepository := extRepo.NewQRCodeGeneratorRepository(qrCodeRemoteDataSource)
-	qrCodeGeneratorService := services.NewQRCodeGeneratorService(extQRCodeGeneratorRepository)
 
 	paymentRepo := repositories.NewPaymentRepository(db)
 	paymentGateway := external.NewPaymentGateway()
@@ -83,6 +80,13 @@ func main() {
 		validateToPreare,
 		validateToDone,
 		validateToDeliveredOrNot,
+	)
+
+	qrCodeRemoteDataSource := remote.NewMercadoLivreQRCOdeGeneratorDataSource(httpClient)
+	extQRCodeGeneratorRepository := extRepo.NewQRCodeGeneratorRepository(qrCodeRemoteDataSource)
+	qrCodeGeneratorService := services.NewQRCodeGeneratorService(
+		extQRCodeGeneratorRepository,
+		orderRepo,
 	)
 
 	router.Get("/api/health", func(w http.ResponseWriter, r *http.Request) {

@@ -3,6 +3,7 @@ package model
 import (
 	"bytes"
 	"encoding/json"
+	"time"
 )
 
 type QRCodeData struct {
@@ -10,24 +11,14 @@ type QRCodeData struct {
 }
 
 type QRCodeInput struct {
-	Description       string `json:"description"`
-	ExpirationDate    string `json:"expiration_date"`
-	ExternalReference string `json:"external_reference"`
-	Items             []Item `json:"items"`
-	NotificationURL   string `json:"notification_url"`
-	Title             string `json:"title"`
-	TotalAmount       int    `json:"total_amount"`
+	ExpirationDate    time.Time `json:"expiration_date"`
+	ExternalReference string    `json:"external_reference"`
+	Items             []Item    `json:"items"`
+	TotalAmount       int       `json:"total_amount"`
 }
 
 type Item struct {
-	SkuNumber   string `json:"sku_number"`
-	Category    string `json:"category"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	UnitPrice   int    `json:"unit_price"`
-	Quantity    int    `json:"quantity"`
-	UnitMeasure string `json:"unit_measure"`
-	TotalAmount int    `json:"total_amount"`
+	SkuNumber string `json:"sku_number"`
 }
 
 func (input *QRCodeInput) GetJSONBody() (*bytes.Buffer, error) {
