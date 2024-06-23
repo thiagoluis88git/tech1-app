@@ -162,8 +162,15 @@ kubectl apply -k infra/k8s/secret/
 
 ### Update Kubeconfig
 
-To add a new appointment to the EKS Cluster, we need to run this command:
+To add a new appointment to the EKS Cluster, we need to export some environment:
 
+```
+export AWS_ACCESS_KEY_ID="<KEY>"
+export AWS_SECRET_ACCESS_KEY="<SECRET>"
+export AWS_SESSION_TOKEN="<TOKEN>"
+```
+
+After that, we can run this command:
 ```
 aws eks update-kubeconfig --region us-east-1 --name cluster-fastfood
 ```

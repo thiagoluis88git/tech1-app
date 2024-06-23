@@ -21,10 +21,10 @@ const (
 	QRCodeGatewayRootURL = "QR_CODE_GATEWAY_ROOT_URL"
 	QRCodeGatewayToken   = "QR_CODE_GATEWAY_TOKEN"
 	DBHost               = "DB_HOST"
-	DBUser               = "DB_USER"
-	DBPassword           = "DB_PASSWORD"
+	DBUser               = "POSTGRES_USER"
+	DBPassword           = "POSTGRES_PASSWORD"
 	DBPort               = "DB_PORT"
-	DBName               = "DB_NAME"
+	DBName               = "POSTGRES_DB"
 )
 
 type Environment struct {

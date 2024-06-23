@@ -3,8 +3,6 @@ kind: ConfigMap
 metadata:
   name: cm-database
 data:
-  DB_HOST: service-database-internal
-  DB_PORT: "5432"
-  DB_USER: fastfood
-  DB_NAME: fastfood_db
-  DB_PASSWORD: fastfood1234
+  POSTGRES_PASSWORD: fastfood1234
+  POSTGRES_USER: fastfood
+  POSTGRES_DB: fastfood_db

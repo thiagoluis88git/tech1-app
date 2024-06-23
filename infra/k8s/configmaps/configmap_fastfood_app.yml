@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: cm-app
 data:
-  QR_CODE_GATEWAY_ROOT_URL: <CHANGE>
-  QR_CODE_GATEWAY_TOKEN: <CHANGE>
+  DB_HOST: service-database-internal
+  DB_PORT: "5432"

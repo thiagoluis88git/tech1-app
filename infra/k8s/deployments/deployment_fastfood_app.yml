@@ -34,10 +34,12 @@ spec:
     spec:
       containers:
       - name: fastfood-app
-        image: thiagoluis88/fastfood-app:0.0.12
+        image: thiagoluis88/fastfood-app:0.0.13
         envFrom:
           - secretRef:
               name: app-env-secret
+          - configMapRef:
+              name: cm-app
           - configMapRef:
               name: cm-database
         ports:
