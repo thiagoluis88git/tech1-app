@@ -1,6 +1,7 @@
 package httpserver
 
 import (
+	"context"
 	"crypto/tls"
 	"encoding/json"
 	"io"
@@ -25,6 +26,7 @@ func NewHTTPClient() *http.Client {
 }
 
 func DoRequest[T any](
+	ctx context.Context,
 	client *http.Client,
 	endpoint string,
 	token *string,
@@ -34,7 +36,7 @@ func DoRequest[T any](
 ) (T, error) {
 	var empty T
 
-	req, err := http.NewRequest(method, endpoint, formData)
+	req, err := http.NewRequestWithContext(ctx, method, endpoint, formData)
 
 	if err != nil {
 		return empty, &responses.NetworkError{

@@ -82,9 +82,9 @@ func main() {
 		validateToDeliveredOrNot,
 	)
 
-	qrCodeRemoteDataSource := remote.NewMercadoLivreQRCOdeGeneratorDataSource(httpClient)
-	extQRCodeGeneratorRepository := extRepo.NewQRCodeGeneratorRepository(qrCodeRemoteDataSource)
-	qrCodeGeneratorService := services.NewQRCodeGeneratorService(
+	qrCodeRemoteDataSource := remote.NewMercadoLivreDataSource(httpClient)
+	extQRCodeGeneratorRepository := extRepo.NewMercadoLivreRepository(qrCodeRemoteDataSource)
+	qrCodeGeneratorService := services.NewMercadoLivreService(
 		extQRCodeGeneratorRepository,
 		orderRepo,
 	)

@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"context"
 	"log"
 	"net/http"
 	"strconv"
@@ -47,7 +46,7 @@ func CreateOrderHandler(orderService *services.OrderService) http.HandlerFunc {
 		ch := make(chan bool, 1)
 		waitGroup.Add(1)
 
-		response, err := orderService.CreateOrder(context.Background(), order, orderDate.UnixMilli(), &waitGroup, ch)
+		response, err := orderService.CreateOrder(r.Context(), order, orderDate.UnixMilli(), &waitGroup, ch)
 
 		if err != nil {
 			log.Print("create order", map[string]interface{}{
@@ -95,7 +94,7 @@ func GetOrderByIdHandler(orderService *services.OrderService) http.HandlerFunc {
 			return
 		}
 
-		response, err := orderService.GetOrderById(context.Background(), uint(orderId))
+		response, err := orderService.GetOrderById(r.Context(), uint(orderId))
 
 		if err != nil {
 			log.Print("get order by id", map[string]interface{}{
@@ -119,7 +118,7 @@ func GetOrderByIdHandler(orderService *services.OrderService) http.HandlerFunc {
 // @Router /api/orders/to-prepare [get]
 func GetOrdersToPrepareHandler(orderService *services.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		response, err := orderService.GetOrdersToPrepare(context.Background())
+		response, err := orderService.GetOrdersToPrepare(r.Context())
 
 		if err != nil {
 			log.Print("get orders to prepare", map[string]interface{}{
@@ -143,7 +142,7 @@ func GetOrdersToPrepareHandler(orderService *services.OrderService) http.Handler
 // @Router /api/orders/status [get]
 func GetOrdersToFollowHandler(orderService *services.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		response, err := orderService.GetOrdersToFollow(context.Background())
+		response, err := orderService.GetOrdersToFollow(r.Context())
 
 		if err != nil {
 			log.Print("get orders status", map[string]interface{}{
@@ -192,7 +191,7 @@ func UpdateOrderPreparingHandler(orderService *services.OrderService) http.Handl
 			return
 		}
 
-		err = orderService.UpdateToPreparing(context.Background(), id)
+		err = orderService.UpdateToPreparing(r.Context(), id)
 
 		if err != nil {
 			log.Print("update order status", map[string]interface{}{
@@ -241,7 +240,7 @@ func UpdateOrderDoneHandler(orderService *services.OrderService) http.HandlerFun
 			return
 		}
 
-		err = orderService.UpdateToDone(context.Background(), id)
+		err = orderService.UpdateToDone(r.Context(), id)
 
 		if err != nil {
 			log.Print("update order status", map[string]interface{}{
@@ -290,7 +289,7 @@ func UpdateOrderDeliveredHandler(orderService *services.OrderService) http.Handl
 			return
 		}
 
-		err = orderService.UpdateToDelivered(context.Background(), id)
+		err = orderService.UpdateToDelivered(r.Context(), id)
 
 		if err != nil {
 			log.Print("update order status", map[string]interface{}{
@@ -339,7 +338,7 @@ func UpdateOrderNotDeliveredandler(orderService *services.OrderService) http.Han
 			return
 		}
 
-		err = orderService.UpdateToNotDelivered(context.Background(), id)
+		err = orderService.UpdateToNotDelivered(r.Context(), id)
 
 		if err != nil {
 			log.Print("update order status", map[string]interface{}{

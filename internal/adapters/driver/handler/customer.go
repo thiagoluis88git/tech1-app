@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"context"
 	"log"
 	"net/http"
 	"strconv"
@@ -36,7 +35,7 @@ func CreateCustomerHandler(customerService *services.CustomerService) http.Handl
 			return
 		}
 
-		response, err := customerService.CreateCustomer(context.Background(), customer)
+		response, err := customerService.CreateCustomer(r.Context(), customer)
 
 		if err != nil {
 			log.Print("create customer", map[string]interface{}{
@@ -99,7 +98,7 @@ func UpdateCustomerHandler(customerService *services.CustomerService) http.Handl
 		}
 
 		customer.ID = uint(customerId)
-		err = customerService.UpdateCustomer(context.Background(), customer)
+		err = customerService.UpdateCustomer(r.Context(), customer)
 
 		if err != nil {
 			log.Print("update customer", map[string]interface{}{
@@ -147,7 +146,7 @@ func GetCustomerByIdHandler(customerService *services.CustomerService) http.Hand
 			return
 		}
 
-		customer, err := customerService.GetCustomerById(context.Background(), uint(customerId))
+		customer, err := customerService.GetCustomerById(r.Context(), uint(customerId))
 
 		if err != nil {
 			log.Print("get customer by id", map[string]interface{}{
@@ -186,7 +185,7 @@ func GetCustomerByCPFHandler(customerService *services.CustomerService) http.Han
 			return
 		}
 
-		customer, err := customerService.GetCustomerByCPF(context.Background(), customerForm.CPF)
+		customer, err := customerService.GetCustomerByCPF(r.Context(), customerForm.CPF)
 
 		if err != nil {
 			log.Print("get customer by id", map[string]interface{}{

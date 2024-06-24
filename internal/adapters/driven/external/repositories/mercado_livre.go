@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"context"
 	"strconv"
 	"time"
 
@@ -10,17 +11,17 @@ import (
 	"github.com/thiagoluis88git/tech1/internal/core/ports"
 )
 
-type QRCodeGeneratorRepositoryImpl struct {
-	ds remote.QRCodeGeneratorDataSource
+type MercadoLivreRepositoryImpl struct {
+	ds remote.MercadoLivreDataSource
 }
 
-func NewQRCodeGeneratorRepository(ds remote.QRCodeGeneratorDataSource) ports.QRCodeGeneratorRepository {
-	return &QRCodeGeneratorRepositoryImpl{
+func NewMercadoLivreRepository(ds remote.MercadoLivreDataSource) ports.MercadoLivreRepository {
+	return &MercadoLivreRepositoryImpl{
 		ds: ds,
 	}
 }
 
-func (repo *QRCodeGeneratorRepositoryImpl) Generate(token string, form domain.Order, orderID int) (domain.QRCodeDataResponse, error) {
+func (repo *MercadoLivreRepositoryImpl) Generate(ctx context.Context, token string, form domain.Order, orderID int) (domain.QRCodeDataResponse, error) {
 	items := make([]model.Item, 0)
 
 	for _, value := range form.OrderProduct {
@@ -38,7 +39,7 @@ func (repo *QRCodeGeneratorRepositoryImpl) Generate(token string, form domain.Or
 		Items:             items,
 	}
 
-	qrData, err := repo.ds.Generate(token, input)
+	qrData, err := repo.ds.Generate(ctx, token, input)
 
 	if err != nil {
 		return domain.QRCodeDataResponse{}, err
@@ -47,4 +48,14 @@ func (repo *QRCodeGeneratorRepositoryImpl) Generate(token string, form domain.Or
 	return domain.QRCodeDataResponse{
 		Data: qrData,
 	}, nil
+}
+
+func (repo *MercadoLivreRepositoryImpl) GetMercadoLivrePaymentData(ctx context.Context, token string, endpoint string) error {
+	err := repo.ds.GetPaymentData(ctx, token, endpoint)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

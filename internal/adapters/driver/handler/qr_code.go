@@ -19,7 +19,7 @@ import (
 // @Param qrCodeForm body domain.QRCodeForm true "qrCodeForm"
 // @Success 200 {object} domain.QRCodeDataResponse
 // @Router /api/qrcode/generate [post]
-func GenerateQRCodeHandler(qrCodeGeneratorService *services.QRCodeGeneratorService) http.HandlerFunc {
+func GenerateQRCodeHandler(qrCodeGeneratorService *services.MercadoLivreService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var form domain.Order
 
