@@ -2,8 +2,8 @@ package repositories
 
 import (
 	"context"
+	"fmt"
 	"strconv"
-	"time"
 
 	"github.com/thiagoluis88git/tech1/internal/adapters/driven/external/model"
 	"github.com/thiagoluis88git/tech1/internal/adapters/driven/external/remote"
@@ -24,19 +24,32 @@ func NewMercadoLivreRepository(ds remote.MercadoLivreDataSource) ports.MercadoLi
 func (repo *MercadoLivreRepositoryImpl) Generate(ctx context.Context, token string, form domain.Order, orderID int) (domain.QRCodeDataResponse, error) {
 	items := make([]model.Item, 0)
 
+	totalAmount := 0
+
 	for _, value := range form.OrderProduct {
+		productId := strconv.Itoa(int(value.ProductID))
+		totalAmount += 1
+
 		items = append(items, model.Item{
-			SkuNumber: strconv.Itoa(int(value.ProductID)),
+			Description: fmt.Sprintf("Product: %v", productId),
+			SkuNumber:   productId,
+			Title:       productId,
+			UnitMeasure: "unit",
+			Quantity:    1,
+			UnitPrice:   value.ProductPrice,
+			TotalAmount: 1,
 		})
 	}
 
-	expirationDate := time.Now().Local().Add(time.Hour + time.Duration(10))
+	// expirationDate := time.Now().Local().Add(time.Hour * 86)
 
 	input := model.QRCodeInput{
-		TotalAmount:       form.TotalPrice,
-		ExpirationDate:    expirationDate,
+		Description:       fmt.Sprintf("Order: %v", orderID),
+		TotalAmount:       totalAmount,
+		ExpirationDate:    "2024-06-28T22:34:56.559-04:00",
 		ExternalReference: strconv.Itoa(orderID),
 		Items:             items,
+		Title:             strconv.Itoa(form.TicketNumber),
 	}
 
 	qrData, err := repo.ds.Generate(ctx, token, input)

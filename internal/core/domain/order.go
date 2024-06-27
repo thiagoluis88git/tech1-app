@@ -6,13 +6,14 @@ type Order struct {
 	OrderStatus  string
 	TotalPrice   int            `json:"totalPrice" validate:"required"`
 	CustomerID   *uint          `json:"customerId"`
-	PaymentID    uint           `json:"paymentId" validate:"required"`
+	PaymentID    *uint          `json:"paymentId"`
 	OrderProduct []OrderProduct `json:"orderProducts" validate:"required"`
 	TicketNumber int
 }
 
 type OrderProduct struct {
-	ProductID uint `json:"productId" validate:"required"`
+	ProductID    uint `json:"productId" validate:"required"`
+	ProductPrice int  `json:"productPrice" validate:"required"`
 }
 
 type OrderResponse struct {

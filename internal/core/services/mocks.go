@@ -9,9 +9,11 @@ import (
 )
 
 var (
+	paymentId = uint(1)
+
 	orderCreation = domain.Order{
 		TotalPrice:   12345,
-		PaymentID:    1,
+		PaymentID:    &paymentId,
 		TicketNumber: 1,
 		OrderProduct: []domain.OrderProduct{
 			{
@@ -26,7 +28,7 @@ var (
 
 	orderCreationWithCustomer = domain.Order{
 		TotalPrice:   12345,
-		PaymentID:    1,
+		PaymentID:    &paymentId,
 		TicketNumber: 1,
 		CustomerID:   &customerId,
 		OrderProduct: []domain.OrderProduct{
