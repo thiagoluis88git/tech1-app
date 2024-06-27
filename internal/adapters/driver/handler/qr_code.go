@@ -3,6 +3,8 @@ package handler
 import (
 	"log"
 	"net/http"
+	"sync"
+	"time"
 
 	"github.com/thiagoluis88git/tech1/internal/core/domain"
 	"github.com/thiagoluis88git/tech1/internal/core/services"
@@ -34,8 +36,16 @@ func GenerateQRCodeHandler(qrCodeGeneratorService *services.MercadoLivreService)
 			return
 		}
 
+		now := time.Now()
+		orderDate := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.Local)
+
+		// Create this to prevent 2 process/goroutines create order with the same TicketNumber
+		var waitGroup sync.WaitGroup
+		ch := make(chan bool, 1)
+		waitGroup.Add(1)
+
 		token := environment.GetQRCodeGatewayToken()
-		response, err := qrCodeGeneratorService.GenerateQRCode(r.Context(), token, form)
+		response, err := qrCodeGeneratorService.GenerateQRCode(r.Context(), token, form, orderDate.UnixMilli(), &waitGroup, ch)
 
 		if err != nil {
 			log.Print("generate qrcode", map[string]interface{}{

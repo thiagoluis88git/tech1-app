@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"net/http"
+	"sync"
 
 	"github.com/thiagoluis88git/tech1/internal/core/domain"
 	"github.com/thiagoluis88git/tech1/internal/core/ports"
@@ -28,7 +29,15 @@ func (service *MercadoLivreService) GenerateQRCode(
 	ctx context.Context,
 	token string,
 	order domain.Order,
+	date int64,
+	wg *sync.WaitGroup,
+	ch chan bool,
 ) (domain.QRCodeDataResponse, error) {
+	//Block this code below until this Channel be empty (by reading with <-ch)
+	ch <- true
+
+	order.TicketNumber = service.orderRepository.GetNextTicketNumber(ctx, date)
+
 	orderResponse, err := service.orderRepository.CreatePayingOrder(ctx, order)
 
 	if err != nil {
@@ -46,6 +55,10 @@ func (service *MercadoLivreService) GenerateQRCode(
 
 		return domain.QRCodeDataResponse{}, responses.GetResponseError(err, "QRCodeGeneratorService")
 	}
+
+	// Release the channel to others process be able to start a new order creation
+	<-ch
+	wg.Done()
 
 	return qrCode, nil
 }

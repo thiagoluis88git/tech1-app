@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/thiagoluis88git/tech1/internal/adapters/driven/external/model"
 	"github.com/thiagoluis88git/tech1/internal/adapters/driven/external/remote"
@@ -28,7 +29,7 @@ func (repo *MercadoLivreRepositoryImpl) Generate(ctx context.Context, token stri
 
 	for _, value := range form.OrderProduct {
 		productId := strconv.Itoa(int(value.ProductID))
-		totalAmount += 1
+		totalAmount += value.ProductPrice
 
 		items = append(items, model.Item{
 			Description: fmt.Sprintf("Product: %v", productId),
@@ -37,16 +38,16 @@ func (repo *MercadoLivreRepositoryImpl) Generate(ctx context.Context, token stri
 			UnitMeasure: "unit",
 			Quantity:    1,
 			UnitPrice:   value.ProductPrice,
-			TotalAmount: 1,
+			TotalAmount: value.ProductPrice,
 		})
 	}
 
-	// expirationDate := time.Now().Local().Add(time.Hour * 86)
+	expirationDate := time.Now().Local().Add(time.Hour * 12)
 
 	input := model.QRCodeInput{
 		Description:       fmt.Sprintf("Order: %v", orderID),
 		TotalAmount:       totalAmount,
-		ExpirationDate:    "2024-06-28T22:34:56.559-04:00",
+		ExpirationDate:    expirationDate.Format("2006-01-02T15:04:05.999Z07:00"),
 		ExternalReference: strconv.Itoa(orderID),
 		Items:             items,
 		Title:             strconv.Itoa(form.TicketNumber),
