@@ -9,11 +9,9 @@ import (
 )
 
 var (
-	paymentId = uint(1)
-
 	orderCreation = domain.Order{
 		TotalPrice:   12345,
-		PaymentID:    &paymentId,
+		PaymentID:    uint(1),
 		TicketNumber: 1,
 		OrderProduct: []domain.OrderProduct{
 			{
@@ -28,7 +26,7 @@ var (
 
 	orderCreationWithCustomer = domain.Order{
 		TotalPrice:   12345,
-		PaymentID:    &paymentId,
+		PaymentID:    uint(1),
 		TicketNumber: 1,
 		CustomerID:   &customerId,
 		OrderProduct: []domain.OrderProduct{
@@ -282,6 +280,17 @@ func (mock *MockOrderRepository) CreatePayingOrder(ctx context.Context, order do
 
 func (mock *MockOrderRepository) DeleteOrder(ctx context.Context, orderID uint) error {
 	args := mock.Called(ctx, orderID)
+	err := args.Error(0)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (mock *MockOrderRepository) FinishOrderWithPayment(ctx context.Context, orderID uint, paymentID uint) error {
+	args := mock.Called(ctx, orderID, paymentID)
 	err := args.Error(0)
 
 	if err != nil {

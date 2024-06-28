@@ -18,12 +18,12 @@ import (
 // @Tags QRCode
 // @Accept json
 // @Produce json
-// @Param qrCodeForm body domain.QRCodeForm true "qrCodeForm"
+// @Param qrCodeOrder body domain.QRCodeOrder true "qrCodeOrder"
 // @Success 200 {object} domain.QRCodeDataResponse
 // @Router /api/qrcode/generate [post]
 func GenerateQRCodeHandler(qrCodeGeneratorService *services.MercadoLivreService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var form domain.Order
+		var form domain.QRCodeOrder
 
 		err := httpserver.DecodeJSONBody(w, r, &form)
 

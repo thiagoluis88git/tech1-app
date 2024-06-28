@@ -36,12 +36,10 @@ func (suite *RepositoryTestSuite) TestCreateOrderWithSuccess() {
 	suite.NoError(err)
 	suite.Equal(uint(1), newId)
 
-	paymentId := uint(12)
-
 	repo := NewOrderRespository(suite.db)
 	newOrder := domain.Order{
 		TotalPrice:   5090,
-		PaymentID:    &paymentId,
+		PaymentID:    uint(12),
 		TicketNumber: 12,
 		OrderProduct: []domain.OrderProduct{
 			{

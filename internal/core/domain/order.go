@@ -6,9 +6,18 @@ type Order struct {
 	OrderStatus  string
 	TotalPrice   int            `json:"totalPrice" validate:"required"`
 	CustomerID   *uint          `json:"customerId"`
-	PaymentID    *uint          `json:"paymentId"`
+	PaymentID    uint           `json:"paymentId" validate:"required"`
 	OrderProduct []OrderProduct `json:"orderProducts" validate:"required"`
 	TicketNumber int
+}
+
+type QRCodeOrder struct {
+	OrderStatus  string
+	TotalPrice   int            `json:"totalPrice" validate:"required"`
+	CustomerID   *uint          `json:"customerId"`
+	OrderProduct []OrderProduct `json:"orderProducts" validate:"required"`
+	TicketNumber int
+	PaymentID    uint
 }
 
 type OrderProduct struct {

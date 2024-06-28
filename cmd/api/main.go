@@ -8,6 +8,7 @@ import (
 	extRepo "github.com/thiagoluis88git/tech1/internal/adapters/driven/external/repositories"
 	"github.com/thiagoluis88git/tech1/internal/adapters/driven/repositories"
 	"github.com/thiagoluis88git/tech1/internal/adapters/driver/handler"
+	"github.com/thiagoluis88git/tech1/internal/adapters/driver/webhook"
 	"github.com/thiagoluis88git/tech1/internal/core/services"
 	"github.com/thiagoluis88git/tech1/pkg/database"
 	"github.com/thiagoluis88git/tech1/pkg/environment"
@@ -84,7 +85,7 @@ func main() {
 
 	qrCodeRemoteDataSource := remote.NewMercadoLivreDataSource(httpClient)
 	extQRCodeGeneratorRepository := extRepo.NewMercadoLivreRepository(qrCodeRemoteDataSource)
-	qrCodeGeneratorService := services.NewMercadoLivreService(
+	mercadoLivreService := services.NewMercadoLivreService(
 		extQRCodeGeneratorRepository,
 		orderRepo,
 	)
@@ -96,7 +97,8 @@ func main() {
 		})
 	})
 
-	router.Post("/api/qrcode/generate", handler.GenerateQRCodeHandler(qrCodeGeneratorService))
+	router.Post("/api/qrcode/generate", handler.GenerateQRCodeHandler(mercadoLivreService))
+	router.Post("/api/webhook/ml/payment", webhook.PostMercadoLivreWebhook(mercadoLivreService))
 
 	router.Post("/api/customers", handler.CreateCustomerHandler(customerService))
 	router.Put("/api/customers/{id}", handler.UpdateCustomerHandler(customerService))

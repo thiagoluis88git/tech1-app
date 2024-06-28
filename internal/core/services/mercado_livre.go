@@ -3,6 +3,8 @@ package services
 import (
 	"context"
 	"net/http"
+	"strconv"
+	"strings"
 	"sync"
 
 	"github.com/thiagoluis88git/tech1/internal/core/domain"
@@ -11,8 +13,9 @@ import (
 )
 
 type MercadoLivreService struct {
-	repository      ports.MercadoLivreRepository
-	orderRepository ports.OrderRepository
+	repository        ports.MercadoLivreRepository
+	orderRepository   ports.OrderRepository
+	paymentRepository ports.PaymentRepository
 }
 
 func NewMercadoLivreService(
@@ -28,7 +31,7 @@ func NewMercadoLivreService(
 func (service *MercadoLivreService) GenerateQRCode(
 	ctx context.Context,
 	token string,
-	order domain.Order,
+	qrOrder domain.QRCodeOrder,
 	date int64,
 	wg *sync.WaitGroup,
 	ch chan bool,
@@ -36,7 +39,28 @@ func (service *MercadoLivreService) GenerateQRCode(
 	//Block this code below until this Channel be empty (by reading with <-ch)
 	ch <- true
 
-	order.TicketNumber = service.orderRepository.GetNextTicketNumber(ctx, date)
+	qrOrder.TicketNumber = service.orderRepository.GetNextTicketNumber(ctx, date)
+
+	payment := domain.Payment{
+		TotalPrice:  qrOrder.TotalPrice,
+		PaymentType: "QR Code",
+	}
+
+	paymentResponse, err := service.paymentRepository.CreatePaymentOrder(ctx, payment)
+
+	if err != nil {
+		return domain.QRCodeDataResponse{}, responses.GetResponseError(err, "QRCodeGeneratorService")
+	}
+
+	qrOrder.PaymentID = paymentResponse.PaymentId
+
+	order := domain.Order{
+		TotalPrice:   qrOrder.TotalPrice,
+		CustomerID:   qrOrder.CustomerID,
+		OrderProduct: []domain.OrderProduct(qrOrder.OrderProduct),
+		TicketNumber: qrOrder.TicketNumber,
+		PaymentID:    qrOrder.PaymentID,
+	}
 
 	orderResponse, err := service.orderRepository.CreatePayingOrder(ctx, order)
 
@@ -64,16 +88,26 @@ func (service *MercadoLivreService) GenerateQRCode(
 }
 
 func (service *MercadoLivreService) FinishOrder(ctx context.Context, token string, form domain.MercadoLivrePaymentForm) error {
-	if form.Topic != "payment" {
+	if form.Topic != "merchant_order" {
 		return &responses.NetworkError{
 			Code: http.StatusNotAcceptable,
 		}
 	}
 
-	err := service.repository.GetMercadoLivrePaymentData(ctx, token, form.Resource)
+	mercadoLivrePayment, err := service.repository.GetMercadoLivrePaymentData(ctx, token, form.Resource)
 
 	if err != nil {
 		return err
+	}
+
+	if mercadoLivrePayment.OrderStatus == "paid" {
+		ids := strings.Split(mercadoLivrePayment.ExternalReference, "|")
+
+		orderID, _ := strconv.Atoi(ids[0])
+		paymentID, _ := strconv.Atoi(ids[1])
+
+		service.paymentRepository.FinishPaymentWithSuccess(ctx, uint(paymentID))
+		service.orderRepository.FinishOrderWithPayment(ctx, uint(orderID), uint(paymentID))
 	}
 
 	return nil

@@ -16,10 +16,10 @@ import (
 // @Tags Webhook
 // @Accept json
 // @Produce json
-// @Param customer body domain.CustomerForm true "customerForm"
+// @Param mercadoLivrePaymentForm body domain.MercadoLivrePaymentForm true "mercadoLivrePaymentForm"
 // @Success 204
-// @Failure 406 "StatusNotAcceptable - Topic is not 'payment'"
-// @Router /api/customers/login [post]
+// @Failure 406 "StatusNotAcceptable - Topic is not 'merchant_order'"
+// @Router /api/webhook/ml/payment [post]
 func PostMercadoLivreWebhook(mercadoLivreService *services.MercadoLivreService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var form domain.MercadoLivrePaymentForm

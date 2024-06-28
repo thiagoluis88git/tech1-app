@@ -48,7 +48,7 @@ func (repo *MercadoLivreRepositoryImpl) Generate(ctx context.Context, token stri
 		Description:       fmt.Sprintf("Order: %v", orderID),
 		TotalAmount:       totalAmount,
 		ExpirationDate:    expirationDate.Format("2006-01-02T15:04:05.999Z07:00"),
-		ExternalReference: strconv.Itoa(orderID),
+		ExternalReference: fmt.Sprintf("%v|%v", strconv.Itoa(orderID), strconv.Itoa(int(form.PaymentID))),
 		Items:             items,
 		Title:             strconv.Itoa(form.TicketNumber),
 	}
@@ -64,12 +64,14 @@ func (repo *MercadoLivreRepositoryImpl) Generate(ctx context.Context, token stri
 	}, nil
 }
 
-func (repo *MercadoLivreRepositoryImpl) GetMercadoLivrePaymentData(ctx context.Context, token string, endpoint string) error {
-	err := repo.ds.GetPaymentData(ctx, token, endpoint)
+func (repo *MercadoLivreRepositoryImpl) GetMercadoLivrePaymentData(ctx context.Context, token string, endpoint string) (domain.MercadoLivrePayment, error) {
+	response, err := repo.ds.GetPaymentData(ctx, token, endpoint)
 
 	if err != nil {
-		return err
+		return domain.MercadoLivrePayment{}, err
 	}
 
-	return nil
+	mercadoLivrePayment := domain.MercadoLivrePayment(response)
+
+	return mercadoLivrePayment, nil
 }

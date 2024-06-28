@@ -19,7 +19,7 @@ type Order struct {
 	gorm.Model
 	OrderStatus    string
 	TotalPrice     int
-	PaymentID      *uint
+	PaymentID      uint
 	CustomerID     *uint
 	Customer       *Customer
 	TicketNumber   int

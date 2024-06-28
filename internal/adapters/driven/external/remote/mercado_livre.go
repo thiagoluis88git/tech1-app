@@ -12,7 +12,7 @@ import (
 
 type MercadoLivreDataSource interface {
 	Generate(ctx context.Context, token string, input model.QRCodeInput) (string, error)
-	GetPaymentData(ctx context.Context, token string, endpoint string) error
+	GetPaymentData(ctx context.Context, token string, endpoint string) (model.MercadoLivrePaymentResponse, error)
 }
 
 type MercadoLivreRemoteDataSource struct {
@@ -54,20 +54,20 @@ func (ds *MercadoLivreRemoteDataSource) Generate(ctx context.Context, token stri
 	return response.QRData, nil
 }
 
-func (ds *MercadoLivreRemoteDataSource) GetPaymentData(ctx context.Context, token string, endpoint string) error {
-	_, err := httpserver.DoRequest(
+func (ds *MercadoLivreRemoteDataSource) GetPaymentData(ctx context.Context, token string, endpoint string) (model.MercadoLivrePaymentResponse, error) {
+	response, err := httpserver.DoRequest(
 		ctx,
 		ds.client,
 		endpoint,
 		&token,
 		nil,
 		http.MethodGet,
-		model.QRCodeData{},
+		model.MercadoLivrePaymentResponse{},
 	)
 
 	if err != nil {
-		return err
+		return model.MercadoLivrePaymentResponse{}, err
 	}
 
-	return nil
+	return response, nil
 }

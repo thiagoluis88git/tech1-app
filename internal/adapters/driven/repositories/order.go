@@ -123,6 +123,21 @@ func (repository *OrderRespository) DeleteOrder(ctx context.Context, orderID uin
 	return nil
 }
 
+func (repository *OrderRespository) FinishOrderWithPayment(ctx context.Context, orderID uint, paymentID uint) error {
+	err := repository.db.WithContext(ctx).
+		Model(&entities.Order{}).
+		Where("id = ?", orderID).
+		Update("payment_id", paymentID).
+		Update("order_status", entities.OrderStatusCreated).
+		Error
+
+	if err != nil {
+		return responses.GetDatabaseError(err)
+	}
+
+	return nil
+}
+
 func (repository *OrderRespository) GetOrderById(ctx context.Context, orderId uint) (domain.OrderResponse, error) {
 	var orderEntity entities.Order
 	err := repository.
