@@ -21,10 +21,12 @@ type MercadoLivreService struct {
 func NewMercadoLivreService(
 	repository ports.MercadoLivreRepository,
 	orderRepository ports.OrderRepository,
+	paymentRepository ports.PaymentRepository,
 ) *MercadoLivreService {
 	return &MercadoLivreService{
-		repository:      repository,
-		orderRepository: orderRepository,
+		repository:        repository,
+		orderRepository:   orderRepository,
+		paymentRepository: paymentRepository,
 	}
 }
 

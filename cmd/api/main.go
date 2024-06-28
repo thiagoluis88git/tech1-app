@@ -88,6 +88,7 @@ func main() {
 	mercadoLivreService := services.NewMercadoLivreService(
 		extQRCodeGeneratorRepository,
 		orderRepo,
+		paymentRepo,
 	)
 
 	router.Get("/api/health", func(w http.ResponseWriter, r *http.Request) {
