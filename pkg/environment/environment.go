@@ -18,23 +18,25 @@ var (
 )
 
 const (
-	QRCodeGatewayRootURL = "QR_CODE_GATEWAY_ROOT_URL"
-	QRCodeGatewayToken   = "QR_CODE_GATEWAY_TOKEN"
-	DBHost               = "DB_HOST"
-	DBUser               = "POSTGRES_USER"
-	DBPassword           = "POSTGRES_PASSWORD"
-	DBPort               = "DB_PORT"
-	DBName               = "POSTGRES_DB"
+	QRCodeGatewayRootURL          = "QR_CODE_GATEWAY_ROOT_URL"
+	QRCodeGatewayToken            = "QR_CODE_GATEWAY_TOKEN"
+	WebhookMercadoLivrePaymentURL = "WEBHOOK_MERCADO_LIVRE_PAYMENT"
+	DBHost                        = "DB_HOST"
+	DBUser                        = "POSTGRES_USER"
+	DBPassword                    = "POSTGRES_PASSWORD"
+	DBPort                        = "DB_PORT"
+	DBName                        = "POSTGRES_DB"
 )
 
 type Environment struct {
-	qrCodeGatewayRootURL string
-	qrCodeGatewayToken   string
-	dbHost               string
-	dbPort               string
-	dbName               string
-	dbUser               string
-	dbPassword           string
+	qrCodeGatewayRootURL          string
+	qrCodeGatewayToken            string
+	webhookMercadoLivrePaymentURL string
+	dbHost                        string
+	dbPort                        string
+	dbName                        string
+	dbUser                        string
+	dbPassword                    string
 }
 
 func LoadEnvironmentVariables() {
@@ -50,6 +52,7 @@ func LoadEnvironmentVariables() {
 
 	qrCodeGatewayRootURL := getEnvironmentVariable(QRCodeGatewayRootURL)
 	qrCodeGatewayToken := getEnvironmentVariable(QRCodeGatewayToken)
+	webhookMercadoLivrePaymentURL := getEnvironmentVariable(WebhookMercadoLivrePaymentURL)
 	dbHost := getEnvironmentVariable(DBHost)
 	dbPort := getEnvironmentVariable(DBPort)
 	dbUser := getEnvironmentVariable(DBUser)
@@ -60,13 +63,14 @@ func LoadEnvironmentVariables() {
 
 	once.Do(func() {
 		singleton = &Environment{
-			qrCodeGatewayRootURL: qrCodeGatewayRootURL,
-			qrCodeGatewayToken:   qrCodeGatewayToken,
-			dbHost:               dbHost,
-			dbPort:               dbPort,
-			dbUser:               dbUser,
-			dbPassword:           dbPassword,
-			dbName:               dbName,
+			qrCodeGatewayRootURL:          qrCodeGatewayRootURL,
+			qrCodeGatewayToken:            qrCodeGatewayToken,
+			dbHost:                        dbHost,
+			dbPort:                        dbPort,
+			dbUser:                        dbUser,
+			dbPassword:                    dbPassword,
+			dbName:                        dbName,
+			webhookMercadoLivrePaymentURL: webhookMercadoLivrePaymentURL,
 		}
 	})
 }
@@ -79,6 +83,14 @@ func getEnvironmentVariable(key string) string {
 	}
 
 	return value
+}
+
+func GetWebhookMercadoLivrePaymentURL() string {
+	if singleton != nil {
+		return singleton.webhookMercadoLivrePaymentURL
+	}
+
+	return getEnvironmentVariable(WebhookMercadoLivrePaymentURL)
 }
 
 func GetQRCodeGatewayRootURL() string {

@@ -10,15 +10,18 @@ import (
 	"github.com/thiagoluis88git/tech1/internal/adapters/driven/external/remote"
 	"github.com/thiagoluis88git/tech1/internal/core/domain"
 	"github.com/thiagoluis88git/tech1/internal/core/ports"
+	"github.com/thiagoluis88git/tech1/pkg/environment"
 )
 
 type MercadoLivreRepositoryImpl struct {
-	ds remote.MercadoLivreDataSource
+	ds      remote.MercadoLivreDataSource
+	webHook string
 }
 
 func NewMercadoLivreRepository(ds remote.MercadoLivreDataSource) ports.MercadoLivreRepository {
 	return &MercadoLivreRepositoryImpl{
-		ds: ds,
+		ds:      ds,
+		webHook: environment.GetWebhookMercadoLivrePaymentURL(),
 	}
 }
 
@@ -51,6 +54,7 @@ func (repo *MercadoLivreRepositoryImpl) Generate(ctx context.Context, token stri
 		ExternalReference: fmt.Sprintf("%v|%v", strconv.Itoa(orderID), strconv.Itoa(int(form.PaymentID))),
 		Items:             items,
 		Title:             strconv.Itoa(form.TicketNumber),
+		NotificationUrl:   repo.webHook,
 	}
 
 	qrData, err := repo.ds.Generate(ctx, token, input)

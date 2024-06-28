@@ -14,6 +14,7 @@ type QRCodeInput struct {
 	ExternalReference string `json:"external_reference"`
 	Description       string `json:"description"`
 	Title             string `json:"title"`
+	NotificationUrl   string `json:"notification_url"`
 	Items             []Item `json:"items"`
 	TotalAmount       int    `json:"total_amount"`
 }
