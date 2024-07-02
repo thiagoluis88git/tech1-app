@@ -154,6 +154,13 @@ func (repository *OrderRespository) GetOrderById(ctx context.Context, orderId ui
 		return domain.OrderResponse{}, responses.GetDatabaseError(err)
 	}
 
+	if orderEntity.ID == uint(0) {
+		return domain.OrderResponse{}, &responses.LocalError{
+			Message: "Order not found",
+			Code:    responses.NOT_FOUND_ERROR,
+		}
+	}
+
 	orderProduct := []domain.OrderProductResponse{}
 
 	for _, value := range orderEntity.OrderProduct {
