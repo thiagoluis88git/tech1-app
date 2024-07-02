@@ -161,21 +161,21 @@ func (repository *ProductRepository) DeleteProduct(ctx context.Context, productI
 		return responses.GetDatabaseError(err)
 	}
 
-	err := tx.Where("product_id = ?", productId).Delete(&entities.ProductImage{}).Error
+	err := tx.Where("product_id = ?", productId).Unscoped().Delete(&entities.ProductImage{}).Error
 
 	if err != nil {
 		tx.Rollback()
 		return responses.GetDatabaseError(err)
 	}
 
-	err = tx.Where("product_id = ?", productId).Delete(&entities.ComboProduct{}).Error
+	err = tx.Where("product_id = ?", productId).Unscoped().Delete(&entities.ComboProduct{}).Error
 
 	if err != nil {
 		tx.Rollback()
 		return responses.GetDatabaseError(err)
 	}
 
-	err = tx.Delete(&entities.Product{}, productId).Error
+	err = tx.Unscoped().Delete(&entities.Product{}, productId).Error
 
 	if err != nil {
 		tx.Rollback()
