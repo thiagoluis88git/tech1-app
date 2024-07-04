@@ -75,12 +75,14 @@ func main() {
 	validateToPreare := services.NewValidateOrderToPrepareUseCase(orderRepo)
 	validateToDone := services.NewValidateOrderToDoneUseCase(orderRepo)
 	validateToDeliveredOrNot := services.NewValidateOrderToDeliveredOrNotUseCase(orderRepo)
+	sortOrders := services.NewSortOrdersUseCase()
 	orderService := services.NewOrderService(
 		orderRepo,
 		customerRepo,
 		validateToPreare,
 		validateToDone,
 		validateToDeliveredOrNot,
+		sortOrders,
 	)
 
 	qrCodeRemoteDataSource := remote.NewMercadoLivreDataSource(httpClient)

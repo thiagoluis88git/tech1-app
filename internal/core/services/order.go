@@ -15,6 +15,7 @@ type OrderService struct {
 	validateToPrepare        *ValidateOrderToPrepareUseCase
 	validateToDone           *ValidateOrderToDoneUseCase
 	validateToDeliveredOrNot *ValidateOrderToDeliveredOrNotUseCase
+	sortOrderUseCase         *SortOrdersUseCase
 }
 
 func NewOrderService(
@@ -23,6 +24,7 @@ func NewOrderService(
 	validateToPrepate *ValidateOrderToPrepareUseCase,
 	validateToDone *ValidateOrderToDoneUseCase,
 	validateToDeliveredOrNot *ValidateOrderToDeliveredOrNotUseCase,
+	sortOrderUseCase *SortOrdersUseCase,
 ) *OrderService {
 	return &OrderService{
 		orderRepo:                orderRepo,
@@ -30,6 +32,7 @@ func NewOrderService(
 		validateToPrepare:        validateToPrepate,
 		validateToDone:           validateToDone,
 		validateToDeliveredOrNot: validateToDeliveredOrNot,
+		sortOrderUseCase:         sortOrderUseCase,
 	}
 }
 
@@ -80,6 +83,8 @@ func (service *OrderService) GetOrdersToPrepare(ctx context.Context) ([]domain.O
 		return []domain.OrderResponse{}, responses.GetResponseError(err, "OrderService -> GetOrdersToPrepare")
 	}
 
+	service.sortOrderUseCase.Execute(response)
+
 	return response, nil
 }
 
@@ -89,6 +94,8 @@ func (service *OrderService) GetOrdersToFollow(ctx context.Context) ([]domain.Or
 	if err != nil {
 		return []domain.OrderResponse{}, responses.GetResponseError(err, "OrderService -> GetOrdersStatus")
 	}
+
+	service.sortOrderUseCase.Execute(response)
 
 	return response, nil
 }

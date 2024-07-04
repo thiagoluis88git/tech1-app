@@ -199,6 +199,7 @@ func (repository *OrderRespository) GetOrdersToPrepare(ctx context.Context) ([]d
 		Preload("OrderProduct.Product").
 		Preload("Customer").
 		Where("order_status = ?", entities.OrderStatusCreated).
+		Order("created_at").
 		Find(&orderEntity).
 		Error
 
@@ -245,7 +246,12 @@ func (repository *OrderRespository) GetOrdersToFollow(ctx context.Context) ([]do
 		Model(&entities.Order{}).
 		Preload("OrderProduct.Product").
 		Preload("Customer").
-		Where("order_status in (?, ?,?)", entities.OrderStatusCreated, entities.OrderStatusPreparing, entities.OrderStatusDone).
+		Where("order_status in (?, ?,?)",
+			entities.OrderStatusCreated,
+			entities.OrderStatusPreparing,
+			entities.OrderStatusDone,
+		).
+		Order("created_at").
 		Find(&orderEntity).
 		Error
 
