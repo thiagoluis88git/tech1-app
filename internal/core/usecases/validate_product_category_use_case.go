@@ -1,4 +1,4 @@
-package services
+package usecases
 
 import "github.com/thiagoluis88git/tech1/internal/core/domain"
 

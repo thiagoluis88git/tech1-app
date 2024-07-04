@@ -1,4 +1,4 @@
-package services
+package usecases
 
 import (
 	"context"
@@ -15,16 +15,16 @@ var (
 	uc = NewValidateProductCategoryUseCase()
 )
 
-func TestProductServices(t *testing.T) {
+func TestProductsUseCase(t *testing.T) {
 	t.Run("got success when getting product categories in services", func(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockProductRepository)
-		sut := NewProductService(uc, mockRepo)
+		sut := NewGetCategoriesUseCase(mockRepo)
 
 		mockRepo.On("GetCategories").Return([]string{"Combo", "Bebidas", "Lanches"})
 
-		response := sut.GetCategories()
+		response := sut.Execute()
 
 		assert.NotEmpty(t, response)
 
@@ -35,13 +35,13 @@ func TestProductServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockProductRepository)
-		sut := NewProductService(uc, mockRepo)
+		sut := NewGetProductsByCategoryUseCase(mockRepo)
 
 		ctx := context.TODO()
 
 		mockRepo.On("GetProductsByCategory", ctx, "category").Return(productsByCategory, nil)
 
-		response, err := sut.GetProductsByCategory(ctx, "category")
+		response, err := sut.Execute(ctx, "category")
 
 		mockRepo.AssertExpectations(t)
 
@@ -55,7 +55,7 @@ func TestProductServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockProductRepository)
-		sut := NewProductService(uc, mockRepo)
+		sut := NewGetProductsByCategoryUseCase(mockRepo)
 
 		ctx := context.TODO()
 
@@ -64,7 +64,7 @@ func TestProductServices(t *testing.T) {
 			Message: "DATABASE_CONFLICT_ERROR",
 		})
 
-		response, err := sut.GetProductsByCategory(ctx, "category")
+		response, err := sut.Execute(ctx, "category")
 
 		mockRepo.AssertExpectations(t)
 
@@ -80,13 +80,13 @@ func TestProductServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockProductRepository)
-		sut := NewProductService(uc, mockRepo)
+		sut := NewGetProductByIdUseCase(mockRepo)
 
 		ctx := context.TODO()
 
 		mockRepo.On("GetProductById", ctx, uint(1)).Return(productById, nil)
 
-		response, err := sut.GetProductById(ctx, uint(1))
+		response, err := sut.Execute(ctx, uint(1))
 
 		mockRepo.AssertExpectations(t)
 
@@ -100,7 +100,7 @@ func TestProductServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockProductRepository)
-		sut := NewProductService(uc, mockRepo)
+		sut := NewGetProductByIdUseCase(mockRepo)
 
 		ctx := context.TODO()
 
@@ -109,7 +109,7 @@ func TestProductServices(t *testing.T) {
 			Message: "DATABASE_CONFLICT_ERROR",
 		})
 
-		response, err := sut.GetProductById(ctx, uint(1))
+		response, err := sut.Execute(ctx, uint(1))
 
 		mockRepo.AssertExpectations(t)
 
@@ -125,13 +125,13 @@ func TestProductServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockProductRepository)
-		sut := NewProductService(uc, mockRepo)
+		sut := NewCreateProductUseCase(uc, mockRepo)
 
 		ctx := context.TODO()
 
 		mockRepo.On("CreateProduct", ctx, productCreation).Return(uint(1), nil)
 
-		response, err := sut.CreateProduct(ctx, productCreation)
+		response, err := sut.Execute(ctx, productCreation)
 
 		mockRepo.AssertExpectations(t)
 
@@ -145,7 +145,7 @@ func TestProductServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockProductRepository)
-		sut := NewProductService(uc, mockRepo)
+		sut := NewCreateProductUseCase(uc, mockRepo)
 
 		ctx := context.TODO()
 
@@ -154,7 +154,7 @@ func TestProductServices(t *testing.T) {
 			Message: "DATABASE_CONFLICT_ERROR",
 		})
 
-		response, err := sut.CreateProduct(ctx, productCreation)
+		response, err := sut.Execute(ctx, productCreation)
 
 		mockRepo.AssertExpectations(t)
 
@@ -170,13 +170,13 @@ func TestProductServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockProductRepository)
-		sut := NewProductService(uc, mockRepo)
+		sut := NewDeleteProductUseCase(mockRepo)
 
 		ctx := context.TODO()
 
 		mockRepo.On("DeleteProduct", ctx, uint(12)).Return(nil)
 
-		err := sut.DeleteProduct(ctx, uint(12))
+		err := sut.Execute(ctx, uint(12))
 
 		mockRepo.AssertExpectations(t)
 
@@ -187,7 +187,7 @@ func TestProductServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockProductRepository)
-		sut := NewProductService(uc, mockRepo)
+		sut := NewDeleteProductUseCase(mockRepo)
 
 		ctx := context.TODO()
 
@@ -196,7 +196,7 @@ func TestProductServices(t *testing.T) {
 			Message: "DATABASE_CONFLICT_ERROR",
 		})
 
-		err := sut.DeleteProduct(ctx, uint(12))
+		err := sut.Execute(ctx, uint(12))
 
 		mockRepo.AssertExpectations(t)
 
@@ -211,13 +211,13 @@ func TestProductServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockProductRepository)
-		sut := NewProductService(uc, mockRepo)
+		sut := NewUpdateProductUseCase(mockRepo)
 
 		ctx := context.TODO()
 
 		mockRepo.On("UpdateProduct", ctx, productUpdate).Return(nil)
 
-		err := sut.UpdateProduct(ctx, productUpdate)
+		err := sut.Execute(ctx, productUpdate)
 
 		mockRepo.AssertExpectations(t)
 
@@ -228,7 +228,7 @@ func TestProductServices(t *testing.T) {
 		t.Parallel()
 
 		mockRepo := new(MockProductRepository)
-		sut := NewProductService(uc, mockRepo)
+		sut := NewUpdateProductUseCase(mockRepo)
 
 		ctx := context.TODO()
 
@@ -237,7 +237,7 @@ func TestProductServices(t *testing.T) {
 			Message: "DATABASE_CONFLICT_ERROR",
 		})
 
-		err := sut.UpdateProduct(ctx, productUpdate)
+		err := sut.Execute(ctx, productUpdate)
 
 		mockRepo.AssertExpectations(t)
 

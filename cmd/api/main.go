@@ -9,7 +9,7 @@ import (
 	"github.com/thiagoluis88git/tech1/internal/adapters/driven/repositories"
 	"github.com/thiagoluis88git/tech1/internal/adapters/driver/handler"
 	"github.com/thiagoluis88git/tech1/internal/adapters/driver/webhook"
-	"github.com/thiagoluis88git/tech1/internal/core/services"
+	"github.com/thiagoluis88git/tech1/internal/core/usecases"
 	"github.com/thiagoluis88git/tech1/pkg/database"
 	"github.com/thiagoluis88git/tech1/pkg/environment"
 	"github.com/thiagoluis88git/tech1/pkg/httpserver"
@@ -61,22 +61,27 @@ func main() {
 
 	paymentRepo := repositories.NewPaymentRepository(db)
 	paymentGateway := external.NewPaymentGateway()
-	paymentService := services.NewPaymentService(paymentRepo, paymentGateway)
+	paymentService := usecases.NewPaymentService(paymentRepo, paymentGateway)
 
 	productRepo := repositories.NewProductRepository(db)
-	validateProductCategoryUseCase := services.NewValidateProductCategoryUseCase()
-	productService := services.NewProductService(validateProductCategoryUseCase, productRepo)
+	validateProductCategoryUseCase := usecases.NewValidateProductCategoryUseCase()
+	getCategoriesUseCase := usecases.NewGetCategoriesUseCase(productRepo)
+	getProductsUseCase := usecases.NewGetProductsByCategoryUseCase(productRepo)
+	getProductByIdUseCase := usecases.NewGetProductByIdUseCase(productRepo)
+	deleteProductUseCase := usecases.NewDeleteProductUseCase(productRepo)
+	updateProductUseCase := usecases.NewUpdateProductUseCase(productRepo)
+	createProductUseCase := usecases.NewCreateProductUseCase(validateProductCategoryUseCase, productRepo)
 
 	customerRepo := repositories.NewCustomerRepository(db)
-	validateCPFUseCase := services.NewValidateCPFUseCase()
-	customerService := services.NewCustomerService(validateCPFUseCase, customerRepo)
+	validateCPFUseCase := usecases.NewValidateCPFUseCase()
+	customerService := usecases.NewCustomerService(validateCPFUseCase, customerRepo)
 
 	orderRepo := repositories.NewOrderRespository(db)
-	validateToPreare := services.NewValidateOrderToPrepareUseCase(orderRepo)
-	validateToDone := services.NewValidateOrderToDoneUseCase(orderRepo)
-	validateToDeliveredOrNot := services.NewValidateOrderToDeliveredOrNotUseCase(orderRepo)
-	sortOrders := services.NewSortOrdersUseCase()
-	orderService := services.NewOrderService(
+	validateToPreare := usecases.NewValidateOrderToPrepareUseCase(orderRepo)
+	validateToDone := usecases.NewValidateOrderToDoneUseCase(orderRepo)
+	validateToDeliveredOrNot := usecases.NewValidateOrderToDeliveredOrNotUseCase(orderRepo)
+	sortOrders := usecases.NewSortOrdersUseCase()
+	orderService := usecases.NewOrderService(
 		orderRepo,
 		customerRepo,
 		validateToPreare,
@@ -87,7 +92,7 @@ func main() {
 
 	qrCodeRemoteDataSource := remote.NewMercadoLivreDataSource(httpClient)
 	extQRCodeGeneratorRepository := extRepo.NewMercadoLivreRepository(qrCodeRemoteDataSource)
-	mercadoLivreService := services.NewMercadoLivreService(
+	mercadoLivreService := usecases.NewMercadoLivreService(
 		extQRCodeGeneratorRepository,
 		orderRepo,
 		paymentRepo,
@@ -108,12 +113,12 @@ func main() {
 	router.Get("/api/customers/{id}", handler.GetCustomerByIdHandler(customerService))
 	router.Post("/api/customers/login", handler.GetCustomerByCPFHandler(customerService))
 
-	router.Post("/api/products", handler.CreateProductHandler(productService))
-	router.Delete("/api/products/{id}", handler.DeleteProductHandler(productService))
-	router.Put("/api/products/{id}", handler.UpdateProductHandler(productService))
-	router.Get("/api/products/{id}", handler.GetProductsByIdHandler(productService))
-	router.Get("/api/products/categories", handler.GetCategoriesHandler(productService))
-	router.Get("/api/products/categories/{category}", handler.GetProductsByCategoryHandler(productService))
+	router.Post("/api/products", handler.CreateProductHandler(createProductUseCase))
+	router.Delete("/api/products/{id}", handler.DeleteProductHandler(deleteProductUseCase))
+	router.Put("/api/products/{id}", handler.UpdateProductHandler(updateProductUseCase))
+	router.Get("/api/products/{id}", handler.GetProductsByIdHandler(getProductByIdUseCase))
+	router.Get("/api/products/categories", handler.GetCategoriesHandler(getCategoriesUseCase))
+	router.Get("/api/products/categories/{category}", handler.GetProductsByCategoryHandler(getProductsUseCase))
 
 	router.Get("/api/payments/types", handler.GetPaymentTypeHandler(paymentService))
 	router.Post("/api/payments", handler.CreatePaymentHandler(paymentService))

@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/thiagoluis88git/tech1/internal/core/domain"
-	"github.com/thiagoluis88git/tech1/internal/core/services"
+	"github.com/thiagoluis88git/tech1/internal/core/usecases"
 	"github.com/thiagoluis88git/tech1/pkg/environment"
 	"github.com/thiagoluis88git/tech1/pkg/httpserver"
 )
@@ -21,7 +21,7 @@ import (
 // @Param qrCodeOrder body domain.QRCodeOrder true "qrCodeOrder"
 // @Success 200 {object} domain.QRCodeDataResponse
 // @Router /api/qrcode/generate [post]
-func GenerateQRCodeHandler(qrCodeGeneratorService *services.MercadoLivreService) http.HandlerFunc {
+func GenerateQRCodeHandler(qrCodeGeneratorService *usecases.MercadoLivreService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var form domain.QRCodeOrder
 

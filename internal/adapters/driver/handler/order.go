@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/thiagoluis88git/tech1/internal/core/domain"
-	"github.com/thiagoluis88git/tech1/internal/core/services"
+	"github.com/thiagoluis88git/tech1/internal/core/usecases"
 	"github.com/thiagoluis88git/tech1/pkg/httpserver"
 )
 
@@ -23,7 +23,7 @@ import (
 // @Success 200 {object} domain.OrderResponse
 // @Failure 400 "Order has required fields"
 // @Router /api/orders [post]
-func CreateOrderHandler(orderService *services.OrderService) http.HandlerFunc {
+func CreateOrderHandler(orderService *usecases.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var order domain.Order
 
@@ -70,7 +70,7 @@ func CreateOrderHandler(orderService *services.OrderService) http.HandlerFunc {
 // @Success 200 {object} domain.OrderResponse
 // @Failure 400 "Order has required fields"
 // @Router /api/orders/{id} [get]
-func GetOrderByIdHandler(orderService *services.OrderService) http.HandlerFunc {
+func GetOrderByIdHandler(orderService *usecases.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		orderIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -116,7 +116,7 @@ func GetOrderByIdHandler(orderService *services.OrderService) http.HandlerFunc {
 // @Produce json
 // @Success 200 {object} []domain.OrderResponse
 // @Router /api/orders/to-prepare [get]
-func GetOrdersToPrepareHandler(orderService *services.OrderService) http.HandlerFunc {
+func GetOrdersToPrepareHandler(orderService *usecases.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		response, err := orderService.GetOrdersToPrepare(r.Context())
 
@@ -140,7 +140,7 @@ func GetOrdersToPrepareHandler(orderService *services.OrderService) http.Handler
 // @Produce json
 // @Success 200 {object} []domain.OrderResponse
 // @Router /api/orders/status [get]
-func GetOrdersToFollowHandler(orderService *services.OrderService) http.HandlerFunc {
+func GetOrdersToFollowHandler(orderService *usecases.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		response, err := orderService.GetOrdersToFollow(r.Context())
 
@@ -167,7 +167,7 @@ func GetOrdersToFollowHandler(orderService *services.OrderService) http.HandlerF
 // @Failure 404 "Order not found"
 // @Failure 428 "Precondition failed: Need to be with status Criado"
 // @Router /api/orders/{id}/preparing [put]
-func UpdateOrderPreparingHandler(orderService *services.OrderService) http.HandlerFunc {
+func UpdateOrderPreparingHandler(orderService *usecases.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -216,7 +216,7 @@ func UpdateOrderPreparingHandler(orderService *services.OrderService) http.Handl
 // @Failure 404 "Order not found"
 // @Failure 428 "Precondition failed: Need to be with status Preparando"
 // @Router /api/orders/{id}/done [put]
-func UpdateOrderDoneHandler(orderService *services.OrderService) http.HandlerFunc {
+func UpdateOrderDoneHandler(orderService *usecases.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -265,7 +265,7 @@ func UpdateOrderDoneHandler(orderService *services.OrderService) http.HandlerFun
 // @Failure 404 "Order not found"
 // @Failure 428 "Precondition failed: Need to be with status Finalizado"
 // @Router /api/orders/{id}/delivered [put]
-func UpdateOrderDeliveredHandler(orderService *services.OrderService) http.HandlerFunc {
+func UpdateOrderDeliveredHandler(orderService *usecases.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -314,7 +314,7 @@ func UpdateOrderDeliveredHandler(orderService *services.OrderService) http.Handl
 // @Failure 404 "Order not found"
 // @Failure 428 "Precondition failed: Need to be with status Finalizado"
 // @Router /api/orders/{id}/not-delivered [put]
-func UpdateOrderNotDeliveredandler(orderService *services.OrderService) http.HandlerFunc {
+func UpdateOrderNotDeliveredandler(orderService *usecases.OrderService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr, err := httpserver.GetPathParamFromRequest(r, "id")
 

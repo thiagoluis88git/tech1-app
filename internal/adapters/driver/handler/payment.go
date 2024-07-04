@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/thiagoluis88git/tech1/internal/core/domain"
-	"github.com/thiagoluis88git/tech1/internal/core/services"
+	"github.com/thiagoluis88git/tech1/internal/core/usecases"
 	"github.com/thiagoluis88git/tech1/pkg/httpserver"
 )
 
@@ -19,7 +19,7 @@ import (
 // @Success 200 {object} domain.PaymentResponse
 // @Failure 400 "Payment has required fields"
 // @Router /api/payments [post]
-func CreatePaymentHandler(productService *services.PaymentService) http.HandlerFunc {
+func CreatePaymentHandler(productService *usecases.PaymentService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var combo domain.Payment
 
@@ -56,7 +56,7 @@ func CreatePaymentHandler(productService *services.PaymentService) http.HandlerF
 // @Produce json
 // @Success 200 {object} []string
 // @Router /api/payments/type [get]
-func GetPaymentTypeHandler(paymentService *services.PaymentService) http.HandlerFunc {
+func GetPaymentTypeHandler(paymentService *usecases.PaymentService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		httpserver.SendResponseSuccess(w, paymentService.GetPaymentTypes())
 	}

@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/thiagoluis88git/tech1/internal/core/domain"
-	"github.com/thiagoluis88git/tech1/internal/core/services"
+	"github.com/thiagoluis88git/tech1/internal/core/usecases"
 	"github.com/thiagoluis88git/tech1/pkg/httpserver"
 )
 
@@ -21,7 +21,7 @@ import (
 // @Failure 400 "Product has required fields"
 // @Failure 409 "This Product is already added"
 // @Router /api/products [post]
-func CreateProductHandler(productService *services.ProductService) http.HandlerFunc {
+func CreateProductHandler(createUseCase *usecases.CreateProductUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var product domain.ProductForm
 
@@ -36,7 +36,7 @@ func CreateProductHandler(productService *services.ProductService) http.HandlerF
 			return
 		}
 
-		productId, err := productService.CreateProduct(context.Background(), product)
+		productId, err := createUseCase.Execute(context.Background(), product)
 
 		if err != nil {
 			log.Print("create product", map[string]interface{}{
@@ -61,7 +61,7 @@ func CreateProductHandler(productService *services.ProductService) http.HandlerF
 // @Produce json
 // @Success 200 {object} []domain.ProductResponse
 // @Router /api/products/categories/{category} [get]
-func GetProductsByCategoryHandler(productService *services.ProductService) http.HandlerFunc {
+func GetProductsByCategoryHandler(getProductsUseCase *usecases.GetProductsByCategoryUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		category, err := httpserver.GetPathParamFromRequest(r, "category")
 
@@ -74,7 +74,7 @@ func GetProductsByCategoryHandler(productService *services.ProductService) http.
 			return
 		}
 
-		products, err := productService.GetProductsByCategory(context.Background(), category)
+		products, err := getProductsUseCase.Execute(context.Background(), category)
 
 		if err != nil {
 			log.Print("get products by category", map[string]interface{}{
@@ -97,7 +97,7 @@ func GetProductsByCategoryHandler(productService *services.ProductService) http.
 // @Produce json
 // @Success 200 {object} domain.ProductResponse
 // @Router /api/products/{id} [get]
-func GetProductsByIdHandler(productService *services.ProductService) http.HandlerFunc {
+func GetProductsByIdHandler(getProductById *usecases.GetProductByIdUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		productIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -121,7 +121,7 @@ func GetProductsByIdHandler(productService *services.ProductService) http.Handle
 			return
 		}
 
-		product, err := productService.GetProductById(context.Background(), uint(productId))
+		product, err := getProductById.Execute(context.Background(), uint(productId))
 
 		if err != nil {
 			log.Print("get product by id", map[string]interface{}{
@@ -144,7 +144,7 @@ func GetProductsByIdHandler(productService *services.ProductService) http.Handle
 // @Produce json
 // @Success 204
 // @Router /api/products/{id} [delete]
-func DeleteProductHandler(productService *services.ProductService) http.HandlerFunc {
+func DeleteProductHandler(deleteProduct *usecases.DeleteProductUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		productIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -168,7 +168,7 @@ func DeleteProductHandler(productService *services.ProductService) http.HandlerF
 			return
 		}
 
-		err = productService.DeleteProduct(context.Background(), uint(productId))
+		err = deleteProduct.Execute(context.Background(), uint(productId))
 
 		if err != nil {
 			log.Print("delete product", map[string]interface{}{
@@ -191,7 +191,7 @@ func DeleteProductHandler(productService *services.ProductService) http.HandlerF
 // @Produce json
 // @Success 204
 // @Router /api/products/{id} [put]
-func UpdateProductHandler(productService *services.ProductService) http.HandlerFunc {
+func UpdateProductHandler(updateProduct *usecases.UpdateProductUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		productIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -229,7 +229,7 @@ func UpdateProductHandler(productService *services.ProductService) http.HandlerF
 		}
 
 		product.Id = uint(productId)
-		err = productService.UpdateProduct(context.Background(), product)
+		err = updateProduct.Execute(context.Background(), product)
 
 		if err != nil {
 			log.Print("update product", map[string]interface{}{
@@ -252,8 +252,8 @@ func UpdateProductHandler(productService *services.ProductService) http.HandlerF
 // @Produce json
 // @Success 200 {object} []string
 // @Router /api/products/categories [get]
-func GetCategoriesHandler(productService *services.ProductService) http.HandlerFunc {
+func GetCategoriesHandler(getCategoriesUseCase *usecases.GetCategoriesUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		httpserver.SendResponseSuccess(w, productService.GetCategories())
+		httpserver.SendResponseSuccess(w, getCategoriesUseCase.Execute())
 	}
 }

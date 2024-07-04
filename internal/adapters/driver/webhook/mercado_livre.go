@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/thiagoluis88git/tech1/internal/core/domain"
-	"github.com/thiagoluis88git/tech1/internal/core/services"
+	"github.com/thiagoluis88git/tech1/internal/core/usecases"
 	"github.com/thiagoluis88git/tech1/pkg/environment"
 	"github.com/thiagoluis88git/tech1/pkg/httpserver"
 )
@@ -20,7 +20,7 @@ import (
 // @Success 204
 // @Failure 406 "StatusNotAcceptable - Topic is not 'merchant_order'"
 // @Router /api/webhook/ml/payment [post]
-func PostMercadoLivreWebhook(mercadoLivreService *services.MercadoLivreService) http.HandlerFunc {
+func PostMercadoLivreWebhook(mercadoLivreService *usecases.MercadoLivreService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var form domain.MercadoLivrePaymentForm
 

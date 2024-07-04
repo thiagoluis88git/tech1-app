@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/thiagoluis88git/tech1/internal/core/domain"
-	"github.com/thiagoluis88git/tech1/internal/core/services"
+	"github.com/thiagoluis88git/tech1/internal/core/usecases"
 	"github.com/thiagoluis88git/tech1/pkg/httpserver"
 )
 
@@ -20,7 +20,7 @@ import (
 // @Failure 400 "Customer has required fields"
 // @Failure 409 "This Customer is already added"
 // @Router /api/customers [post]
-func CreateCustomerHandler(customerService *services.CustomerService) http.HandlerFunc {
+func CreateCustomerHandler(customerService *usecases.CustomerService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var customer domain.Customer
 
@@ -61,7 +61,7 @@ func CreateCustomerHandler(customerService *services.CustomerService) http.Handl
 // @Failure 400 "Customer has required fields"
 // @Failure 404 "Customer not found"
 // @Router /api/customers/{id} [put]
-func UpdateCustomerHandler(customerService *services.CustomerService) http.HandlerFunc {
+func UpdateCustomerHandler(customerService *usecases.CustomerService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		customerIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -122,7 +122,7 @@ func UpdateCustomerHandler(customerService *services.CustomerService) http.Handl
 // @Success 200 {object} domain.Customer
 // @Failure 404 "Customer not found"
 // @Router /api/customers/{id} [get]
-func GetCustomerByIdHandler(customerService *services.CustomerService) http.HandlerFunc {
+func GetCustomerByIdHandler(customerService *usecases.CustomerService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		customerIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -170,7 +170,7 @@ func GetCustomerByIdHandler(customerService *services.CustomerService) http.Hand
 // @Success 200 {object} domain.Customer
 // @Failure 404 "Customer not found"
 // @Router /api/customers/login [post]
-func GetCustomerByCPFHandler(customerService *services.CustomerService) http.HandlerFunc {
+func GetCustomerByCPFHandler(customerService *usecases.CustomerService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var customerForm domain.CustomerForm
 
