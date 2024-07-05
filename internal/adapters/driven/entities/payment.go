@@ -7,8 +7,8 @@ const (
 	PaymentPayedStatus  = "Pago"
 	PaymentErrorStatus  = "Erro"
 
-	PaymentQRCodeType      = "QR Code"
-	PaymentMercadoPagoType = "Mercado Pago"
+	PaymentCreditType = "Crédito"
+	PaymentQRCodeType = "QR Code (Mercado Pago)"
 )
 
 type Payment struct {

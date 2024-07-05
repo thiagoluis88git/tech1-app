@@ -9,7 +9,7 @@ import (
 	"github.com/thiagoluis88git/tech1/pkg/responses"
 )
 
-type OrderService struct {
+type CreateOrderUseCase struct {
 	orderRepo                ports.OrderRepository
 	customerRepo             ports.CustomerRepository
 	validateToPrepare        *ValidateOrderToPrepareUseCase
@@ -18,15 +18,49 @@ type OrderService struct {
 	sortOrderUseCase         *SortOrdersUseCase
 }
 
-func NewOrderService(
+type UpdateToPreparingUseCase struct {
+	orderRepo         ports.OrderRepository
+	validateToPrepare *ValidateOrderToPrepareUseCase
+}
+
+type UpdateToDoneUseCase struct {
+	orderRepo      ports.OrderRepository
+	validateToDone *ValidateOrderToDoneUseCase
+}
+
+type UpdateToDeliveredUseCase struct {
+	orderRepo                ports.OrderRepository
+	validateToDeliveredOrNot *ValidateOrderToDeliveredOrNotUseCase
+}
+
+type UpdateToNotDeliveredUseCase struct {
+	orderRepo                ports.OrderRepository
+	validateToDeliveredOrNot *ValidateOrderToDeliveredOrNotUseCase
+}
+
+type GetOrderByIdUseCase struct {
+	orderRepo ports.OrderRepository
+}
+
+type GetOrdersToPrepareUseCase struct {
+	orderRepo        ports.OrderRepository
+	sortOrderUseCase *SortOrdersUseCase
+}
+
+type GetGetOrdersToFollowUseCase struct {
+	orderRepo        ports.OrderRepository
+	sortOrderUseCase *SortOrdersUseCase
+}
+
+func NewCreateOrderUseCase(
 	orderRepo ports.OrderRepository,
 	customerRepo ports.CustomerRepository,
 	validateToPrepate *ValidateOrderToPrepareUseCase,
 	validateToDone *ValidateOrderToDoneUseCase,
 	validateToDeliveredOrNot *ValidateOrderToDeliveredOrNotUseCase,
 	sortOrderUseCase *SortOrdersUseCase,
-) *OrderService {
-	return &OrderService{
+) *CreateOrderUseCase {
+	return &CreateOrderUseCase{
 		orderRepo:                orderRepo,
 		customerRepo:             customerRepo,
 		validateToPrepare:        validateToPrepate,
@@ -36,20 +70,88 @@ func NewOrderService(
 	}
 }
 
-func (service *OrderService) CreateOrder(ctx context.Context, order domain.Order, date int64, wg *sync.WaitGroup, ch chan bool) (domain.OrderResponse, error) {
+func NewGetOrderByIdUseCase(
+	orderRepo ports.OrderRepository,
+) *GetOrderByIdUseCase {
+	return &GetOrderByIdUseCase{
+		orderRepo: orderRepo,
+	}
+}
+
+func NewGetOrdersToPrepareUseCase(
+	orderRepo ports.OrderRepository,
+	sortOrderUseCase *SortOrdersUseCase,
+) *GetOrdersToPrepareUseCase {
+	return &GetOrdersToPrepareUseCase{
+		orderRepo:        orderRepo,
+		sortOrderUseCase: sortOrderUseCase,
+	}
+}
+
+func NewGetOrdersToFollowUseCase(
+	orderRepo ports.OrderRepository,
+	sortOrderUseCase *SortOrdersUseCase,
+) *GetGetOrdersToFollowUseCase {
+	return &GetGetOrdersToFollowUseCase{
+		orderRepo:        orderRepo,
+		sortOrderUseCase: sortOrderUseCase,
+	}
+}
+
+func NewUpdateToPreparingUseCase(
+	orderRepo ports.OrderRepository,
+	validateToPrepare *ValidateOrderToPrepareUseCase,
+) *UpdateToPreparingUseCase {
+	return &UpdateToPreparingUseCase{
+		orderRepo:         orderRepo,
+		validateToPrepare: validateToPrepare,
+	}
+}
+
+func NewUpdateToDoneUseCase(
+	orderRepo ports.OrderRepository,
+	validateToDone *ValidateOrderToDoneUseCase,
+) *UpdateToDoneUseCase {
+	return &UpdateToDoneUseCase{
+		orderRepo:      orderRepo,
+		validateToDone: validateToDone,
+	}
+}
+
+func NewUpdateToDeliveredUseCase(
+	orderRepo ports.OrderRepository,
+	validateToDeliveredOrNot *ValidateOrderToDeliveredOrNotUseCase,
+) *UpdateToDeliveredUseCase {
+	return &UpdateToDeliveredUseCase{
+		orderRepo:                orderRepo,
+		validateToDeliveredOrNot: validateToDeliveredOrNot,
+	}
+}
+
+func NewUpdateToNotDeliveredUseCase(
+	orderRepo ports.OrderRepository,
+	validateToDeliveredOrNot *ValidateOrderToDeliveredOrNotUseCase,
+) *UpdateToNotDeliveredUseCase {
+	return &UpdateToNotDeliveredUseCase{
+		orderRepo:                orderRepo,
+		validateToDeliveredOrNot: validateToDeliveredOrNot,
+	}
+}
+
+func (usecase *CreateOrderUseCase) Execute(ctx context.Context, order domain.Order, date int64, wg *sync.WaitGroup, ch chan bool) (domain.OrderResponse, error) {
 	//Block this code below until this Channel be empty (by reading with <-ch)
 	ch <- true
 
-	order.TicketNumber = service.GenerateTicket(ctx, date)
+	order.TicketNumber = usecase.GenerateTicket(ctx, date)
 
-	response, err := service.orderRepo.CreateOrder(ctx, order)
+	response, err := usecase.orderRepo.CreateOrder(ctx, order)
 
 	if err != nil {
 		return domain.OrderResponse{}, responses.GetResponseError(err, "OrderService -> CreateOrder")
 	}
 
 	if order.CustomerID != nil {
-		customer, err := service.customerRepo.GetCustomerById(ctx, *order.CustomerID)
+		customer, err := usecase.customerRepo.GetCustomerById(ctx, *order.CustomerID)
 		if err == nil {
 			response.CustomerName = &customer.Name
 		}
@@ -62,12 +164,12 @@ func (service *OrderService) CreateOrder(ctx context.Context, order domain.Order
 	return response, nil
 }
 
-func (service *OrderService) GenerateTicket(ctx context.Context, date int64) int {
-	return service.orderRepo.GetNextTicketNumber(ctx, date)
+func (usecase *CreateOrderUseCase) GenerateTicket(ctx context.Context, date int64) int {
+	return usecase.orderRepo.GetNextTicketNumber(ctx, date)
 }
 
-func (service *OrderService) GetOrderById(ctx context.Context, orderId uint) (domain.OrderResponse, error) {
-	response, err := service.orderRepo.GetOrderById(ctx, orderId)
+func (usecase *GetOrderByIdUseCase) Execute(ctx context.Context, orderId uint) (domain.OrderResponse, error) {
+	response, err := usecase.orderRepo.GetOrderById(ctx, orderId)
 
 	if err != nil {
 		return domain.OrderResponse{}, responses.GetResponseError(err, "OrderService -> GetOrderById")
@@ -76,38 +178,38 @@ func (service *OrderService) GetOrderById(ctx context.Context, orderId uint) (do
 	return response, nil
 }
 
-func (service *OrderService) GetOrdersToPrepare(ctx context.Context) ([]domain.OrderResponse, error) {
-	response, err := service.orderRepo.GetOrdersToPrepare(ctx)
+func (usecase *GetOrdersToPrepareUseCase) Execute(ctx context.Context) ([]domain.OrderResponse, error) {
+	response, err := usecase.orderRepo.GetOrdersToPrepare(ctx)
 
 	if err != nil {
 		return []domain.OrderResponse{}, responses.GetResponseError(err, "OrderService -> GetOrdersToPrepare")
 	}
 
-	service.sortOrderUseCase.Execute(response)
+	usecase.sortOrderUseCase.Execute(response)
 
 	return response, nil
 }
 
-func (service *OrderService) GetOrdersToFollow(ctx context.Context) ([]domain.OrderResponse, error) {
-	response, err := service.orderRepo.GetOrdersToFollow(ctx)
+func (usecase *GetGetOrdersToFollowUseCase) Execute(ctx context.Context) ([]domain.OrderResponse, error) {
+	response, err := usecase.orderRepo.GetOrdersToFollow(ctx)
 
 	if err != nil {
 		return []domain.OrderResponse{}, responses.GetResponseError(err, "OrderService -> GetOrdersStatus")
 	}
 
-	service.sortOrderUseCase.Execute(response)
+	usecase.sortOrderUseCase.Execute(response)
 
 	return response, nil
 }
 
-func (service *OrderService) UpdateToPreparing(ctx context.Context, orderId uint) error {
-	err := service.validateToPrepare.Execute(ctx, orderId)
+func (usecase *UpdateToPreparingUseCase) Execute(ctx context.Context, orderId uint) error {
+	err := usecase.validateToPrepare.Execute(ctx, orderId)
 
 	if err != nil {
 		return responses.GetResponseError(err, "OrderService -> UpdateToPreparing")
 	}
 
-	err = service.orderRepo.UpdateToPreparing(ctx, orderId)
+	err = usecase.orderRepo.UpdateToPreparing(ctx, orderId)
 
 	if err != nil {
 		return responses.GetResponseError(err, "OrderService -> UpdateToPreparing")
@@ -116,14 +218,14 @@ func (service *OrderService) UpdateToPreparing(ctx context.Context, orderId uint
 	return nil
 }
 
-func (service *OrderService) UpdateToDone(ctx context.Context, orderId uint) error {
-	err := service.validateToDone.Execute(ctx, orderId)
+func (usecase *UpdateToDoneUseCase) Execute(ctx context.Context, orderId uint) error {
+	err := usecase.validateToDone.Execute(ctx, orderId)
 
 	if err != nil {
 		return responses.GetResponseError(err, "OrderService -> UpdateToDone")
 	}
 
-	err = service.orderRepo.UpdateToDone(ctx, orderId)
+	err = usecase.orderRepo.UpdateToDone(ctx, orderId)
 
 	if err != nil {
 		return responses.GetResponseError(err, "OrderService -> UpdateToDone")
@@ -132,14 +234,14 @@ func (service *OrderService) UpdateToDone(ctx context.Context, orderId uint) err
 	return nil
 }
 
-func (service *OrderService) UpdateToDelivered(ctx context.Context, orderId uint) error {
-	err := service.validateToDeliveredOrNot.Execute(ctx, orderId)
+func (usecase *UpdateToDeliveredUseCase) Execute(ctx context.Context, orderId uint) error {
+	err := usecase.validateToDeliveredOrNot.Execute(ctx, orderId)
 
 	if err != nil {
 		return responses.GetResponseError(err, "OrderService -> UpdateToDelivered")
 	}
 
-	err = service.orderRepo.UpdateToDelivered(ctx, orderId)
+	err = usecase.orderRepo.UpdateToDelivered(ctx, orderId)
 
 	if err != nil {
 		return responses.GetResponseError(err, "OrderService -> UpdateToDelivered")
@@ -148,14 +250,14 @@ func (service *OrderService) UpdateToDelivered(ctx context.Context, orderId uint
 	return nil
 }
 
-func (service *OrderService) UpdateToNotDelivered(ctx context.Context, orderId uint) error {
-	err := service.validateToDeliveredOrNot.Execute(ctx, orderId)
+func (usecase *UpdateToNotDeliveredUseCase) Execute(ctx context.Context, orderId uint) error {
+	err := usecase.validateToDeliveredOrNot.Execute(ctx, orderId)
 
 	if err != nil {
 		return responses.GetResponseError(err, "OrderService -> UpdateToNotDelivered")
 	}
 
-	err = service.orderRepo.UpdateToNotDelivered(ctx, orderId)
+	err = usecase.orderRepo.UpdateToNotDelivered(ctx, orderId)
 
 	if err != nil {
 		return responses.GetResponseError(err, "OrderService -> UpdateToNotDelivered")

@@ -19,7 +19,7 @@ import (
 // @Success 200 {object} domain.PaymentResponse
 // @Failure 400 "Payment has required fields"
 // @Router /api/payments [post]
-func CreatePaymentHandler(productService *usecases.PaymentService) http.HandlerFunc {
+func CreatePaymentHandler(payOrder *usecases.PayOrderUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var combo domain.Payment
 
@@ -34,7 +34,7 @@ func CreatePaymentHandler(productService *usecases.PaymentService) http.HandlerF
 			return
 		}
 
-		paymentResponse, err := productService.PayOrder(context.Background(), combo)
+		paymentResponse, err := payOrder.Execute(context.Background(), combo)
 
 		if err != nil {
 			log.Print("create payment", map[string]interface{}{
@@ -50,14 +50,14 @@ func CreatePaymentHandler(productService *usecases.PaymentService) http.HandlerF
 }
 
 // @Summary Get payment types
-// @Description Get payment type, like [DEBIT, CREDIT]
+// @Description Get payment type, like [DEBIT, CREDIT, QR Code (Mercado Pago)]
 // @Tags Payment
 // @Accept json
 // @Produce json
 // @Success 200 {object} []string
 // @Router /api/payments/type [get]
-func GetPaymentTypeHandler(paymentService *usecases.PaymentService) http.HandlerFunc {
+func GetPaymentTypeHandler(getPaymentTypes *usecases.GetPaymentTypesUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		httpserver.SendResponseSuccess(w, paymentService.GetPaymentTypes())
+		httpserver.SendResponseSuccess(w, getPaymentTypes.Execute())
 	}
 }

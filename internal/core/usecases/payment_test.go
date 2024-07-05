@@ -16,12 +16,11 @@ func TestPaymentServices(t *testing.T) {
 		t.Parallel()
 
 		mockPaymentRepo := new(MockPaymentRepository)
-		mockPaymentGatewayRepo := new(MockPaymentGatewayRepository)
-		sut := NewPaymentService(mockPaymentRepo, mockPaymentGatewayRepo)
+		sut := NewGetPaymentTypesUseCasee(mockPaymentRepo)
 
 		mockPaymentRepo.On("GetPaymentTypes").Return([]string{"Crédito", "Débito"})
 
-		response := sut.GetPaymentTypes()
+		response := sut.Execute()
 
 		assert.NotEmpty(t, response)
 
@@ -33,7 +32,7 @@ func TestPaymentServices(t *testing.T) {
 
 		mockPaymentRepo := new(MockPaymentRepository)
 		mockPaymentGatewayRepo := new(MockPaymentGatewayRepository)
-		sut := NewPaymentService(mockPaymentRepo, mockPaymentGatewayRepo)
+		sut := NewPayOrderUseCase(mockPaymentRepo, mockPaymentGatewayRepo)
 
 		ctx := context.TODO()
 
@@ -41,7 +40,7 @@ func TestPaymentServices(t *testing.T) {
 		mockPaymentGatewayRepo.On("Pay", paymentResponse, paymentCreation).Return(paymentGatewayResponse, nil)
 		mockPaymentRepo.On("FinishPaymentWithSuccess", ctx, uint(1)).Return(nil)
 
-		response, err := sut.PayOrder(ctx, paymentCreation)
+		response, err := sut.Execute(ctx, paymentCreation)
 
 		mockPaymentRepo.AssertExpectations(t)
 		mockPaymentGatewayRepo.AssertExpectations(t)
@@ -55,7 +54,7 @@ func TestPaymentServices(t *testing.T) {
 
 		mockPaymentRepo := new(MockPaymentRepository)
 		mockPaymentGatewayRepo := new(MockPaymentGatewayRepository)
-		sut := NewPaymentService(mockPaymentRepo, mockPaymentGatewayRepo)
+		sut := NewPayOrderUseCase(mockPaymentRepo, mockPaymentGatewayRepo)
 
 		ctx := context.TODO()
 
@@ -64,7 +63,7 @@ func TestPaymentServices(t *testing.T) {
 			Message: "DATABASE_CONFLICT_ERROR",
 		})
 
-		response, err := sut.PayOrder(ctx, paymentCreation)
+		response, err := sut.Execute(ctx, paymentCreation)
 
 		mockPaymentRepo.AssertExpectations(t)
 
@@ -81,7 +80,7 @@ func TestPaymentServices(t *testing.T) {
 
 		mockPaymentRepo := new(MockPaymentRepository)
 		mockPaymentGatewayRepo := new(MockPaymentGatewayRepository)
-		sut := NewPaymentService(mockPaymentRepo, mockPaymentGatewayRepo)
+		sut := NewPayOrderUseCase(mockPaymentRepo, mockPaymentGatewayRepo)
 
 		ctx := context.TODO()
 
@@ -92,7 +91,7 @@ func TestPaymentServices(t *testing.T) {
 		})
 		mockPaymentRepo.On("FinishPaymentWithError", ctx, uint(1)).Return(nil)
 
-		response, err := sut.PayOrder(ctx, paymentCreation)
+		response, err := sut.Execute(ctx, paymentCreation)
 
 		mockPaymentRepo.AssertExpectations(t)
 		mockPaymentGatewayRepo.AssertExpectations(t)
@@ -110,7 +109,7 @@ func TestPaymentServices(t *testing.T) {
 
 		mockPaymentRepo := new(MockPaymentRepository)
 		mockPaymentGatewayRepo := new(MockPaymentGatewayRepository)
-		sut := NewPaymentService(mockPaymentRepo, mockPaymentGatewayRepo)
+		sut := NewPayOrderUseCase(mockPaymentRepo, mockPaymentGatewayRepo)
 
 		ctx := context.TODO()
 
@@ -121,7 +120,7 @@ func TestPaymentServices(t *testing.T) {
 			Message: "DATABASE_CONFLICT_ERROR",
 		})
 
-		response, err := sut.PayOrder(ctx, paymentCreation)
+		response, err := sut.Execute(ctx, paymentCreation)
 
 		mockPaymentRepo.AssertExpectations(t)
 		mockPaymentGatewayRepo.AssertExpectations(t)

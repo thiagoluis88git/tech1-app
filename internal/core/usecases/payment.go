@@ -8,29 +8,39 @@ import (
 	"github.com/thiagoluis88git/tech1/pkg/responses"
 )
 
-type PaymentService struct {
+type PayOrderUseCase struct {
 	paymentRepo    ports.PaymentRepository
 	paymentGateway ports.PaymentGateway
 }
 
-func NewPaymentService(paymentRepo ports.PaymentRepository, paymentGateway ports.PaymentGateway) *PaymentService {
-	return &PaymentService{
+type GetPaymentTypesUseCase struct {
+	paymentRepo ports.PaymentRepository
+}
+
+func NewPayOrderUseCase(paymentRepo ports.PaymentRepository, paymentGateway ports.PaymentGateway) *PayOrderUseCase {
+	return &PayOrderUseCase{
 		paymentRepo:    paymentRepo,
 		paymentGateway: paymentGateway,
 	}
 }
 
-func (service *PaymentService) PayOrder(ctx context.Context, payment domain.Payment) (domain.PaymentResponse, error) {
-	paymentResponse, err := service.paymentRepo.CreatePaymentOrder(ctx, payment)
+func NewGetPaymentTypesUseCasee(paymentRepo ports.PaymentRepository) *GetPaymentTypesUseCase {
+	return &GetPaymentTypesUseCase{
+		paymentRepo: paymentRepo,
+	}
+}
+
+func (usecase *PayOrderUseCase) Execute(ctx context.Context, payment domain.Payment) (domain.PaymentResponse, error) {
+	paymentResponse, err := usecase.paymentRepo.CreatePaymentOrder(ctx, payment)
 
 	if err != nil {
 		return domain.PaymentResponse{}, responses.GetResponseError(err, "PaymentService")
 	}
 
-	gatewayResponse, err := service.paymentGateway.Pay(paymentResponse, payment)
+	gatewayResponse, err := usecase.paymentGateway.Pay(paymentResponse, payment)
 
 	if err != nil {
-		paymentWithError := service.paymentRepo.FinishPaymentWithError(ctx, paymentResponse.PaymentId)
+		paymentWithError := usecase.paymentRepo.FinishPaymentWithError(ctx, paymentResponse.PaymentId)
 
 		if paymentWithError != nil {
 			return domain.PaymentResponse{}, responses.GetResponseError(paymentWithError, "PaymentService")
@@ -39,7 +49,7 @@ func (service *PaymentService) PayOrder(ctx context.Context, payment domain.Paym
 		return domain.PaymentResponse{}, responses.GetResponseError(err, "PaymentService")
 	}
 
-	err = service.paymentRepo.FinishPaymentWithSuccess(ctx, paymentResponse.PaymentId)
+	err = usecase.paymentRepo.FinishPaymentWithSuccess(ctx, paymentResponse.PaymentId)
 
 	if err != nil {
 		return domain.PaymentResponse{}, responses.GetResponseError(err, "PaymentService")
@@ -52,6 +62,6 @@ func (service *PaymentService) PayOrder(ctx context.Context, payment domain.Paym
 	}, nil
 }
 
-func (service *PaymentService) GetPaymentTypes() []string {
-	return service.paymentRepo.GetPaymentTypes()
+func (usecase *GetPaymentTypesUseCase) Execute() []string {
+	return usecase.paymentRepo.GetPaymentTypes()
 }

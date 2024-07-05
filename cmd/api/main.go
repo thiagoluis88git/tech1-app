@@ -61,7 +61,8 @@ func main() {
 
 	paymentRepo := repositories.NewPaymentRepository(db)
 	paymentGateway := external.NewPaymentGateway()
-	paymentService := usecases.NewPaymentService(paymentRepo, paymentGateway)
+	payOrderUseCase := usecases.NewPayOrderUseCase(paymentRepo, paymentGateway)
+	getPaymentTypesUseCase := usecases.NewGetPaymentTypesUseCasee(paymentRepo)
 
 	productRepo := repositories.NewProductRepository(db)
 	validateProductCategoryUseCase := usecases.NewValidateProductCategoryUseCase()
@@ -81,13 +82,38 @@ func main() {
 	validateToDone := usecases.NewValidateOrderToDoneUseCase(orderRepo)
 	validateToDeliveredOrNot := usecases.NewValidateOrderToDeliveredOrNotUseCase(orderRepo)
 	sortOrders := usecases.NewSortOrdersUseCase()
-	orderService := usecases.NewOrderService(
+	createOrderUseCase := usecases.NewCreateOrderUseCase(
 		orderRepo,
 		customerRepo,
 		validateToPreare,
 		validateToDone,
 		validateToDeliveredOrNot,
 		sortOrders,
+	)
+	getOrderByIdUseCase := usecases.NewGetOrderByIdUseCase(orderRepo)
+	getOrdersToPrepareUseCase := usecases.NewGetOrdersToPrepareUseCase(
+		orderRepo,
+		sortOrders,
+	)
+	getOrdersToFollowUseCase := usecases.NewGetOrdersToFollowUseCase(
+		orderRepo,
+		sortOrders,
+	)
+	updateToPreparingUseCase := usecases.NewUpdateToPreparingUseCase(
+		orderRepo,
+		validateToPreare,
+	)
+	updateToDoneUseCase := usecases.NewUpdateToDoneUseCase(
+		orderRepo,
+		validateToDone,
+	)
+	updateToDeliveredUseCase := usecases.NewUpdateToDeliveredUseCase(
+		orderRepo,
+		validateToDeliveredOrNot,
+	)
+	updateToNotDeliveredUseCase := usecases.NewUpdateToNotDeliveredUseCase(
+		orderRepo,
+		validateToDeliveredOrNot,
 	)
 
 	qrCodeRemoteDataSource := remote.NewMercadoLivreDataSource(httpClient)
@@ -120,17 +146,17 @@ func main() {
 	router.Get("/api/products/categories", handler.GetCategoriesHandler(getCategoriesUseCase))
 	router.Get("/api/products/categories/{category}", handler.GetProductsByCategoryHandler(getProductsUseCase))
 
-	router.Get("/api/payments/types", handler.GetPaymentTypeHandler(paymentService))
-	router.Post("/api/payments", handler.CreatePaymentHandler(paymentService))
+	router.Get("/api/payments/types", handler.GetPaymentTypeHandler(getPaymentTypesUseCase))
+	router.Post("/api/payments", handler.CreatePaymentHandler(payOrderUseCase))
 
-	router.Post("/api/orders", handler.CreateOrderHandler(orderService))
-	router.Get("/api/orders/{id}", handler.GetOrderByIdHandler(orderService))
-	router.Get("/api/orders/to-prepare", handler.GetOrdersToPrepareHandler(orderService))
-	router.Get("/api/orders/follow", handler.GetOrdersToFollowHandler(orderService))
-	router.Put("/api/orders/{id}/preparing", handler.UpdateOrderPreparingHandler(orderService))
-	router.Put("/api/orders/{id}/done", handler.UpdateOrderDoneHandler(orderService))
-	router.Put("/api/orders/{id}/delivered", handler.UpdateOrderDeliveredHandler(orderService))
-	router.Put("/api/orders/{id}/not-delivered", handler.UpdateOrderNotDeliveredandler(orderService))
+	router.Post("/api/orders", handler.CreateOrderHandler(createOrderUseCase))
+	router.Get("/api/orders/{id}", handler.GetOrderByIdHandler(getOrderByIdUseCase))
+	router.Get("/api/orders/to-prepare", handler.GetOrdersToPrepareHandler(getOrdersToPrepareUseCase))
+	router.Get("/api/orders/follow", handler.GetOrdersToFollowHandler(getOrdersToFollowUseCase))
+	router.Put("/api/orders/{id}/preparing", handler.UpdateOrderPreparingHandler(updateToPreparingUseCase))
+	router.Put("/api/orders/{id}/done", handler.UpdateOrderDoneHandler(updateToDoneUseCase))
+	router.Put("/api/orders/{id}/delivered", handler.UpdateOrderDeliveredHandler(updateToDeliveredUseCase))
+	router.Put("/api/orders/{id}/not-delivered", handler.UpdateOrderNotDeliveredandler(updateToNotDeliveredUseCase))
 
 	router.Get("/swagger/*", httpSwagger.Handler(
 		httpSwagger.URL("http://localhost:3210/swagger/doc.json"),

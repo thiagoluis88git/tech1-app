@@ -23,7 +23,7 @@ import (
 // @Success 200 {object} domain.OrderResponse
 // @Failure 400 "Order has required fields"
 // @Router /api/orders [post]
-func CreateOrderHandler(orderService *usecases.OrderService) http.HandlerFunc {
+func CreateOrderHandler(createOrder *usecases.CreateOrderUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var order domain.Order
 
@@ -46,7 +46,7 @@ func CreateOrderHandler(orderService *usecases.OrderService) http.HandlerFunc {
 		ch := make(chan bool, 1)
 		waitGroup.Add(1)
 
-		response, err := orderService.CreateOrder(r.Context(), order, orderDate.UnixMilli(), &waitGroup, ch)
+		response, err := createOrder.Execute(r.Context(), order, orderDate.UnixMilli(), &waitGroup, ch)
 
 		if err != nil {
 			log.Print("create order", map[string]interface{}{
@@ -70,7 +70,7 @@ func CreateOrderHandler(orderService *usecases.OrderService) http.HandlerFunc {
 // @Success 200 {object} domain.OrderResponse
 // @Failure 400 "Order has required fields"
 // @Router /api/orders/{id} [get]
-func GetOrderByIdHandler(orderService *usecases.OrderService) http.HandlerFunc {
+func GetOrderByIdHandler(getOrderById *usecases.GetOrderByIdUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		orderIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -94,7 +94,7 @@ func GetOrderByIdHandler(orderService *usecases.OrderService) http.HandlerFunc {
 			return
 		}
 
-		response, err := orderService.GetOrderById(r.Context(), uint(orderId))
+		response, err := getOrderById.Execute(r.Context(), uint(orderId))
 
 		if err != nil {
 			log.Print("get order by id", map[string]interface{}{
@@ -116,9 +116,9 @@ func GetOrderByIdHandler(orderService *usecases.OrderService) http.HandlerFunc {
 // @Produce json
 // @Success 200 {object} []domain.OrderResponse
 // @Router /api/orders/to-prepare [get]
-func GetOrdersToPrepareHandler(orderService *usecases.OrderService) http.HandlerFunc {
+func GetOrdersToPrepareHandler(getOrdersToPrepare *usecases.GetOrdersToPrepareUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		response, err := orderService.GetOrdersToPrepare(r.Context())
+		response, err := getOrdersToPrepare.Execute(r.Context())
 
 		if err != nil {
 			log.Print("get orders to prepare", map[string]interface{}{
@@ -140,9 +140,9 @@ func GetOrdersToPrepareHandler(orderService *usecases.OrderService) http.Handler
 // @Produce json
 // @Success 200 {object} []domain.OrderResponse
 // @Router /api/orders/status [get]
-func GetOrdersToFollowHandler(orderService *usecases.OrderService) http.HandlerFunc {
+func GetOrdersToFollowHandler(getOrdersToFollow *usecases.GetGetOrdersToFollowUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		response, err := orderService.GetOrdersToFollow(r.Context())
+		response, err := getOrdersToFollow.Execute(r.Context())
 
 		if err != nil {
 			log.Print("get orders status", map[string]interface{}{
@@ -167,7 +167,7 @@ func GetOrdersToFollowHandler(orderService *usecases.OrderService) http.HandlerF
 // @Failure 404 "Order not found"
 // @Failure 428 "Precondition failed: Need to be with status Criado"
 // @Router /api/orders/{id}/preparing [put]
-func UpdateOrderPreparingHandler(orderService *usecases.OrderService) http.HandlerFunc {
+func UpdateOrderPreparingHandler(updateToPreparing *usecases.UpdateToPreparingUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -191,7 +191,7 @@ func UpdateOrderPreparingHandler(orderService *usecases.OrderService) http.Handl
 			return
 		}
 
-		err = orderService.UpdateToPreparing(r.Context(), id)
+		err = updateToPreparing.Execute(r.Context(), id)
 
 		if err != nil {
 			log.Print("update order status", map[string]interface{}{
@@ -216,7 +216,7 @@ func UpdateOrderPreparingHandler(orderService *usecases.OrderService) http.Handl
 // @Failure 404 "Order not found"
 // @Failure 428 "Precondition failed: Need to be with status Preparando"
 // @Router /api/orders/{id}/done [put]
-func UpdateOrderDoneHandler(orderService *usecases.OrderService) http.HandlerFunc {
+func UpdateOrderDoneHandler(updateToDone *usecases.UpdateToDoneUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -240,7 +240,7 @@ func UpdateOrderDoneHandler(orderService *usecases.OrderService) http.HandlerFun
 			return
 		}
 
-		err = orderService.UpdateToDone(r.Context(), id)
+		err = updateToDone.Execute(r.Context(), id)
 
 		if err != nil {
 			log.Print("update order status", map[string]interface{}{
@@ -265,7 +265,7 @@ func UpdateOrderDoneHandler(orderService *usecases.OrderService) http.HandlerFun
 // @Failure 404 "Order not found"
 // @Failure 428 "Precondition failed: Need to be with status Finalizado"
 // @Router /api/orders/{id}/delivered [put]
-func UpdateOrderDeliveredHandler(orderService *usecases.OrderService) http.HandlerFunc {
+func UpdateOrderDeliveredHandler(updateToDelivered *usecases.UpdateToDeliveredUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -289,7 +289,7 @@ func UpdateOrderDeliveredHandler(orderService *usecases.OrderService) http.Handl
 			return
 		}
 
-		err = orderService.UpdateToDelivered(r.Context(), id)
+		err = updateToDelivered.Execute(r.Context(), id)
 
 		if err != nil {
 			log.Print("update order status", map[string]interface{}{
@@ -314,7 +314,7 @@ func UpdateOrderDeliveredHandler(orderService *usecases.OrderService) http.Handl
 // @Failure 404 "Order not found"
 // @Failure 428 "Precondition failed: Need to be with status Finalizado"
 // @Router /api/orders/{id}/not-delivered [put]
-func UpdateOrderNotDeliveredandler(orderService *usecases.OrderService) http.HandlerFunc {
+func UpdateOrderNotDeliveredandler(updateToNotDelivered *usecases.UpdateToNotDeliveredUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -338,7 +338,7 @@ func UpdateOrderNotDeliveredandler(orderService *usecases.OrderService) http.Han
 			return
 		}
 
-		err = orderService.UpdateToNotDelivered(r.Context(), id)
+		err = updateToNotDelivered.Execute(r.Context(), id)
 
 		if err != nil {
 			log.Print("update order status", map[string]interface{}{
