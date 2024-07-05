@@ -20,7 +20,7 @@ import (
 // @Failure 400 "Customer has required fields"
 // @Failure 409 "This Customer is already added"
 // @Router /api/customers [post]
-func CreateCustomerHandler(customerService *usecases.CustomerService) http.HandlerFunc {
+func CreateCustomerHandler(createCustomer *usecases.CreateCustomerUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var customer domain.Customer
 
@@ -35,7 +35,7 @@ func CreateCustomerHandler(customerService *usecases.CustomerService) http.Handl
 			return
 		}
 
-		response, err := customerService.CreateCustomer(r.Context(), customer)
+		response, err := createCustomer.Execute(r.Context(), customer)
 
 		if err != nil {
 			log.Print("create customer", map[string]interface{}{
@@ -61,7 +61,7 @@ func CreateCustomerHandler(customerService *usecases.CustomerService) http.Handl
 // @Failure 400 "Customer has required fields"
 // @Failure 404 "Customer not found"
 // @Router /api/customers/{id} [put]
-func UpdateCustomerHandler(customerService *usecases.CustomerService) http.HandlerFunc {
+func UpdateCustomerHandler(updateCustomer *usecases.UpdateCustomerUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		customerIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -98,7 +98,7 @@ func UpdateCustomerHandler(customerService *usecases.CustomerService) http.Handl
 		}
 
 		customer.ID = uint(customerId)
-		err = customerService.UpdateCustomer(r.Context(), customer)
+		err = updateCustomer.Execute(r.Context(), customer)
 
 		if err != nil {
 			log.Print("update customer", map[string]interface{}{
@@ -122,7 +122,7 @@ func UpdateCustomerHandler(customerService *usecases.CustomerService) http.Handl
 // @Success 200 {object} domain.Customer
 // @Failure 404 "Customer not found"
 // @Router /api/customers/{id} [get]
-func GetCustomerByIdHandler(customerService *usecases.CustomerService) http.HandlerFunc {
+func GetCustomerByIdHandler(getCustomerById *usecases.GetCustomerByIdUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		customerIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -146,7 +146,7 @@ func GetCustomerByIdHandler(customerService *usecases.CustomerService) http.Hand
 			return
 		}
 
-		customer, err := customerService.GetCustomerById(r.Context(), uint(customerId))
+		customer, err := getCustomerById.Execute(r.Context(), uint(customerId))
 
 		if err != nil {
 			log.Print("get customer by id", map[string]interface{}{
@@ -170,7 +170,7 @@ func GetCustomerByIdHandler(customerService *usecases.CustomerService) http.Hand
 // @Success 200 {object} domain.Customer
 // @Failure 404 "Customer not found"
 // @Router /api/customers/login [post]
-func GetCustomerByCPFHandler(customerService *usecases.CustomerService) http.HandlerFunc {
+func GetCustomerByCPFHandler(getCustomerByCPF *usecases.GetCustomerByCPFUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var customerForm domain.CustomerForm
 
@@ -185,7 +185,7 @@ func GetCustomerByCPFHandler(customerService *usecases.CustomerService) http.Han
 			return
 		}
 
-		customer, err := customerService.GetCustomerByCPF(r.Context(), customerForm.CPF)
+		customer, err := getCustomerByCPF.Execute(r.Context(), customerForm.CPF)
 
 		if err != nil {
 			log.Print("get customer by id", map[string]interface{}{

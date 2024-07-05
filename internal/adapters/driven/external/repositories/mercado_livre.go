@@ -18,7 +18,7 @@ type MercadoLivreRepositoryImpl struct {
 	webHook string
 }
 
-func NewMercadoLivreRepository(ds remote.MercadoLivreDataSource) ports.MercadoLivreRepository {
+func NewMercadoLivreRepository(ds remote.MercadoLivreDataSource) ports.QRCodePaymentRepository {
 	return &MercadoLivreRepositoryImpl{
 		ds:      ds,
 		webHook: environment.GetWebhookMercadoLivrePaymentURL(),
@@ -35,9 +35,9 @@ func (repo *MercadoLivreRepositoryImpl) Generate(ctx context.Context, token stri
 		totalAmount += value.ProductPrice
 
 		items = append(items, model.Item{
-			Description: fmt.Sprintf("Product: %v", productId),
+			Description: fmt.Sprintf("FastFood Pagamento - Produto: %v", productId),
 			SkuNumber:   productId,
-			Title:       productId,
+			Title:       fmt.Sprintf("FastFood Pagamento - Produto: %v", productId),
 			UnitMeasure: "unit",
 			Quantity:    1,
 			UnitPrice:   value.ProductPrice,
@@ -53,7 +53,7 @@ func (repo *MercadoLivreRepositoryImpl) Generate(ctx context.Context, token stri
 		ExpirationDate:    expirationDate.Format("2006-01-02T15:04:05.999Z07:00"),
 		ExternalReference: fmt.Sprintf("%v|%v", strconv.Itoa(orderID), strconv.Itoa(int(form.PaymentID))),
 		Items:             items,
-		Title:             strconv.Itoa(form.TicketNumber),
+		Title:             fmt.Sprintf("FastFood Pagamento - Nr: %v", form.TicketNumber),
 		NotificationUrl:   repo.webHook,
 	}
 
@@ -68,7 +68,7 @@ func (repo *MercadoLivreRepositoryImpl) Generate(ctx context.Context, token stri
 	}, nil
 }
 
-func (repo *MercadoLivreRepositoryImpl) GetMercadoLivrePaymentData(ctx context.Context, token string, endpoint string) (domain.MercadoLivrePayment, error) {
+func (repo *MercadoLivreRepositoryImpl) GetQRCodePaymentData(ctx context.Context, token string, endpoint string) (domain.MercadoLivrePayment, error) {
 	response, err := repo.ds.GetPaymentData(ctx, token, endpoint)
 
 	if err != nil {

@@ -75,7 +75,10 @@ func main() {
 
 	customerRepo := repositories.NewCustomerRepository(db)
 	validateCPFUseCase := usecases.NewValidateCPFUseCase()
-	customerService := usecases.NewCustomerService(validateCPFUseCase, customerRepo)
+	createCustomerUseCase := usecases.NewCreateCustomerUseCase(validateCPFUseCase, customerRepo)
+	updateCustomerUseCase := usecases.NewUpdateCustomerUseCase(validateCPFUseCase, customerRepo)
+	getCustomerByIdUseCase := usecases.NewGetCustomerByIdUseCase(customerRepo)
+	getCustomerByCPFUseCase := usecases.NewGetCustomerByCPFUseCase(validateCPFUseCase, customerRepo)
 
 	orderRepo := repositories.NewOrderRespository(db)
 	validateToPreare := usecases.NewValidateOrderToPrepareUseCase(orderRepo)
@@ -118,7 +121,13 @@ func main() {
 
 	qrCodeRemoteDataSource := remote.NewMercadoLivreDataSource(httpClient)
 	extQRCodeGeneratorRepository := extRepo.NewMercadoLivreRepository(qrCodeRemoteDataSource)
-	mercadoLivreService := usecases.NewMercadoLivreService(
+	generateQRCodePaymentUseCase := usecases.NewGenerateQRCodePaymentUseCase(
+		extQRCodeGeneratorRepository,
+		orderRepo,
+		paymentRepo,
+	)
+
+	finishOrderForQRCodeUseCase := usecases.NewFinishOrderForQRCodeUseCase(
 		extQRCodeGeneratorRepository,
 		orderRepo,
 		paymentRepo,
@@ -131,13 +140,13 @@ func main() {
 		})
 	})
 
-	router.Post("/api/qrcode/generate", handler.GenerateQRCodeHandler(mercadoLivreService))
-	router.Post("/api/webhook/ml/payment", webhook.PostMercadoLivreWebhook(mercadoLivreService))
+	router.Post("/api/qrcode/generate", handler.GenerateQRCodeHandler(generateQRCodePaymentUseCase))
+	router.Post("/api/webhook/ml/payment", webhook.PostMercadoLivreWebhook(finishOrderForQRCodeUseCase))
 
-	router.Post("/api/customers", handler.CreateCustomerHandler(customerService))
-	router.Put("/api/customers/{id}", handler.UpdateCustomerHandler(customerService))
-	router.Get("/api/customers/{id}", handler.GetCustomerByIdHandler(customerService))
-	router.Post("/api/customers/login", handler.GetCustomerByCPFHandler(customerService))
+	router.Post("/api/customers", handler.CreateCustomerHandler(createCustomerUseCase))
+	router.Put("/api/customers/{id}", handler.UpdateCustomerHandler(updateCustomerUseCase))
+	router.Get("/api/customers/{id}", handler.GetCustomerByIdHandler(getCustomerByIdUseCase))
+	router.Post("/api/customers/login", handler.GetCustomerByCPFHandler(getCustomerByCPFUseCase))
 
 	router.Post("/api/products", handler.CreateProductHandler(createProductUseCase))
 	router.Delete("/api/products/{id}", handler.DeleteProductHandler(deleteProductUseCase))

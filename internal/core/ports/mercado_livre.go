@@ -6,7 +6,7 @@ import (
 	"github.com/thiagoluis88git/tech1/internal/core/domain"
 )
 
-type MercadoLivreRepository interface {
+type QRCodePaymentRepository interface {
 	Generate(ctx context.Context, token string, form domain.Order, orderID int) (domain.QRCodeDataResponse, error)
-	GetMercadoLivrePaymentData(ctx context.Context, token string, endpoint string) (domain.MercadoLivrePayment, error)
+	GetQRCodePaymentData(ctx context.Context, token string, endpoint string) (domain.MercadoLivrePayment, error)
 }

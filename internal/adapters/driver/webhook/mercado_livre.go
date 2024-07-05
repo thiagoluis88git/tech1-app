@@ -20,7 +20,7 @@ import (
 // @Success 204
 // @Failure 406 "StatusNotAcceptable - Topic is not 'merchant_order'"
 // @Router /api/webhook/ml/payment [post]
-func PostMercadoLivreWebhook(mercadoLivreService *usecases.MercadoLivreService) http.HandlerFunc {
+func PostMercadoLivreWebhook(finishOrderForQRCode *usecases.FinishOrderForQRCodeUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var form domain.MercadoLivrePaymentForm
 
@@ -36,7 +36,7 @@ func PostMercadoLivreWebhook(mercadoLivreService *usecases.MercadoLivreService) 
 		}
 
 		token := environment.GetQRCodeGatewayToken()
-		err = mercadoLivreService.FinishOrder(r.Context(), token, form)
+		err = finishOrderForQRCode.Execute(r.Context(), token, form)
 
 		if err != nil {
 			log.Print("post mercado livre webhook", map[string]interface{}{

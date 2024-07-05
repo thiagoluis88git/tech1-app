@@ -9,19 +9,53 @@ import (
 	"github.com/thiagoluis88git/tech1/pkg/responses"
 )
 
-type CustomerService struct {
+type CreateCustomerUseCase struct {
 	validateCPFUseCase *ValidateCPFUseCase
 	repository         ports.CustomerRepository
 }
 
-func NewCustomerService(validateCPFUseCase *ValidateCPFUseCase, repository ports.CustomerRepository) *CustomerService {
-	return &CustomerService{
+type UpdateCustomerUseCase struct {
+	validateCPFUseCase *ValidateCPFUseCase
+	repository         ports.CustomerRepository
+}
+
+type GetCustomerByCPFUseCase struct {
+	validateCPFUseCase *ValidateCPFUseCase
+	repository         ports.CustomerRepository
+}
+
+type GetCustomerByIdUseCase struct {
+	repository ports.CustomerRepository
+}
+
+func NewUpdateCustomerUseCase(validateCPFUseCase *ValidateCPFUseCase, repository ports.CustomerRepository) *UpdateCustomerUseCase {
+	return &UpdateCustomerUseCase{
 		validateCPFUseCase: validateCPFUseCase,
 		repository:         repository,
 	}
 }
 
-func (service *CustomerService) CreateCustomer(ctx context.Context, customer domain.Customer) (domain.CustomerResponse, error) {
+func NewCreateCustomerUseCase(validateCPFUseCase *ValidateCPFUseCase, repository ports.CustomerRepository) *CreateCustomerUseCase {
+	return &CreateCustomerUseCase{
+		validateCPFUseCase: validateCPFUseCase,
+		repository:         repository,
+	}
+}
+
+func NewGetCustomerByCPFUseCase(validateCPFUseCase *ValidateCPFUseCase, repository ports.CustomerRepository) *GetCustomerByCPFUseCase {
+	return &GetCustomerByCPFUseCase{
+		validateCPFUseCase: validateCPFUseCase,
+		repository:         repository,
+	}
+}
+
+func NewGetCustomerByIdUseCase(repository ports.CustomerRepository) *GetCustomerByIdUseCase {
+	return &GetCustomerByIdUseCase{
+		repository: repository,
+	}
+}
+
+func (service *CreateCustomerUseCase) Execute(ctx context.Context, customer domain.Customer) (domain.CustomerResponse, error) {
 	cleanedCPF, validate := service.validateCPFUseCase.Execute(customer.CPF)
 
 	if !validate {
@@ -43,7 +77,7 @@ func (service *CustomerService) CreateCustomer(ctx context.Context, customer dom
 	}, nil
 }
 
-func (service *CustomerService) UpdateCustomer(ctx context.Context, customer domain.Customer) error {
+func (service *UpdateCustomerUseCase) Execute(ctx context.Context, customer domain.Customer) error {
 	cleanedCPF, validate := service.validateCPFUseCase.Execute(customer.CPF)
 
 	if !validate {
@@ -63,7 +97,7 @@ func (service *CustomerService) UpdateCustomer(ctx context.Context, customer dom
 	return nil
 }
 
-func (service *CustomerService) GetCustomerById(ctx context.Context, id uint) (domain.Customer, error) {
+func (service *GetCustomerByIdUseCase) Execute(ctx context.Context, id uint) (domain.Customer, error) {
 	customer, err := service.repository.GetCustomerById(ctx, id)
 
 	if err != nil {
@@ -73,7 +107,7 @@ func (service *CustomerService) GetCustomerById(ctx context.Context, id uint) (d
 	return customer, nil
 }
 
-func (service *CustomerService) GetCustomerByCPF(ctx context.Context, cpf string) (domain.Customer, error) {
+func (service *GetCustomerByCPFUseCase) Execute(ctx context.Context, cpf string) (domain.Customer, error) {
 	cleanedCPF, validate := service.validateCPFUseCase.Execute(cpf)
 
 	if !validate {

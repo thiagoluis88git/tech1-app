@@ -12,25 +12,49 @@ import (
 	"github.com/thiagoluis88git/tech1/pkg/responses"
 )
 
-type MercadoLivreService struct {
-	repository        ports.MercadoLivreRepository
+type GenerateQRCodePaymentUseCase struct {
+	repository        ports.QRCodePaymentRepository
 	orderRepository   ports.OrderRepository
 	paymentRepository ports.PaymentRepository
 }
 
-func NewMercadoLivreService(
-	repository ports.MercadoLivreRepository,
+type FinishOrderForQRCodeUseCase struct {
+	repository        ports.QRCodePaymentRepository
+	orderRepository   ports.OrderRepository
+	paymentRepository ports.PaymentRepository
+}
+
+type MercadoLivreService struct {
+	repository        ports.QRCodePaymentRepository
+	orderRepository   ports.OrderRepository
+	paymentRepository ports.PaymentRepository
+}
+
+func NewGenerateQRCodePaymentUseCase(
+	repository ports.QRCodePaymentRepository,
 	orderRepository ports.OrderRepository,
 	paymentRepository ports.PaymentRepository,
-) *MercadoLivreService {
-	return &MercadoLivreService{
+) *GenerateQRCodePaymentUseCase {
+	return &GenerateQRCodePaymentUseCase{
 		repository:        repository,
 		orderRepository:   orderRepository,
 		paymentRepository: paymentRepository,
 	}
 }
 
-func (service *MercadoLivreService) GenerateQRCode(
+func NewFinishOrderForQRCodeUseCase(
+	repository ports.QRCodePaymentRepository,
+	orderRepository ports.OrderRepository,
+	paymentRepository ports.PaymentRepository,
+) *FinishOrderForQRCodeUseCase {
+	return &FinishOrderForQRCodeUseCase{
+		repository:        repository,
+		orderRepository:   orderRepository,
+		paymentRepository: paymentRepository,
+	}
+}
+
+func (service *GenerateQRCodePaymentUseCase) Execute(
 	ctx context.Context,
 	token string,
 	qrOrder domain.QRCodeOrder,
@@ -89,14 +113,14 @@ func (service *MercadoLivreService) GenerateQRCode(
 	return qrCode, nil
 }
 
-func (service *MercadoLivreService) FinishOrder(ctx context.Context, token string, form domain.MercadoLivrePaymentForm) error {
+func (service *FinishOrderForQRCodeUseCase) Execute(ctx context.Context, token string, form domain.MercadoLivrePaymentForm) error {
 	if form.Topic != "merchant_order" {
 		return &responses.NetworkError{
 			Code: http.StatusNotAcceptable,
 		}
 	}
 
-	mercadoLivrePayment, err := service.repository.GetMercadoLivrePaymentData(ctx, token, form.Resource)
+	mercadoLivrePayment, err := service.repository.GetQRCodePaymentData(ctx, token, form.Resource)
 
 	if err != nil {
 		return err

@@ -21,7 +21,7 @@ import (
 // @Param qrCodeOrder body domain.QRCodeOrder true "qrCodeOrder"
 // @Success 200 {object} domain.QRCodeDataResponse
 // @Router /api/qrcode/generate [post]
-func GenerateQRCodeHandler(qrCodeGeneratorService *usecases.MercadoLivreService) http.HandlerFunc {
+func GenerateQRCodeHandler(generateQRCodePayment *usecases.GenerateQRCodePaymentUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var form domain.QRCodeOrder
 
@@ -45,7 +45,7 @@ func GenerateQRCodeHandler(qrCodeGeneratorService *usecases.MercadoLivreService)
 		waitGroup.Add(1)
 
 		token := environment.GetQRCodeGatewayToken()
-		response, err := qrCodeGeneratorService.GenerateQRCode(r.Context(), token, form, orderDate.UnixMilli(), &waitGroup, ch)
+		response, err := generateQRCodePayment.Execute(r.Context(), token, form, orderDate.UnixMilli(), &waitGroup, ch)
 
 		if err != nil {
 			log.Print("generate qrcode", map[string]interface{}{
