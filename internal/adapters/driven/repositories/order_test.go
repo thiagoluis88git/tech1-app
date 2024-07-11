@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
-	"github.com/thiagoluis88git/tech1/internal/adapters/driven/entities"
+	"github.com/thiagoluis88git/tech1/internal/adapters/driven/model"
 	"github.com/thiagoluis88git/tech1/internal/core/domain"
 )
 
@@ -14,7 +14,7 @@ func TestOrderRepository(t *testing.T) {
 
 func (suite *RepositoryTestSuite) TestCreateOrderWithSuccess() {
 	// ensure that the postgres database is empty
-	var products []entities.Product
+	var products []model.Product
 	result := suite.db.Find(&products)
 	suite.NoError(result.Error)
 	suite.Empty(products)

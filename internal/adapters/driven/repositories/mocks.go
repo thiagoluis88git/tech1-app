@@ -8,7 +8,7 @@ import (
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/testcontainers/testcontainers-go/wait"
-	"github.com/thiagoluis88git/tech1/internal/adapters/driven/entities"
+	"github.com/thiagoluis88git/tech1/internal/adapters/driven/model"
 	pg "gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -59,13 +59,13 @@ func (suite *RepositoryTestSuite) TearDownSuite() {
 
 func (suite *RepositoryTestSuite) SetupTest() {
 	err := suite.db.AutoMigrate(
-		&entities.Product{},
-		&entities.ProductImage{},
-		&entities.ComboProduct{},
-		&entities.Order{},
-		&entities.OrderProduct{},
-		&entities.OrderTicketNumber{},
-		&entities.Customer{},
+		&model.Product{},
+		&model.ProductImage{},
+		&model.ComboProduct{},
+		&model.Order{},
+		&model.OrderProduct{},
+		&model.OrderTicketNumber{},
+		&model.Customer{},
 	)
 	suite.NoError(err)
 }

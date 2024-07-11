@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/thiagoluis88git/tech1/internal/adapters/driven/entities"
+	"github.com/thiagoluis88git/tech1/internal/adapters/driven/model"
 	"github.com/thiagoluis88git/tech1/internal/core/domain"
 	"github.com/thiagoluis88git/tech1/internal/core/ports"
 	"github.com/thiagoluis88git/tech1/pkg/responses"
@@ -23,11 +23,11 @@ func NewOrderRespository(db *gorm.DB) ports.OrderRepository {
 }
 
 func (repository *OrderRespository) CreateOrder(ctx context.Context, order domain.Order) (domain.OrderResponse, error) {
-	return repository.createOrder(ctx, order, entities.OrderStatusCreated)
+	return repository.createOrder(ctx, order, model.OrderStatusCreated)
 }
 
 func (repository *OrderRespository) CreatePayingOrder(ctx context.Context, order domain.Order) (domain.OrderResponse, error) {
-	return repository.createOrder(ctx, order, entities.OrderStatusPaying)
+	return repository.createOrder(ctx, order, model.OrderStatusPaying)
 }
 
 func (repository *OrderRespository) createOrder(ctx context.Context, order domain.Order, status string) (domain.OrderResponse, error) {
@@ -42,7 +42,7 @@ func (repository *OrderRespository) createOrder(ctx context.Context, order domai
 		return domain.OrderResponse{}, responses.GetDatabaseError(err)
 	}
 
-	orderEntity := &entities.Order{
+	orderEntity := &model.Order{
 		OrderStatus:  status,
 		TotalPrice:   order.TotalPrice,
 		CustomerID:   order.CustomerID,
@@ -57,10 +57,10 @@ func (repository *OrderRespository) createOrder(ctx context.Context, order domai
 		return domain.OrderResponse{}, responses.GetDatabaseError(err)
 	}
 
-	orderProductsEntity := []*entities.OrderProduct{}
+	orderProductsEntity := []*model.OrderProduct{}
 
 	for _, value := range order.OrderProduct {
-		orderProductsEntity = append(orderProductsEntity, &entities.OrderProduct{
+		orderProductsEntity = append(orderProductsEntity, &model.OrderProduct{
 			ProductID: value.ProductID,
 			OrderID:   orderEntity.ID,
 		})
@@ -99,14 +99,14 @@ func (repository *OrderRespository) DeleteOrder(ctx context.Context, orderID uin
 		return responses.GetDatabaseError(err)
 	}
 
-	err := tx.Where("order_id = ?", orderID).Delete(&entities.OrderProduct{}).Error
+	err := tx.Where("order_id = ?", orderID).Delete(&model.OrderProduct{}).Error
 
 	if err != nil {
 		tx.Rollback()
 		return responses.GetDatabaseError(err)
 	}
 
-	err = tx.Delete(&entities.Order{}, orderID).Error
+	err = tx.Delete(&model.Order{}, orderID).Error
 
 	if err != nil {
 		tx.Rollback()
@@ -125,10 +125,10 @@ func (repository *OrderRespository) DeleteOrder(ctx context.Context, orderID uin
 
 func (repository *OrderRespository) FinishOrderWithPayment(ctx context.Context, orderID uint, paymentID uint) error {
 	err := repository.db.WithContext(ctx).
-		Model(&entities.Order{}).
+		Model(&model.Order{}).
 		Where("id = ?", orderID).
 		Update("payment_id", paymentID).
-		Update("order_status", entities.OrderStatusCreated).
+		Update("order_status", model.OrderStatusCreated).
 		Error
 
 	if err != nil {
@@ -139,10 +139,10 @@ func (repository *OrderRespository) FinishOrderWithPayment(ctx context.Context, 
 }
 
 func (repository *OrderRespository) GetOrderById(ctx context.Context, orderId uint) (domain.OrderResponse, error) {
-	var orderEntity entities.Order
+	var orderEntity model.Order
 	err := repository.
 		db.WithContext(ctx).
-		Model(&entities.Order{}).
+		Model(&model.Order{}).
 		Preload("OrderProduct.Product").
 		Preload("Customer").
 		Where("id = ?", orderId).
@@ -192,13 +192,13 @@ func (repository *OrderRespository) GetOrderById(ctx context.Context, orderId ui
 }
 
 func (repository *OrderRespository) GetOrdersToPrepare(ctx context.Context) ([]domain.OrderResponse, error) {
-	var orderEntity []entities.Order
+	var orderEntity []model.Order
 	err := repository.
 		db.WithContext(ctx).
-		Model(&entities.Order{}).
+		Model(&model.Order{}).
 		Preload("OrderProduct.Product").
 		Preload("Customer").
-		Where("order_status = ?", entities.OrderStatusCreated).
+		Where("order_status = ?", model.OrderStatusCreated).
 		Order("created_at").
 		Find(&orderEntity).
 		Error
@@ -240,16 +240,16 @@ func (repository *OrderRespository) GetOrdersToPrepare(ctx context.Context) ([]d
 }
 
 func (repository *OrderRespository) GetOrdersToFollow(ctx context.Context) ([]domain.OrderResponse, error) {
-	var orderEntity []entities.Order
+	var orderEntity []model.Order
 	err := repository.
 		db.WithContext(ctx).
-		Model(&entities.Order{}).
+		Model(&model.Order{}).
 		Preload("OrderProduct.Product").
 		Preload("Customer").
 		Where("order_status in (?, ?,?)",
-			entities.OrderStatusCreated,
-			entities.OrderStatusPreparing,
-			entities.OrderStatusDone,
+			model.OrderStatusCreated,
+			model.OrderStatusPreparing,
+			model.OrderStatusDone,
 		).
 		Order("created_at").
 		Find(&orderEntity).
@@ -297,9 +297,9 @@ func (repository *OrderRespository) GetOrdersToFollow(ctx context.Context) ([]do
 
 func (repository *OrderRespository) UpdateToPreparing(ctx context.Context, orderId uint) error {
 	err := repository.db.WithContext(ctx).
-		Model(&entities.Order{}).
+		Model(&model.Order{}).
 		Where("id = ?", orderId).
-		Update("order_status", entities.OrderStatusPreparing).
+		Update("order_status", model.OrderStatusPreparing).
 		Update("preparing_at", time.Now()).
 		Error
 
@@ -312,9 +312,9 @@ func (repository *OrderRespository) UpdateToPreparing(ctx context.Context, order
 
 func (repository *OrderRespository) UpdateToDone(ctx context.Context, orderId uint) error {
 	err := repository.db.WithContext(ctx).
-		Model(&entities.Order{}).
+		Model(&model.Order{}).
 		Where("id = ?", orderId).
-		Update("order_status", entities.OrderStatusDone).
+		Update("order_status", model.OrderStatusDone).
 		Update("done_at", time.Now()).
 		Error
 
@@ -327,9 +327,9 @@ func (repository *OrderRespository) UpdateToDone(ctx context.Context, orderId ui
 
 func (repository *OrderRespository) UpdateToDelivered(ctx context.Context, orderId uint) error {
 	err := repository.db.WithContext(ctx).
-		Model(&entities.Order{}).
+		Model(&model.Order{}).
 		Where("id = ?", orderId).
-		Update("order_status", entities.OrderStatusDelivered).
+		Update("order_status", model.OrderStatusDelivered).
 		Update("delivered_at", time.Now()).
 		Error
 
@@ -342,9 +342,9 @@ func (repository *OrderRespository) UpdateToDelivered(ctx context.Context, order
 
 func (repository *OrderRespository) UpdateToNotDelivered(ctx context.Context, orderId uint) error {
 	err := repository.db.WithContext(ctx).
-		Model(&entities.Order{}).
+		Model(&model.Order{}).
 		Where("id = ?", orderId).
-		Update("order_status", entities.OrderStatusNotDelivered).
+		Update("order_status", model.OrderStatusNotDelivered).
 		Update("not_delivered_at", time.Now()).
 		Error
 
@@ -356,9 +356,9 @@ func (repository *OrderRespository) UpdateToNotDelivered(ctx context.Context, or
 }
 
 func (repository *OrderRespository) GetNextTicketNumber(ctx context.Context, date int64) int {
-	var orderTicketNumber entities.OrderTicketNumber
+	var orderTicketNumber model.OrderTicketNumber
 	err := repository.db.WithContext(ctx).
-		Model(&entities.OrderTicketNumber{}).
+		Model(&model.OrderTicketNumber{}).
 		Where("date = ?", date).
 		Find(&orderTicketNumber).
 		Limit(1).
@@ -374,7 +374,7 @@ func (repository *OrderRespository) GetNextTicketNumber(ctx context.Context, dat
 }
 
 func (repository *OrderRespository) createNewTicketForDate(ctx context.Context, date int64) int {
-	orderTicketNumber := entities.OrderTicketNumber{
+	orderTicketNumber := model.OrderTicketNumber{
 		Date:         date,
 		TicketNumber: 1,
 	}
@@ -390,7 +390,7 @@ func (repository *OrderRespository) createNewTicketForDate(ctx context.Context, 
 
 func (repository *OrderRespository) updateTicketForDate(ctx context.Context, date int64, newTicketNumber int) int {
 	err := repository.db.WithContext(ctx).
-		Model(&entities.OrderTicketNumber{}).
+		Model(&model.OrderTicketNumber{}).
 		Where("date = ?", date).
 		Update("ticket_number", newTicketNumber).
 		Error

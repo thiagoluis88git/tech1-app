@@ -3,7 +3,7 @@ package repositories
 import (
 	"context"
 
-	"github.com/thiagoluis88git/tech1/internal/adapters/driven/entities"
+	"github.com/thiagoluis88git/tech1/internal/adapters/driven/model"
 	"github.com/thiagoluis88git/tech1/internal/core/domain"
 	"github.com/thiagoluis88git/tech1/internal/core/ports"
 	"github.com/thiagoluis88git/tech1/pkg/responses"
@@ -22,7 +22,7 @@ func NewCustomerRepository(db *gorm.DB) ports.CustomerRepository {
 }
 
 func (repository *CustomerRepository) CreateCustomer(ctx context.Context, customer domain.Customer) (uint, error) {
-	customerEntity := &entities.Customer{
+	customerEntity := &model.Customer{
 		Name:  customer.Name,
 		CPF:   customer.CPF,
 		Email: customer.Email,
@@ -38,7 +38,7 @@ func (repository *CustomerRepository) CreateCustomer(ctx context.Context, custom
 }
 
 func (repository *CustomerRepository) UpdateCustomer(ctx context.Context, customer domain.Customer) error {
-	customerEntity := &entities.Customer{
+	customerEntity := &model.Customer{
 		Model: gorm.Model{ID: customer.ID},
 		Name:  customer.Name,
 		CPF:   customer.CPF,
@@ -55,7 +55,7 @@ func (repository *CustomerRepository) UpdateCustomer(ctx context.Context, custom
 }
 
 func (repository *CustomerRepository) GetCustomerById(ctx context.Context, id uint) (domain.Customer, error) {
-	var customerEntity entities.Customer
+	var customerEntity model.Customer
 
 	err := repository.
 		db.WithContext(ctx).
@@ -70,7 +70,7 @@ func (repository *CustomerRepository) GetCustomerById(ctx context.Context, id ui
 }
 
 func (repository *CustomerRepository) GetCustomerByCPF(ctx context.Context, cpf string) (domain.Customer, error) {
-	var customerEntity entities.Customer
+	var customerEntity model.Customer
 
 	err := repository.
 		db.WithContext(ctx).
@@ -85,7 +85,7 @@ func (repository *CustomerRepository) GetCustomerByCPF(ctx context.Context, cpf 
 	return repository.populateCustomer(customerEntity), nil
 }
 
-func (repository *CustomerRepository) populateCustomer(customerEntity entities.Customer) domain.Customer {
+func (repository *CustomerRepository) populateCustomer(customerEntity model.Customer) domain.Customer {
 	return domain.Customer{
 		ID:    customerEntity.ID,
 		Name:  customerEntity.Name,

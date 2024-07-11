@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
-	"github.com/thiagoluis88git/tech1/internal/adapters/driven/entities"
+	"github.com/thiagoluis88git/tech1/internal/adapters/driven/model"
 	"github.com/thiagoluis88git/tech1/internal/core/domain"
 )
 
@@ -14,7 +14,7 @@ func TestCustomerRepository(t *testing.T) {
 
 func (suite *RepositoryTestSuite) TestCreateCustomerWithSuccess() {
 	// ensure that the postgres database is empty
-	var customers []entities.Customer
+	var customers []model.Customer
 	result := suite.db.Find(&customers)
 	suite.NoError(result.Error)
 	suite.Empty(customers)
@@ -40,7 +40,7 @@ func (suite *RepositoryTestSuite) TestCreateCustomerWithSuccess() {
 
 func (suite *RepositoryTestSuite) TestGetCustomerByCPFWithSuccess() {
 	// ensure that the postgres database is empty
-	var customers []entities.Customer
+	var customers []model.Customer
 	result := suite.db.Find(&customers)
 	suite.NoError(result.Error)
 	suite.Empty(customers)

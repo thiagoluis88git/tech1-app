@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
-	"github.com/thiagoluis88git/tech1/internal/adapters/driven/entities"
+	"github.com/thiagoluis88git/tech1/internal/adapters/driven/model"
 	"github.com/thiagoluis88git/tech1/internal/core/domain"
 	"github.com/thiagoluis88git/tech1/pkg/responses"
 )
@@ -16,7 +16,7 @@ func TestProductRepository(t *testing.T) {
 
 func (suite *RepositoryTestSuite) TestGetProductsWithSuccess() {
 	// ensure that the postgres database is empty
-	var products []entities.Product
+	var products []model.Product
 	result := suite.db.Find(&products)
 	suite.NoError(result.Error)
 	suite.Empty(products)
@@ -47,7 +47,7 @@ func (suite *RepositoryTestSuite) TestGetProductsWithSuccess() {
 
 func (suite *RepositoryTestSuite) TestGetProductByIdWithSuccess() {
 	// ensure that the postgres database is empty
-	var products []entities.Product
+	var products []model.Product
 	result := suite.db.Find(&products)
 	suite.NoError(result.Error)
 	suite.Empty(products)
@@ -77,7 +77,7 @@ func (suite *RepositoryTestSuite) TestGetProductByIdWithSuccess() {
 
 func (suite *RepositoryTestSuite) TestCreateProductWithSuccess() {
 	// ensure that the postgres database is empty
-	var products []entities.Product
+	var products []model.Product
 	result := suite.db.Find(&products)
 	suite.NoError(result.Error)
 	suite.Empty(products)
@@ -109,7 +109,7 @@ func (suite *RepositoryTestSuite) TestCreateProductWithSuccess() {
 
 func (suite *RepositoryTestSuite) TestUpdateProductWithSuccess() {
 	// ensure that the postgres database is empty
-	var products []entities.Product
+	var products []model.Product
 	result := suite.db.Find(&products)
 	suite.NoError(result.Error)
 	suite.Empty(products)
@@ -168,7 +168,7 @@ func (suite *RepositoryTestSuite) TestUpdateProductWithSuccess() {
 
 func (suite *RepositoryTestSuite) TestCreateProductWithConflictError() {
 	// ensure that the postgres database is empty
-	var products []entities.Product
+	var products []model.Product
 	result := suite.db.Find(&products)
 	suite.NoError(result.Error)
 	suite.Empty(products)

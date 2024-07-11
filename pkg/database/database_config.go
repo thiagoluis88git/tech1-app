@@ -3,7 +3,7 @@ package database
 import (
 	"fmt"
 
-	"github.com/thiagoluis88git/tech1/internal/adapters/driven/entities"
+	"github.com/thiagoluis88git/tech1/internal/adapters/driven/model"
 	"github.com/thiagoluis88git/tech1/pkg/environment"
 
 	"gorm.io/driver/postgres"
@@ -25,14 +25,14 @@ func ConfigDatabase() *gorm.DB {
 	}
 
 	db.AutoMigrate(
-		&entities.Customer{},
-		&entities.Order{},
-		&entities.OrderProduct{},
-		&entities.Payment{},
-		&entities.Product{},
-		&entities.ProductImage{},
-		&entities.ComboProduct{},
-		&entities.OrderTicketNumber{},
+		&model.Customer{},
+		&model.Order{},
+		&model.OrderProduct{},
+		&model.Payment{},
+		&model.Product{},
+		&model.ProductImage{},
+		&model.ComboProduct{},
+		&model.OrderTicketNumber{},
 	)
 
 	return db

@@ -3,7 +3,7 @@ package repositories
 import (
 	"context"
 
-	"github.com/thiagoluis88git/tech1/internal/adapters/driven/entities"
+	"github.com/thiagoluis88git/tech1/internal/adapters/driven/model"
 	"github.com/thiagoluis88git/tech1/internal/core/domain"
 	"github.com/thiagoluis88git/tech1/internal/core/ports"
 	"github.com/thiagoluis88git/tech1/pkg/responses"
@@ -23,8 +23,8 @@ func NewPaymentRepository(db *gorm.DB) ports.PaymentRepository {
 
 func (repository *PaymentRepository) GetPaymentTypes() []string {
 	return []string{
-		entities.PaymentQRCodeType,
-		entities.PaymentCreditType,
+		model.PaymentQRCodeType,
+		model.PaymentCreditType,
 	}
 }
 
@@ -40,11 +40,11 @@ func (repository *PaymentRepository) CreatePaymentOrder(ctx context.Context, pay
 		return domain.PaymentResponse{}, responses.GetDatabaseError(err)
 	}
 
-	paymentEntity := entities.Payment{
+	paymentEntity := model.Payment{
 		CustomerID:    payment.CustomerID,
 		TotalPrice:    payment.TotalPrice,
 		PaymentType:   payment.PaymentType,
-		PaymentStatus: entities.PaymentPayingStatus,
+		PaymentStatus: model.PaymentPayingStatus,
 	}
 
 	err := tx.Create(&paymentEntity).Error
@@ -67,7 +67,7 @@ func (repository *PaymentRepository) CreatePaymentOrder(ctx context.Context, pay
 }
 
 func (repository *PaymentRepository) FinishPaymentWithError(ctx context.Context, paymentId uint) error {
-	err := repository.db.WithContext(ctx).Model(&entities.Payment{}).Where("id = ?", paymentId).Update("payment_status", entities.PaymentPayedStatus).Error
+	err := repository.db.WithContext(ctx).Model(&model.Payment{}).Where("id = ?", paymentId).Update("payment_status", model.PaymentPayedStatus).Error
 
 	if err != nil {
 		return responses.GetDatabaseError(err)
@@ -77,7 +77,7 @@ func (repository *PaymentRepository) FinishPaymentWithError(ctx context.Context,
 }
 
 func (repository *PaymentRepository) FinishPaymentWithSuccess(ctx context.Context, paymentId uint) error {
-	err := repository.db.WithContext(ctx).Model(&entities.Payment{}).Where("id = ?", paymentId).Update("payment_status", entities.PaymentErrorStatus).Error
+	err := repository.db.WithContext(ctx).Model(&model.Payment{}).Where("id = ?", paymentId).Update("payment_status", model.PaymentErrorStatus).Error
 
 	if err != nil {
 		return responses.GetDatabaseError(err)
