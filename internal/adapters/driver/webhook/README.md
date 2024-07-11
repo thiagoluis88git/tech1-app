@@ -14,7 +14,7 @@ If the customer choose *QR Code* payment type, the entire payment flow will be:
  - The customer needs to generate the QR Code via `POST /api/qrcode/generate`. This endpoint will generate an **Order** in the database.
  - With this QR Code, the customer needs to open `Mercado Pago` app and scan the QR Code to make the payment.
  - When the payment completes, the Webhook `POST /api/webhook/ml/payment` will receive the Mercado Livre data.
- - After the Webhook completes, the *Order* will be finihsed.
+ - After the Webhook completes, the *Order* will finish the payment and will change the status to `Pago`.
 
 The `POST /api/qrcode/generate` will return the data like this:
 
