@@ -27,6 +27,7 @@
   - [9 Update order to done](#9-update-order-to-done)
   - [10 Update order to delivered](#10-update-order-to-delivered)
   - [11 Update order to not delivered](#11-update-order-to-not-delivered)
+- [Mercado Livre](#mercado-livre-webhook)
 - [Documentation](#documentation)
   - [Event storming](#event-storming)
   - [Postman collection](#postman-collection)
@@ -149,7 +150,7 @@ fastfood-app  | 2024/05/27 22:57:35 API Tech 1 has started
 ## Kubernetes
 
 This application has all the K8S YAMLs to be applied in any cluster. 
-To read the specific documentation, read: [Kubernetes README](infra/README.md/README.md)
+To read the specific documentation, read: [Kubernetes README](infra/README.md)
 
 ### Secrets
 
@@ -277,10 +278,10 @@ This is used to 'finish' the order and can be used to track some convertion rate
 - Call the PUT `http://localhost:3210/api/orders/{id}/not-delivered` to set Not Delivered status to indicate that customer does not receive the meal.
 This is used to 'finish' the order and can be used to track some convertion rate
 
-## Mercado Livre - Webhook ##
+## Mercado Livre Webhook ##
 
 The Fast Food application can pay the order via QR Code. 
-This is a separate flow and can be read in: [Webhook Payment](internal/adapters/driver/webhook/README.md/README.md)
+This is a separate flow and can be read in: [Webhook Payment](internal/adapters/driver/webhook/README.md)
 
 ## Documentation
 
