@@ -1,4 +1,4 @@
-# Tech Challenge 1 - Mercado Livre Webhook payment
+# Mercado Livre Webhook payment
 
 ## Table of Contents
 
@@ -23,7 +23,7 @@ The `POST /api/qrcode/generate` will return the data like this:
 ```
 
 > [!NOTE]  
-> After `POST /api/qrcode/generate` retrieve the **QR Code data**, to test the order payment, the developer needs to transform the *QR Code data* in a QR Code image. This site can be used to generate is [Generate QR Code image](https://br.qr-code-generator.com/)
+> After `POST /api/qrcode/generate` retrieves the **QR Code data**, to test the order payment, the developer needs to transform the *QR Code data* in a QR Code image. This site can be used to generate is [Generate QR Code image](https://br.qr-code-generator.com/)
 
 After the payment has completed, the Webhook Endpoint (`POST /api/webhook/ml/payment`) will be called and it will receive the following data:
 

@@ -27,7 +27,7 @@
   - [9 Update order to done](#9-update-order-to-done)
   - [10 Update order to delivered](#10-update-order-to-delivered)
   - [11 Update order to not delivered](#11-update-order-to-not-delivered)
-- [Mercado Livre](#mercado-livre-webhook)
+- [Mercado Livre Webhook](#mercado-livre-webhook)
 - [Documentation](#documentation)
   - [Event storming](#event-storming)
   - [Postman collection](#postman-collection)
@@ -44,6 +44,7 @@ that makes all steps of a fast food dish order, as:
 - Customer identification
 - Order creation with given products
 - Payment process
+- - With Mercado Livre QR Code payment option (internal/adapters/driver/webhook/README.md)
 - Order tracking by the chef
 - Order tracking by the waiter and the customer
 
