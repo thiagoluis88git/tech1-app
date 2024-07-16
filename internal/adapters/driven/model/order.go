@@ -18,7 +18,7 @@ const (
 type Order struct {
 	gorm.Model
 	OrderStatus    string
-	TotalPrice     int
+	TotalPrice     float64
 	PaymentID      uint
 	CustomerID     *uint
 	Customer       *Customer

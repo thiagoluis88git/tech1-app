@@ -15,7 +15,7 @@ type Product struct {
 	Name         string `gorm:"unique"`
 	Description  string
 	Category     string
-	Price        int
+	Price        float64
 	ProductImage []ProductImage
 	ComboProduct []ComboProduct
 }

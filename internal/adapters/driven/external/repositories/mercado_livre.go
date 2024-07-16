@@ -32,7 +32,7 @@ func (repo *MercadoLivreRepositoryImpl) Generate(ctx context.Context, token stri
 
 	for _, value := range form.OrderProduct {
 		productId := strconv.Itoa(int(value.ProductID))
-		totalAmount += value.ProductPrice
+		totalAmount += int(value.ProductPrice)
 
 		items = append(items, model.Item{
 			Description: fmt.Sprintf("FastFood Pagamento - Produto: %v", productId),
@@ -40,8 +40,8 @@ func (repo *MercadoLivreRepositoryImpl) Generate(ctx context.Context, token stri
 			Title:       fmt.Sprintf("FastFood Pagamento - Produto: %v", productId),
 			UnitMeasure: "unit",
 			Quantity:    1,
-			UnitPrice:   value.ProductPrice,
-			TotalAmount: value.ProductPrice,
+			UnitPrice:   int(value.ProductPrice),
+			TotalAmount: int(value.ProductPrice),
 		})
 	}
 

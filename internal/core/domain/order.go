@@ -4,7 +4,7 @@ import "time"
 
 type Order struct {
 	OrderStatus  string
-	TotalPrice   int            `json:"totalPrice" validate:"required"`
+	TotalPrice   float64        `json:"totalPrice" validate:"required"`
 	CustomerID   *uint          `json:"customerId"`
 	PaymentID    uint           `json:"paymentId" validate:"required"`
 	OrderProduct []OrderProduct `json:"orderProducts" validate:"required"`
@@ -13,7 +13,7 @@ type Order struct {
 
 type QRCodeOrder struct {
 	OrderStatus  string
-	TotalPrice   int            `json:"totalPrice" validate:"required"`
+	TotalPrice   float64        `json:"totalPrice" validate:"required"`
 	CustomerID   *uint          `json:"customerId"`
 	OrderProduct []OrderProduct `json:"orderProducts" validate:"required"`
 	TicketNumber int
@@ -21,8 +21,8 @@ type QRCodeOrder struct {
 }
 
 type OrderProduct struct {
-	ProductID    uint `json:"productId" validate:"required"`
-	ProductPrice int  `json:"productPrice" validate:"required"`
+	ProductID    uint    `json:"productId" validate:"required"`
+	ProductPrice float64 `json:"productPrice" validate:"required"`
 }
 
 type OrderResponse struct {
