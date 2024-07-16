@@ -44,7 +44,7 @@ that makes all steps of a fast food dish order, as:
 - Customer identification
 - Order creation with given products
 - Payment process
-- - With Mercado Livre QR Code payment option (internal/adapters/driver/webhook/README.md)
+- - With Mercado Livre QR Code payment option [Webhook Payment](internal/adapters/driver/webhook/README.md)
 - Order tracking by the chef
 - Order tracking by the waiter and the customer
 
