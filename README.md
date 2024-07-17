@@ -248,14 +248,101 @@ With this endpoints we can simulate a screen producst selection by chosing all p
 ***(Customer and Waiter)***
 
 - Call the GET `http://localhost:3210/api/orders/follow` to show a list of Orders to be followed by Customer and Waiter. This will list only, `CREATED`, `PREPARING` and `DONE`.
+This Endpoint will sort the orders wit these business rule:
+ - - `DONE` 
+ - - `PREPARING` 
+ - - `CREATED`
 
+ Here is some response example:
+
+```
+[
+    {
+        "orderId": 2,
+        "orderDate": "2024-07-16T21:41:31.229299-03:00",
+        "preparingAt": "2024-07-16T21:53:25.156494-03:00",
+        "doneAt": "2024-07-16T22:05:01.067784-03:00",
+        "deliveredAt": null,
+        "notDeliveredAt": null,
+        "ticketNumber": 2,
+        "customerName": null,
+        "orderStatus": "Finalizado",
+        "orderProducts": [
+            {
+                "id": 9,
+                "name": "Combo pequeno",
+                "description": "Hamburguer, batata e bebida"
+            }
+        ]
+    },
+    {
+        "orderId": 3,
+        "orderDate": "2024-07-16T21:47:20.122753-03:00",
+        "preparingAt": "2024-07-16T22:04:08.225152-03:00",
+        "doneAt": null,
+        "deliveredAt": null,
+        "notDeliveredAt": null,
+        "ticketNumber": 3,
+        "customerName": null,
+        "orderStatus": "Preparando",
+        "orderProducts": [
+            {
+                "id": 6,
+                "name": "Hamburguer 1",
+                "description": "Hamburguer com 1 carne de 100g e queijo"
+            },
+            {
+                "id": 5,
+                "name": "Batata frita 400g + cheddar",
+                "description": "Batata frita 400g no prato com cheddar"
+            }
+        ]
+    },
+    {
+        "orderId": 4,
+        "orderDate": "2024-07-16T21:52:31.813815-03:00",
+        "preparingAt": null,
+        "doneAt": null,
+        "deliveredAt": null,
+        "notDeliveredAt": null,
+        "ticketNumber": 4,
+        "customerName": null,
+        "orderStatus": "Criado",
+        "orderProducts": [
+            {
+                "id": 4,
+                "name": "Batata frita 200g",
+                "description": "Batata frita 200g no cone"
+            }
+        ]
+    },
+    {
+        "orderId": 1,
+        "orderDate": "2024-07-16T21:40:11.480459-03:00",
+        "preparingAt": null,
+        "doneAt": null,
+        "deliveredAt": null,
+        "notDeliveredAt": null,
+        "ticketNumber": 1,
+        "customerName": null,
+        "orderStatus": "Criado",
+        "orderProducts": [
+            {
+                "id": 9,
+                "name": "Combo pequeno",
+                "description": "Hamburguer, batata e bebida"
+            }
+        ]
+    }
+]
+```
 The order can be followed by its ID:
 - Call the GET `http://localhost:3210/api/orders/{id}` to show a an Orders to be followed by Customer and Waiter
 
 ### 7 List orders to prepare
 ***(Chef view)***
 
-- Call the GET `http://localhost:3210/api/orders/to-prepare` to list the Orders with its [Order ID]. This endpoint will be used by the **Chef**
+- Call the GET `http://localhost:3210/api/orders/to-prepare` to list the Orders with its [Order ID]. This endpoint will be used by the **Chef**. This will list only `CREATED`
 
 ### 8 Update order to preparing
 ***(Chef view)***
