@@ -69,13 +69,14 @@ The folder project was created to follow DDD principle:
 - - internal/core: The Domain of this project
 - - - internal/core/domain: All the domain structures representing the classes and aggregates
 - - - internal/core/ports: All the domain interfaces. With this, we can protect the domain from external classes
-- - - internal/core/services: All the business logic (Services or Use Cases).
+- - - internal/core/usecases: All the business logic (Services or Use Cases).
 - - internal/adapters: The folder to represent all the adapters for the DDD principle
 - - - internal/adapters/driven: The driven adapter to comunicate with external dependencies, like databases and REST apis
-- - - - internal/adapters/driven/entities: All the structures to represent Database Entities
+- - - - internal/adapters/driven/model: All the structures to represent Database Entities
 - - - - internal/adapters/driven/external: REST Api consumers
 - - - - internal/adapters/driven/repositores: The clue between Core Ports and External Dependencies. Here we have the implementations of the Core Ports interfaces
 - - - internal/adapters/driver/handler: This is the driver adapter of the DDD principle. Here resides the REST handlers to be consumed by the client
+- - - internal/adapters/driver/webhook: This is the driver adapter of the DDD principle. Here resides the REST handlers to be consumed by the Mercado Livre when the QR Code payment finishes its process
 
 ## Design Patterns
 
