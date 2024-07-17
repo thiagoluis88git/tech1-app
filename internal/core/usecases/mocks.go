@@ -333,6 +333,17 @@ func (mock *MockOrderRepository) GetOrdersToFollow(ctx context.Context) ([]domai
 	return args.Get(0).([]domain.OrderResponse), nil
 }
 
+func (mock *MockOrderRepository) GetOrdersWaitingPayment(ctx context.Context) ([]domain.OrderResponse, error) {
+	args := mock.Called(ctx)
+	err := args.Error(1)
+
+	if err != nil {
+		return []domain.OrderResponse{}, err
+	}
+
+	return args.Get(0).([]domain.OrderResponse), nil
+}
+
 func (mock *MockOrderRepository) UpdateToPreparing(ctx context.Context, orderId uint) error {
 	args := mock.Called(ctx, orderId)
 	err := args.Error(0)

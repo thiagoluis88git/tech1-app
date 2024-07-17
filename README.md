@@ -23,10 +23,11 @@
   - [5 Create an order](#5-create-an-order)
   - [6 List orders to follow](#6-list-orders-to-follow)
   - [7 List orders to prepare](#7-list-orders-to-prepare)
-  - [8 Update order to preparing](#8-update-order-to-preparing)
-  - [9 Update order to done](#9-update-order-to-done)
-  - [10 Update order to delivered](#10-update-order-to-delivered)
-  - [11 Update order to not delivered](#11-update-order-to-not-delivered)
+  - [8 List orders waiting payment](#7-list-orders-waiting-payment)
+  - [9 Update order to preparing](#8-update-order-to-preparing)
+  - [10 Update order to done](#9-update-order-to-done)
+  - [11 Update order to delivered](#10-update-order-to-delivered)
+  - [12 Update order to not delivered](#11-update-order-to-not-delivered)
 - [Mercado Livre Webhook](#mercado-livre-webhook)
 - [Documentation](#documentation)
   - [Event storming](#event-storming)
@@ -345,6 +346,13 @@ The order can also be followed by its ID:
 ***(Chef view)***
 
 - Call the GET `http://localhost:3210/api/orders/to-prepare` to list the Orders with its [Order ID]. This endpoint will be used by the **Chef**. This will list only `CREATED`
+
+### 7 List orders to prepare
+***(Owner view)***
+
+- Call the GET `http://localhost:3210/api/orders/waiting-payment` to list the Orders with its [Order ID]. This endpoint will be used by the **Owner**. This will list only `PAYING`.
+
+This Endpoint can be used to see if the `Mercado Livre QR Code payment` was paid successfully 
 
 ### 8 Update order to preparing
 ***(Chef view)***

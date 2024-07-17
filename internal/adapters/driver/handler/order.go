@@ -140,9 +140,34 @@ func GetOrdersToPrepareHandler(getOrdersToPrepare *usecases.GetOrdersToPrepareUs
 // @Produce json
 // @Success 200 {object} []domain.OrderResponse
 // @Router /api/orders/status [get]
-func GetOrdersToFollowHandler(getOrdersToFollow *usecases.GetGetOrdersToFollowUseCase) http.HandlerFunc {
+func GetOrdersToFollowHandler(getOrdersToFollow *usecases.GetOrdersToFollowUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		response, err := getOrdersToFollow.Execute(r.Context())
+
+		if err != nil {
+			log.Print("get orders status", map[string]interface{}{
+				"error":  err.Error(),
+				"status": httpserver.GetStatusCodeFromError(err),
+			})
+			httpserver.SendResponseError(w, err)
+			return
+		}
+
+		httpserver.SendResponseSuccess(w, response)
+	}
+}
+
+// @Summary Get all orders with waiting payment status
+// @Description Get all orders with waiting payment by the owner.
+// @Description This endpoint will be used by the owner to know it the Mercado Livre QR Code was paid
+// @Tags Order
+// @Accept json
+// @Produce json
+// @Success 200 {object} []domain.OrderResponse
+// @Router /api/orders/waiting-payment [get]
+func GetOrdersWaitingPaymentHandler(getOrdersWaitingPayment *usecases.GetOrdersWaitingPaymentUseCase) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		response, err := getOrdersWaitingPayment.Execute(r.Context())
 
 		if err != nil {
 			log.Print("get orders status", map[string]interface{}{

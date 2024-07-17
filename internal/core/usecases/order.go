@@ -47,7 +47,12 @@ type GetOrdersToPrepareUseCase struct {
 	sortOrderUseCase *SortOrdersUseCase
 }
 
-type GetGetOrdersToFollowUseCase struct {
+type GetOrdersToFollowUseCase struct {
+	orderRepo        ports.OrderRepository
+	sortOrderUseCase *SortOrdersUseCase
+}
+
+type GetOrdersWaitingPaymentUseCase struct {
 	orderRepo        ports.OrderRepository
 	sortOrderUseCase *SortOrdersUseCase
 }
@@ -91,8 +96,18 @@ func NewGetOrdersToPrepareUseCase(
 func NewGetOrdersToFollowUseCase(
 	orderRepo ports.OrderRepository,
 	sortOrderUseCase *SortOrdersUseCase,
-) *GetGetOrdersToFollowUseCase {
-	return &GetGetOrdersToFollowUseCase{
+) *GetOrdersToFollowUseCase {
+	return &GetOrdersToFollowUseCase{
+		orderRepo:        orderRepo,
+		sortOrderUseCase: sortOrderUseCase,
+	}
+}
+
+func NewGetOrdersWaitingPaymentUseCase(
+	orderRepo ports.OrderRepository,
+	sortOrderUseCase *SortOrdersUseCase,
+) *GetOrdersWaitingPaymentUseCase {
+	return &GetOrdersWaitingPaymentUseCase{
 		orderRepo:        orderRepo,
 		sortOrderUseCase: sortOrderUseCase,
 	}
@@ -190,11 +205,23 @@ func (usecase *GetOrdersToPrepareUseCase) Execute(ctx context.Context) ([]domain
 	return response, nil
 }
 
-func (usecase *GetGetOrdersToFollowUseCase) Execute(ctx context.Context) ([]domain.OrderResponse, error) {
+func (usecase *GetOrdersToFollowUseCase) Execute(ctx context.Context) ([]domain.OrderResponse, error) {
 	response, err := usecase.orderRepo.GetOrdersToFollow(ctx)
 
 	if err != nil {
-		return []domain.OrderResponse{}, responses.GetResponseError(err, "OrderService -> GetOrdersStatus")
+		return []domain.OrderResponse{}, responses.GetResponseError(err, "OrderService -> GetOrdersToFollow")
+	}
+
+	usecase.sortOrderUseCase.Execute(response)
+
+	return response, nil
+}
+
+func (usecase *GetOrdersWaitingPaymentUseCase) Execute(ctx context.Context) ([]domain.OrderResponse, error) {
+	response, err := usecase.orderRepo.GetOrdersWaitingPayment(ctx)
+
+	if err != nil {
+		return []domain.OrderResponse{}, responses.GetResponseError(err, "OrderService -> GetOrdersWaitingPayment")
 	}
 
 	usecase.sortOrderUseCase.Execute(response)

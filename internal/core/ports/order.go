@@ -14,6 +14,7 @@ type OrderRepository interface {
 	GetOrderById(ctx context.Context, orderID uint) (domain.OrderResponse, error)
 	GetOrdersToPrepare(ctx context.Context) ([]domain.OrderResponse, error)
 	GetOrdersToFollow(ctx context.Context) ([]domain.OrderResponse, error)
+	GetOrdersWaitingPayment(ctx context.Context) ([]domain.OrderResponse, error)
 	UpdateToPreparing(ctx context.Context, orderID uint) error
 	UpdateToDone(ctx context.Context, orderID uint) error
 	UpdateToDelivered(ctx context.Context, orderID uint) error

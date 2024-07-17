@@ -207,36 +207,7 @@ func (repository *OrderRespository) GetOrdersToPrepare(ctx context.Context) ([]d
 		return []domain.OrderResponse{}, responses.GetDatabaseError(err)
 	}
 
-	orders := []domain.OrderResponse{}
-
-	for _, value := range orderEntity {
-		orderProduct := []domain.OrderProductResponse{}
-
-		for _, value := range value.OrderProduct {
-			orderProduct = append(orderProduct, domain.OrderProductResponse{
-				ProductID:   value.ProductID,
-				ProductName: value.Product.Name,
-				Description: value.Product.Description,
-			})
-		}
-
-		var customerName *string
-
-		if value.Customer != nil {
-			customerName = &value.Customer.Name
-		}
-
-		orders = append(orders, domain.OrderResponse{
-			OrderId:      value.ID,
-			OrderDate:    value.CreatedAt,
-			TicketNumber: value.TicketNumber,
-			OrderStatus:  value.OrderStatus,
-			OrderProduct: orderProduct,
-			CustomerName: customerName,
-		})
-	}
-
-	return orders, nil
+	return repository.buildOrdersList(orderEntity), nil
 }
 
 func (repository *OrderRespository) GetOrdersToFollow(ctx context.Context) ([]domain.OrderResponse, error) {
@@ -259,6 +230,29 @@ func (repository *OrderRespository) GetOrdersToFollow(ctx context.Context) ([]do
 		return []domain.OrderResponse{}, responses.GetDatabaseError(err)
 	}
 
+	return repository.buildOrdersList(orderEntity), nil
+}
+
+func (repository *OrderRespository) GetOrdersWaitingPayment(ctx context.Context) ([]domain.OrderResponse, error) {
+	var orderEntity []model.Order
+	err := repository.
+		db.WithContext(ctx).
+		Model(&model.Order{}).
+		Preload("OrderProduct.Product").
+		Preload("Customer").
+		Where("order_status = ?", model.OrderStatusPaying).
+		Order("created_at").
+		Find(&orderEntity).
+		Error
+
+	if err != nil {
+		return []domain.OrderResponse{}, responses.GetDatabaseError(err)
+	}
+
+	return repository.buildOrdersList(orderEntity), nil
+}
+
+func (repository *OrderRespository) buildOrdersList(orderEntity []model.Order) []domain.OrderResponse {
 	orders := []domain.OrderResponse{}
 
 	for _, value := range orderEntity {
@@ -292,7 +286,7 @@ func (repository *OrderRespository) GetOrdersToFollow(ctx context.Context) ([]do
 		})
 	}
 
-	return orders, nil
+	return orders
 }
 
 func (repository *OrderRespository) UpdateToPreparing(ctx context.Context, orderId uint) error {

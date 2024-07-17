@@ -102,6 +102,10 @@ func main() {
 		orderRepo,
 		sortOrders,
 	)
+	getOrdersWaitingPaymentUseCase := usecases.NewGetOrdersWaitingPaymentUseCase(
+		orderRepo,
+		sortOrders,
+	)
 	updateToPreparingUseCase := usecases.NewUpdateToPreparingUseCase(
 		orderRepo,
 		validateToPreare,
@@ -162,6 +166,7 @@ func main() {
 	router.Get("/api/orders/{id}", handler.GetOrderByIdHandler(getOrderByIdUseCase))
 	router.Get("/api/orders/to-prepare", handler.GetOrdersToPrepareHandler(getOrdersToPrepareUseCase))
 	router.Get("/api/orders/follow", handler.GetOrdersToFollowHandler(getOrdersToFollowUseCase))
+	router.Get("/api/orders/waiting-payment", handler.GetOrdersWaitingPaymentHandler(getOrdersWaitingPaymentUseCase))
 	router.Put("/api/orders/{id}/preparing", handler.UpdateOrderPreparingHandler(updateToPreparingUseCase))
 	router.Put("/api/orders/{id}/done", handler.UpdateOrderDoneHandler(updateToDoneUseCase))
 	router.Put("/api/orders/{id}/delivered", handler.UpdateOrderDeliveredHandler(updateToDeliveredUseCase))
