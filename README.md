@@ -336,7 +336,8 @@ This Endpoint will sort the orders wit these business rule:
     }
 ]
 ```
-The order can be followed by its ID:
+
+The order can also be followed by its ID:
 - Call the GET `http://localhost:3210/api/orders/{id}` to show a an Orders to be followed by Customer and Waiter
 
 ### 7 List orders to prepare
