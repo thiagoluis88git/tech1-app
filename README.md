@@ -10,6 +10,7 @@
 - [Docker build and run](#docker-build-and-run)
 - [How to use](#how-to-use)
   - [Check app status](#check-app-status)
+- [AWS](#aws)
 - [Kubernetes](#kubernetes)
   - [Secrets](#secrets)
   - [Update Kubeconfig](#update-kubeconfig)
@@ -150,10 +151,14 @@ We can see some database errors but at the end of the logs we can see:
 fastfood-app  | 2024/05/27 22:57:35 API Tech 1 has started
 ```
 
+## AWS ##
+
+[AWS Readme](infra/README.md)
+
 ## Kubernetes
 
 This application has all the K8S YAMLs to be applied in any cluster. 
-To read the specific documentation, read: [Kubernetes README](infra/README.md)
+To read the specific documentation, read: [Kubernetes README](infra/k8s/README.md)
 
 ### Secrets
 
