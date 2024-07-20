@@ -1,4 +1,4 @@
-# Tech Challenge 1 - Kubernetes infrastructure
+# FastFood API - Kubernetes infrastructure
 
 ## Table of Contents
 

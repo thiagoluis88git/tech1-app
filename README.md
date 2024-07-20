@@ -1,4 +1,4 @@
-# Tech Challenge 1
+# FastFood API - Description
 
 ## Table of Contents
 
@@ -153,7 +153,7 @@ fastfood-app  | 2024/05/27 22:57:35 API Tech 1 has started
 
 ## AWS ##
 
-[AWS Readme](infra/README.md)
+The Fast food project uses `AWS Cloud` to host its software components. To know more about the **AWS configuration**, read: [AWS Readme](infra/README.md)
 
 ## Kubernetes
 
