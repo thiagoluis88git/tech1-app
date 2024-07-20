@@ -19,7 +19,7 @@ The project is structutred in specific components within the cluster to make the
  - ConfigMaps: in `k8s/configmaps` is stored all the environment variables used in **deployments**
  - Deployments: in `k8s/deployments` is the main App, devided in **Application** and **Database**. Inside the *.yml* files are also implemented some **Services** components to make the comunication works between the **Application** and **Database**
  - HPA: in `k8s/hpa` has the **HorizontalPodAutoscaler** specification. With *HorizontalPodAutoscaler* we can enable an auto scaling of application PODs
- - Metrics: in `k8s/metrics` has some components to enable the Cluster metrics access. To enable *HPA* work as expected, this component is required because its activate some deployments to consume the Cluster metrics. With these metricas, the *HPA* component can scale the PODs via some metric types
+ - Metrics: in `k8s/metrics` has some components to enable the Cluster metrics access. To enable *HPA* work as expected, this component is required because its activate some deployments to consume the Cluster metrics. With these metrics, the *HPA* component can scale the PODs via some metric types
  - Secret: in `k8s/secret` has the Kustomization component. **This folder is not tracked in Github**. This will set in the Kubernetes cluster some **environment secrets** to be consumed by the application
  - Volumes: in `k8s/volumes` have the **PV** and **PVC***. With those we can create a persistent storage to work with the Database application
 
