@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Cliente 1\",\n    \"cpf\": \"23423456789\",\n    \"email\": \"teste2@teste2.com\"\n}",
+							"raw": "{\n    \"name\": \"Joana Cruz\",\n    \"cpf\": \"903.640.610-22\",\n    \"email\": \"joana.cruz@gmail.com\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -24,12 +24,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3210/api/customers",
-							"protocol": "http",
+							"raw": "{{base_url}}/api/customers",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3210",
 							"path": [
 								"api",
 								"customers"
@@ -56,16 +54,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3210/api/customers/345456",
-							"protocol": "http",
+							"raw": "{{base_url}}/api/customers/15",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3210",
 							"path": [
 								"api",
 								"customers",
-								"345456"
+								"15"
 							]
 						}
 					},
@@ -78,7 +74,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"cpf\": \"908.903.600-81\"\n}",
+							"raw": "{\n    \"cpf\": \"903.640.610-22\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -86,12 +82,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3210/api/customers/login",
-							"protocol": "http",
+							"raw": "{{base_url}}/api/customers/login",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3210",
 							"path": [
 								"api",
 								"customers",
@@ -108,7 +102,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Cliente 1\",\n    \"cpf\": \"23423456789\",\n    \"email\": \"teste2@teste2.com\"\n}",
+							"raw": "{\n    \"name\": \"João da Silva Soares\",\n    \"cpf\": \"90890360081\",\n    \"email\": \"joao.silva23@gmail.com\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -116,16 +110,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3210/api/customers/42",
-							"protocol": "http",
+							"raw": "{{base_url}}/api/customers/15",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3210",
 							"path": [
 								"api",
 								"customers",
-								"42"
+								"15"
 							]
 						}
 					},
@@ -142,12 +134,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3210/api/products/categories",
-							"protocol": "http",
+							"raw": "{{base_url}}/api/products/categories",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3210",
 							"path": [
 								"api",
 								"products",
@@ -163,16 +153,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3210/api/products/6",
-							"protocol": "http",
+							"raw": "{{base_url}}/api/products/1",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3210",
 							"path": [
 								"api",
 								"products",
-								"6"
+								"1"
 							]
 						}
 					},
@@ -185,7 +173,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 6,\n    \"name\": \"Hamburger 2 to update\",\n    \"description\": \"Hamburger 150g com pão de brioche, queijo prato e cebola roxa\",\n    \"category\": \"Lanche\",\n    \"price\": 1349,\n    \"images\": [\n        {\n            \"imageUrl\": \"url1\"\n        },\n        {\n            \"imageUrl\": \"url1\"\n        }\n    ]\n}",
+							"raw": "{\n    \"name\": \"Combo pequeno\",\n    \"description\": \"Hamburguer, batata e bebida\",\n    \"category\": \"Combo\",\n    \"price\": 25.99,\n    \"images\": [\n        {\n            \"imageUrl\": \"url1\"\n        },\n        {\n            \"imageUrl\": \"url2\"\n        },\n        {\n            \"imageUrl\": \"url3\"\n        }\n    ],\n    \"comboProductsIds\": [6,4, 1]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -193,16 +181,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3210/api/products/6",
-							"protocol": "http",
+							"raw": "{{base_url}}/api/products/9",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3210",
 							"path": [
 								"api",
 								"products",
-								"6"
+								"9"
 							]
 						}
 					},
@@ -215,7 +201,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Combo 2\",\n    \"description\": \"Combo 1 mais 1 sorvete\",\n    \"category\": \"Combo\",\n    \"price\": 499,\n    \"images\": [\n        {\n            \"imageUrl\": \"url1\"\n        },\n        {\n            \"imageUrl\": \"url2\"\n        }\n    ],\n    \"comboProductsIds\": [3,4,8]\n}",
+							"raw": "{\n    \"name\": \"Combo pequeno\",\n    \"description\": \"Hamburguer, batata e bebida\",\n    \"category\": \"Combo\",\n    \"price\": 2999,\n    \"images\": [\n        {\n            \"imageUrl\": \"url1\"\n        },\n        {\n            \"imageUrl\": \"url2\"\n        },\n        {\n            \"imageUrl\": \"url3\"\n        }\n    ],\n    \"comboProductsIds\": [6,4, 1]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -223,12 +209,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3210/api/products",
-							"protocol": "http",
+							"raw": "{{base_url}}/api/products",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3210",
 							"path": [
 								"api",
 								"products"
@@ -244,7 +228,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Coca Cola lata\",\n    \"description\": \"Refrigerante Coca Cola lata de 200ml\",\n    \"category\": \"Lanche\",\n    \"price\": 699,\n    \"images\": [\n        {\n            \"imageUrl\": \"url1\"\n        },\n        {\n            \"imageUrl\": \"url1\"\n        }\n    ]\n}",
+							"raw": "{\n    \"name\": \"Hamburguer 3\",\n    \"description\": \"Hamburguer com 2 carnes de 150g, queijo, alface e bacon\",\n    \"category\": \"Lanche\",\n    \"price\": 32.99,\n    \"images\": [\n        {\n            \"imageUrl\": \"url1\"\n        },\n        {\n            \"imageUrl\": \"url1\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -252,12 +236,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3210/api/products",
-							"protocol": "http",
+							"raw": "{{base_url}}/api/products",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3210",
 							"path": [
 								"api",
 								"products"
@@ -281,12 +263,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3210/api/products/6",
-							"protocol": "http",
+							"raw": "{{base_url}}/api/products/6",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3210",
 							"path": [
 								"api",
 								"products",
@@ -298,33 +278,19 @@
 				},
 				{
 					"name": "Get Products by category",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"Batata\",\n    \"description\": \"Batata frita 300g\",\n    \"category\": \"Acompanhamento\",\n    \"price\": 939,\n    \"images\": [\n        {\n            \"imageUrl\": \"url1\",\n            \"imageUrl\": \"url2\",\n            \"imageUrl\": \"url3\",\n            \"imageUrl\": \"url4\"\n        }\n    ]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "http://localhost:3210/api/products/categories/Acompanhamento",
-							"protocol": "http",
+							"raw": "{{base_url}}/api/products/categories/Combo",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3210",
 							"path": [
 								"api",
 								"products",
 								"categories",
-								"Acompanhamento"
+								"Combo"
 							]
 						}
 					},
@@ -353,16 +319,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3210/api/orders/8",
-							"protocol": "http",
+							"raw": "{{base_url}}/api/orders/6",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3210",
 							"path": [
 								"api",
 								"orders",
-								"8"
+								"6"
 							]
 						}
 					},
@@ -386,12 +350,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3210/api/orders/to-prepare",
-							"protocol": "http",
+							"raw": "{{base_url}}/api/orders/to-prepare",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3210",
 							"path": [
 								"api",
 								"orders",
@@ -419,16 +381,45 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3210/api/orders/follow",
-							"protocol": "http",
+							"raw": "{{base_url}}/api/orders/follow",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3210",
 							"path": [
 								"api",
 								"orders",
 								"follow"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Orders Waiting Payment",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"totalPrice\": 4590,\n    \"paymentKind\": \"Voucher\",\n    \"customerId\": 13,\n    \"orderProducts\": [\n        {\n            \"productId\": 30\n        },\n        {\n            \"productId\": 33\n        },\n        {\n            \"productId\": 2\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/orders/waiting-payment",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"waiting-payment"
 							]
 						}
 					},
@@ -449,16 +440,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3210/api/orders/1/preparing",
-							"protocol": "http",
+							"raw": "{{base_url}}/api/orders/3/preparing",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3210",
 							"path": [
 								"api",
 								"orders",
-								"1",
+								"3",
 								"preparing"
 							]
 						}
@@ -480,16 +469,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3210/api/orders/1/done",
-							"protocol": "http",
+							"raw": "{{base_url}}/api/orders/2/done",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3210",
 							"path": [
 								"api",
 								"orders",
-								"1",
+								"2",
 								"done"
 							]
 						}
@@ -511,16 +498,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3210/api/orders/1/delivered",
-							"protocol": "http",
+							"raw": "{{base_url}}/api/orders/7/delivered",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3210",
 							"path": [
 								"api",
 								"orders",
-								"1",
+								"7",
 								"delivered"
 							]
 						}
@@ -542,16 +527,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3210/api/orders/1/not-delivered",
-							"protocol": "http",
+							"raw": "{{base_url}}/api/orders/7/not-delivered",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3210",
 							"path": [
 								"api",
 								"orders",
-								"1",
+								"7",
 								"not-delivered"
 							]
 						}
@@ -565,7 +548,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"totalPrice\": 5990,\n    \"paymentId\": 4,\n    \"orderProducts\": [\n        {\n            \"productId\": 30\n        },\n        {\n            \"productId\": 33\n        },\n        {\n            \"productId\": 2\n        }\n    ]\n}",
+							"raw": "{\n    \"totalPrice\": 9.50,\n    \"paymentId\": 4,\n    \"orderProducts\": [\n        {\n            \"productId\": 4\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -573,12 +556,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3210/api/orders",
-							"protocol": "http",
+							"raw": "{{base_url}}/api/orders",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3210",
 							"path": [
 								"api",
 								"orders"
@@ -599,7 +580,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"paymentType\": \"Crédito\",\n    \"totalPrice\": 5690\n}",
+							"raw": "{\n    \"paymentType\": \"Credito\",\n    \"totalPrice\": 9.50\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -607,12 +588,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3210/api/payments",
-							"protocol": "http",
+							"raw": "{{base_url}}/api/payments",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3210",
 							"path": [
 								"api",
 								"payments"
@@ -627,16 +606,47 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3210/api/payments/types",
-							"protocol": "http",
+							"raw": "{{base_url}}/api/payments/types",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3210",
 							"path": [
 								"api",
 								"payments",
 								"types"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "QR Code",
+			"item": [
+				{
+					"name": "Generate QR Code",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"totalPrice\": 24.55,\n    \"orderProducts\": [\n        {\n            \"productId\": 9,\n            \"productPrice\": 25.99\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/qrcode/generate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"qrcode",
+								"generate"
 							]
 						}
 					},
@@ -650,12 +660,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3210/api/health",
-					"protocol": "http",
+					"raw": "{{base_url}}/api/health",
 					"host": [
-						"localhost"
+						"{{base_url}}"
 					],
-					"port": "3210",
 					"path": [
 						"api",
 						"health"
@@ -663,6 +671,28 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }
