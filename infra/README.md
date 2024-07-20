@@ -16,7 +16,8 @@ The Fast food project uses `AWS Cloud` to host its software components.
 To follow some of the best practices of network security in Cloud, the FastFood API uses the Private and Public network strategy to configure the `VPC` on **AWS**. This configuration can be created via `AWS Cloud Formation` using [this YAML file](https://s3.us-west-2.amazonaws.com/amazon-eks/cloudformation/2020-10-29/amazon-eks-vpc-private-subnets.yaml). The **most important** aspect for this *hybrid* solution is:
 
 - Software components are stored in `Private Subnets`
-- Infrastructure components, such as `EKS Load Balancers Services` are stored in `Public Subnets`
+- Infrastructure components, such as `NAT Gateways` are stored in `Public Subnets`
+- The `EKS Load Balancers Services` will traffic the internet data between applications inside **Private Subnets**
 - All the traffic between **Private Subnets** and **Public Subnets** are done by `Route tables` 
 
 <img width="602" alt="AWS infra" src="https://github.com/user-attachments/assets/178cafb0-7552-41e7-b826-40795f595145">
