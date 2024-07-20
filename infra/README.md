@@ -19,6 +19,9 @@ To follow some of the best practices of network security in Cloud, the FastFood 
 - Infrastructure components, such as `EKS Load Balancers Services` are stored in `Public Subnets`
 - All the traffic between **Private Subnets** and **Public Subnets** are done by `Route tables` 
 
+<img width="602" alt="AWS infra" src="https://github.com/user-attachments/assets/178cafb0-7552-41e7-b826-40795f595145">
+
+
 With this approach the **FastFood API** is secure and safe from possible internet attackers
 
 ## AWS EKS
