@@ -11,7 +11,7 @@ import (
 )
 
 func ConfigDatabase() *gorm.DB {
-	dsn := fmt.Sprintf("host=%v user=%v password=%v dbname=%v port=%v sslmode=disable",
+	dsn := fmt.Sprintf("host=%v user=%v password=%v dbname=%v port=%v",
 		environment.GetDBHost(),
 		environment.GetDBUser(),
 		environment.GetDBPassword(),

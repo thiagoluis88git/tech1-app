@@ -34,7 +34,7 @@ spec:
     spec:
       containers:
       - name: fastfood-app
-        image: thiagoluis88/fastfood-app:0.0.23
+        image: thiagoluis88/fastfood-app:0.0.25
         envFrom:
           - secretRef:
               name: app-env-secret

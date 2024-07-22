@@ -3,6 +3,5 @@ kind: ConfigMap
 metadata:
   name: cm-database
 data:
-  POSTGRES_PASSWORD: fastfood1234
-  POSTGRES_USER: fastfood
+  POSTGRES_USER: fastfood_db_user
   POSTGRES_DB: fastfood_db
