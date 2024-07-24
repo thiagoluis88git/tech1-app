@@ -259,7 +259,7 @@ When the server returns as expected, the response is like:
 }
 ```
 
-> [!INFO]
+> [!NOTE]
 > This method will `CREATE AN ORDER` with the status `WAITING PAYMENT`.
 
 ### 5 Create an order
