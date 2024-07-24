@@ -246,7 +246,7 @@ With this endpoints we can simulate a screen producst selection by chosing all p
 #### 4_1 Generate Mercado Livre QR Code ####
 ***(Customer view)***
 
-- Call the POST `http://localhost:3210/api/qrcode/generate` to get the `QR Code Data` to **transform** in Image to pay with `Mercado Pago App`
+- Call the POST `http://localhost:3210/api/qrcode/generate` to get the `QR Code Data` to **transform** in Image to pay with `Mercado Pago App`. Must send the same **post body** as [5 create an order](#5-create-an-order) needs.
 
 > [!WARNING]
 > Sometimes the **Mercado Livre** server returns `500 Internal Server Error` for unknown reason. The error returned by the server is: `{"error":"alias_obtainment_error","message":"Get aliases for user failed","status":500,"causes":[]}`. When this occurs, **IS NOT possible to proceed with QR Code Payment**.
@@ -258,6 +258,9 @@ When the server returns as expected, the response is like:
     "data": "00020101021243650016COM.MERCADOLIBRE020130636b624f3f3-d289-453b-a620-a32198e16a235204000053039865802BR5909Test Test6009SAO PAULO62070503***63046773"
 }
 ```
+
+> [!INFO]
+> This method will `CREATE AN ORDER` with the status `WAITING PAYMENT`.
 
 ### 5 Create an order
 ***(Customer view)***
