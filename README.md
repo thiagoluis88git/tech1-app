@@ -21,6 +21,7 @@
   - [2 List all the categories](#2-list-all-the-categories)
   - [3 List products by the chosen category](#3-list-products-by-the-chosen-category)
   - [4 Pay the products amount](#4-pay-the-products-amount)
+    - [4.1 Generate Mercado Livre QR Code](#4_1-generate-mercado-livre-qr-code)
   - [5 Create an order](#5-create-an-order)
   - [6 List orders to follow](#6-list-orders-to-follow)
   - [7 List orders to prepare](#7-list-orders-to-prepare)
@@ -241,6 +242,15 @@ With this endpoints we can simulate a screen producst selection by chosing all p
 
 - Call the GET `http://localhost:3210/api/payments/types` to show to customer which payment type to choose
 - Call the POST `http://localhost:3210/api/payments` to pay for the amount and receive the `[Payment ID]`
+
+#### 4_1 Generate Mercado Livre QR Code ####
+***(Customer view)***
+
+- Call the POST `http://localhost:3210/api/qrcode/generate` to get the `QR Code Data` to **transform** in Image to pay with `Mercado Pago App`
+
+> [!WARNING]
+> Sometimes the **Mercado Livre** server returns `500 Internal Server Error` for unknown reason. The error returned by the server is: `{"error":"alias_obtainment_error","message":"Get aliases for user failed","status":500,"causes":[]}`. When this occurs, **IS NOT possible to proceed with QR Code Payment**.
+
 
 ### 5 Create an order
 ***(Customer view)***
