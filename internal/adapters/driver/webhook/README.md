@@ -25,6 +25,9 @@ The `POST /api/qrcode/generate` will return the data like this:
 > [!NOTE]  
 > After `POST /api/qrcode/generate` retrieves the **QR Code data**, to test the order payment, the developer needs to transform the *QR Code data* in a QR Code image. This site can be used to generate is [Generate QR Code image](https://br.qr-code-generator.com/)
 
+> [!WARNING]
+> Sometimes the **Mercado Livre** server returns `500 Internal Server Error` for unknown reason. The error returned by the server is: `{"error":"alias_obtainment_error","message":"Get aliases for user failed","status":500,"causes":[]}`. When this occurs, **IS NOT possible to proceed with QR Code Payment**.
+
 After the payment has completed, the Webhook Endpoint (`POST /api/webhook/ml/payment`) will be called and it will receive the following data:
 
 ```
