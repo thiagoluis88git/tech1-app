@@ -5,6 +5,7 @@
 - [Table of Contents](#table-of-contents)
 - [Description](#description)
 - [AWS VPC Description](#aws-vpc-description)
+    - [AWS RDS](#aws-rds)
 - [AWS EKS](#aws-eks)
 
 ## Description
@@ -23,7 +24,12 @@ To follow some of the best practices of network security in Cloud, the FastFood 
 <img width="602" alt="AWS infra" src="https://github.com/user-attachments/assets/178cafb0-7552-41e7-b826-40795f595145">
 
 
-With this approach the **FastFood API** is secure and safe from possible internet attackers
+With this approach the **FastFood API** is secure and safe from possible internet attackers.
+
+
+### AWS RDS ###
+
+This API uses the `AWS RDS` with **PostgreSQL** for relational database data saving. To keep it **private** and **safe** the *RDS* are stored in `Private Subnets` within the VPC mentioned above. By doing this, only the `internal applications` can access the **database**
 
 ## AWS EKS
 
