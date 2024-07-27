@@ -33,4 +33,4 @@ This API uses the `AWS RDS` with **PostgreSQL** for relational database data sav
 
 ## AWS EKS
 
-The main AWS product used in FastFood project is `AWS EKS`. To know more about this configuration, read: [Kubernetes README](infra/k8s/README.md)
+The main AWS product used in FastFood project is `AWS EKS`. To know more about this configuration, read: [Kubernetes README](k8s/README.md)
