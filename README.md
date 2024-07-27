@@ -5,6 +5,8 @@
 - [Table of Contents](#table-of-contents)
 - [Description](#description)
 - [Architecture](#architecture)
+  - [DDD](#ddd)
+  - [Clean Archtecture](#clean-archtecture)
 - [Design Patterns](#design-patterns)
 - [Unit Testing](#unit-testing)
 - [Docker build and run](#docker-build-and-run)
@@ -59,27 +61,25 @@ To build and run this project. Follow the Docker section
 
 ## Architecture
 
+This project uses a mixin with two architectures to make it scalable and secure by protecting the **domain** layer. Those are `DDD (Domain Driven Design)` and `Clean Archtecture`
+
+### DDD ###
+
 To design this application was chosen `DDD (Domain Drive Design)` architecture to follow the principle of **protecting the model**.
 
 ![ddd_image](https://github.com/thiagoluis88git/tech1/assets/166969350/2016bfff-3c19-4172-837f-8d5d428525f7)
 
+### Clean Archtecture ###
 
-The folder project was created to follow DDD principle:
+The other one is `Clean Archtecture`. With it, we add some extra layers to organize even more the project.
 
-- cmd/api: The application entrypoint
-- docs: OpenAPI documentation
-- internal: All the application data like services, repositories, entities, etc
-- - internal/core: The Domain of this project
-- - - internal/core/domain: All the domain structures representing the classes and aggregates
-- - - internal/core/ports: All the domain interfaces. With this, we can protect the domain from external classes
-- - - internal/core/usecases: All the business logic (Services or Use Cases).
-- - internal/adapters: The folder to represent all the adapters for the DDD principle
-- - - internal/adapters/driven: The driven adapter to comunicate with external dependencies, like databases and REST apis
-- - - - internal/adapters/driven/model: All the structures to represent Database Entities
-- - - - internal/adapters/driven/external: REST Api consumers
-- - - - internal/adapters/driven/repositores: The clue between Core Ports and External Dependencies. Here we have the implementations of the Core Ports interfaces
-- - - internal/adapters/driver/handler: This is the driver adapter of the DDD principle. Here resides the REST handlers to be consumed by the client
-- - - internal/adapters/driver/webhook: This is the driver adapter of the DDD principle. Here resides the REST handlers to be consumed by the Mercado Livre when the QR Code payment finishes its process
+The folder project was created to follow this main principle:
+
+- **data**: Here we have all the implementations, such as Repositories, Remotes and Locals
+- **domain**: All the `application business logic`, such as UseCases
+- **handler**: Also known as `presentation layer` resides all the `Controllers` handled by the `Web` **interface** given by the `/cmd/api Framework & Driver` 
+
+- **integrations**: This is not part of `DDD` or `Clean Arch`, but is important separate some external packages or integrations, such `Mercado Livre API`
 
 ## Design Patterns
 

@@ -3,7 +3,7 @@ package database
 import (
 	"fmt"
 
-	"github.com/thiagoluis88git/tech1/internal/adapters/driven/model"
+	"github.com/thiagoluis88git/tech1/internal/core/data/model"
 	"github.com/thiagoluis88git/tech1/pkg/environment"
 
 	"gorm.io/driver/postgres"
