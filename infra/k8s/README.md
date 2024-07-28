@@ -5,6 +5,8 @@
 - [Table of Contents](#table-of-contents)
 - [Description](#description)
 - [Kubernetes Cluster](#kubernetes-cluster)
+    - [Running on AWS EKS](#running-on-aws-eks)
+    - [Running on Minikube](#running-on-minikube)
 - [Minikube](#minikube)
 
 
@@ -14,24 +16,16 @@ The Fast food project was designed to work with **Docker compose** as well as `K
 
 ## Kubernetes Cluster
 
-The project is structutred in specific components within the cluster to make the project scale when it needs. To do so, it requires some Kubernetes components installed in the Cluster. These are:
+The project is structutred in specific components within the cluster to make the project scale when it needs. To do so, it requires some Kubernetes components installed in the Cluster:
+
+### Running on AWS EKS ###
+
+To run in `AWS EKS`, we need to apply these resources:
 
  - ConfigMaps: in `k8s/configmaps` is stored all the environment variables used in **deployments**
- - Deployments: in `k8s/deployments` is the main App, devided in **Application** and **Database**. Inside the *.yml* files are also implemented some **Services** components to make the comunication works between the **Application** and **Database**
- - HPA: in `k8s/hpa` has the **HorizontalPodAutoscaler** specification. With *HorizontalPodAutoscaler* we can enable an auto scaling of application PODs
+ - Deployments: in `k8s/deployments` is the main App, devided in **Application**. Inside the *.yml* files are also implemented some **Services** components to make the comunication works between the **Application** and **REST Client**
+ - HPA: in `k8s/hpa` has the **HorizontalPodAutoscaler** specification. With *HorizontalPodAutoscaler* we can enable an auto scaling of application PODs.
  - Metrics: in `k8s/metrics` has some components to enable the Cluster metrics access. To enable *HPA* work as expected, this component is required because its activate some deployments to consume the Cluster metrics. With these metrics, the *HPA* component can scale the PODs via some metric types. 
- 
- To apply the metrics in the `AWS EKS`, run the command:
-
- ```
- kubectl apply -f infra/k8s/metrics/components.yaml
- ```
-
- To apply the metrics in the `Minikube`, run the command:
-
- ```
- kubectl apply -f infra/k8s/metrics/components-insecure.yaml
- ```
  
  After applied, wait some minutes. To show the metrics just run the command:
 
@@ -59,7 +53,18 @@ secretGenerator:
   - POSTGRES_PASSWORD=<RDS_POSTGRES_PASSWORD>
 ```
 
- - Volumes: in `k8s/volumes` have the **PV** and **PVC***. With those we can create a persistent storage to work with the Database application
+### Running on Minikube ###
+
+To run the cluster locally, install `Minikube` and apply these resources:
+
+ - ConfigMaps: in `k8s/configmaps` is stored all the environment variables used in **deployments**. (**Remember to change the values to apply the localhost configuration**)
+ - Deployments: in `k8s/deployments` is the main App, devided in **Application**. Inside the *.yml* files are also implemented some **Services** components to make the comunication works between the **Application** and **REST Client**
+ - Localhost: in `k8s/localhost` has all the resources to work in `Minikube` *localhost*. The resources are:
+    - Volumes: The **PV** and **PVC***. With those we can create a persistent storage to work with the Database application.
+    - Metrics: The `insecure metrics` to work in `Minikube`.
+    - Database: The `Deployment` and `Service` to work with `PostgreSQL` *database*
+ - HPA: in `k8s/hpa` has the **HorizontalPodAutoscaler** specification. With *HorizontalPodAutoscaler* we can enable an auto scaling of application PODs.
+
 
 ## Minikube
 
