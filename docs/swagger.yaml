@@ -1,6 +1,6 @@
 basePath: /
 definitions:
-  domain.Customer:
+  dto.Customer:
     properties:
       cpf:
         type: string
@@ -15,32 +15,32 @@ definitions:
     - email
     - name
     type: object
-  domain.CustomerForm:
+  dto.CustomerForm:
     properties:
       cpf:
         type: string
     required:
     - cpf
     type: object
-  domain.CustomerResponse:
+  dto.CustomerResponse:
     properties:
       id:
         type: integer
     type: object
-  domain.MercadoLivrePaymentForm:
+  dto.MercadoLivrePaymentForm:
     properties:
       resource:
         type: string
       topic:
         type: string
     type: object
-  domain.Order:
+  dto.Order:
     properties:
       customerId:
         type: integer
       orderProducts:
         items:
-          $ref: '#/definitions/domain.OrderProduct'
+          $ref: '#/definitions/dto.OrderProduct'
         type: array
       orderStatus:
         type: string
@@ -55,7 +55,7 @@ definitions:
     - paymentId
     - totalPrice
     type: object
-  domain.OrderProduct:
+  dto.OrderProduct:
     properties:
       productId:
         type: integer
@@ -65,7 +65,7 @@ definitions:
     - productId
     - productPrice
     type: object
-  domain.OrderProductResponse:
+  dto.OrderProductResponse:
     properties:
       description:
         type: string
@@ -74,7 +74,7 @@ definitions:
       name:
         type: string
     type: object
-  domain.OrderResponse:
+  dto.OrderResponse:
     properties:
       customerName:
         type: string
@@ -90,7 +90,7 @@ definitions:
         type: integer
       orderProducts:
         items:
-          $ref: '#/definitions/domain.OrderProductResponse'
+          $ref: '#/definitions/dto.OrderProductResponse'
         type: array
       orderStatus:
         type: string
@@ -99,7 +99,7 @@ definitions:
       ticketNumber:
         type: integer
     type: object
-  domain.Payment:
+  dto.Payment:
     properties:
       customerId:
         type: integer
@@ -111,7 +111,7 @@ definitions:
     - paymentType
     - totalPrice
     type: object
-  domain.PaymentResponse:
+  dto.PaymentResponse:
     properties:
       paymentDate:
         type: string
@@ -120,14 +120,14 @@ definitions:
       paymentId:
         type: integer
     type: object
-  domain.ProducImage:
+  dto.ProducImage:
     properties:
       imageUrl:
         type: string
     required:
     - imageUrl
     type: object
-  domain.ProductForm:
+  dto.ProductForm:
     properties:
       category:
         type: string
@@ -141,7 +141,7 @@ definitions:
         type: integer
       images:
         items:
-          $ref: '#/definitions/domain.ProducImage'
+          $ref: '#/definitions/dto.ProducImage'
         type: array
       name:
         type: string
@@ -154,13 +154,13 @@ definitions:
     - name
     - price
     type: object
-  domain.ProductResponse:
+  dto.ProductResponse:
     properties:
       category:
         type: string
       comboProducts:
         items:
-          $ref: '#/definitions/domain.ProductResponse'
+          $ref: '#/definitions/dto.ProductResponse'
         type: array
       description:
         type: string
@@ -168,7 +168,7 @@ definitions:
         type: integer
       images:
         items:
-          $ref: '#/definitions/domain.ProducImage'
+          $ref: '#/definitions/dto.ProducImage'
         type: array
       name:
         type: string
@@ -181,18 +181,18 @@ definitions:
     - name
     - price
     type: object
-  domain.QRCodeDataResponse:
+  dto.QRCodeDataResponse:
     properties:
       data:
         type: string
     type: object
-  domain.QRCodeOrder:
+  dto.QRCodeOrder:
     properties:
       customerId:
         type: integer
       orderProducts:
         items:
-          $ref: '#/definitions/domain.OrderProduct'
+          $ref: '#/definitions/dto.OrderProduct'
         type: array
       orderStatus:
         type: string
@@ -231,14 +231,14 @@ paths:
         name: product
         required: true
         schema:
-          $ref: '#/definitions/domain.Customer'
+          $ref: '#/definitions/dto.Customer'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.CustomerResponse'
+            $ref: '#/definitions/dto.CustomerResponse'
         "400":
           description: Customer has required fields
         "409":
@@ -263,7 +263,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.Customer'
+            $ref: '#/definitions/dto.Customer'
         "404":
           description: Customer not found
       summary: Get customer by ID
@@ -284,7 +284,7 @@ paths:
         name: product
         required: true
         schema:
-          $ref: '#/definitions/domain.Customer'
+          $ref: '#/definitions/dto.Customer'
       produces:
       - application/json
       responses:
@@ -308,14 +308,14 @@ paths:
         name: customer
         required: true
         schema:
-          $ref: '#/definitions/domain.CustomerForm'
+          $ref: '#/definitions/dto.CustomerForm'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.Customer'
+            $ref: '#/definitions/dto.Customer'
         "404":
           description: Customer not found
       summary: Get customer by CPF
@@ -335,14 +335,14 @@ paths:
         name: product
         required: true
         schema:
-          $ref: '#/definitions/domain.Order'
+          $ref: '#/definitions/dto.Order'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.OrderResponse'
+            $ref: '#/definitions/dto.OrderResponse'
         "400":
           description: Order has required fields
       summary: Create new order
@@ -365,7 +365,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.OrderResponse'
+            $ref: '#/definitions/dto.OrderResponse'
         "400":
           description: Order has required fields
       summary: Get order by Id
@@ -480,7 +480,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/domain.OrderResponse'
+              $ref: '#/definitions/dto.OrderResponse'
             type: array
       summary: Get all orders status different to prepare
       tags:
@@ -498,7 +498,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/domain.OrderResponse'
+              $ref: '#/definitions/dto.OrderResponse'
             type: array
       summary: Get all orders to prepare
       tags:
@@ -517,7 +517,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/domain.OrderResponse'
+              $ref: '#/definitions/dto.OrderResponse'
             type: array
       summary: Get all orders with waiting payment status
       tags:
@@ -534,14 +534,14 @@ paths:
         name: product
         required: true
         schema:
-          $ref: '#/definitions/domain.Payment'
+          $ref: '#/definitions/dto.Payment'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.PaymentResponse'
+            $ref: '#/definitions/dto.PaymentResponse'
         "400":
           description: Payment has required fields
       summary: Create new payment
@@ -575,14 +575,14 @@ paths:
         name: product
         required: true
         schema:
-          $ref: '#/definitions/domain.ProductForm'
+          $ref: '#/definitions/dto.ProductForm'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.ProductResponse'
+            $ref: '#/definitions/dto.ProductResponse'
         "400":
           description: Product has required fields
         "409":
@@ -625,7 +625,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.ProductResponse'
+            $ref: '#/definitions/dto.ProductResponse'
       summary: Get product by ID
       tags:
       - Product
@@ -688,7 +688,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/domain.ProductResponse'
+              $ref: '#/definitions/dto.ProductResponse'
             type: array
       summary: List all products by a category
       tags:
@@ -706,14 +706,14 @@ paths:
         name: qrCodeOrder
         required: true
         schema:
-          $ref: '#/definitions/domain.QRCodeOrder'
+          $ref: '#/definitions/dto.QRCodeOrder'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.QRCodeDataResponse'
+            $ref: '#/definitions/dto.QRCodeDataResponse'
       summary: Generate a QR Code
       tags:
       - QRCode
@@ -730,7 +730,7 @@ paths:
         name: mercadoLivrePaymentForm
         required: true
         schema:
-          $ref: '#/definitions/domain.MercadoLivrePaymentForm'
+          $ref: '#/definitions/dto.MercadoLivrePaymentForm'
       produces:
       - application/json
       responses:

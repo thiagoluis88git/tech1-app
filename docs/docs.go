@@ -44,7 +44,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Customer"
+                            "$ref": "#/definitions/dto.Customer"
                         }
                     }
                 ],
@@ -52,7 +52,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.CustomerResponse"
+                            "$ref": "#/definitions/dto.CustomerResponse"
                         }
                     },
                     "400": {
@@ -84,7 +84,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.CustomerForm"
+                            "$ref": "#/definitions/dto.CustomerForm"
                         }
                     }
                 ],
@@ -92,7 +92,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Customer"
+                            "$ref": "#/definitions/dto.Customer"
                         }
                     },
                     "404": {
@@ -127,7 +127,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Customer"
+                            "$ref": "#/definitions/dto.Customer"
                         }
                     },
                     "404": {
@@ -161,7 +161,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Customer"
+                            "$ref": "#/definitions/dto.Customer"
                         }
                     }
                 ],
@@ -198,7 +198,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Order"
+                            "$ref": "#/definitions/dto.Order"
                         }
                     }
                 ],
@@ -206,7 +206,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.OrderResponse"
+                            "$ref": "#/definitions/dto.OrderResponse"
                         }
                     },
                     "400": {
@@ -234,7 +234,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/domain.OrderResponse"
+                                "$ref": "#/definitions/dto.OrderResponse"
                             }
                         }
                     }
@@ -260,7 +260,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/domain.OrderResponse"
+                                "$ref": "#/definitions/dto.OrderResponse"
                             }
                         }
                     }
@@ -286,7 +286,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/domain.OrderResponse"
+                                "$ref": "#/definitions/dto.OrderResponse"
                             }
                         }
                     }
@@ -319,7 +319,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.OrderResponse"
+                            "$ref": "#/definitions/dto.OrderResponse"
                         }
                     },
                     "400": {
@@ -488,7 +488,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Payment"
+                            "$ref": "#/definitions/dto.Payment"
                         }
                     }
                 ],
@@ -496,7 +496,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.PaymentResponse"
+                            "$ref": "#/definitions/dto.PaymentResponse"
                         }
                     },
                     "400": {
@@ -551,7 +551,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.ProductForm"
+                            "$ref": "#/definitions/dto.ProductForm"
                         }
                     }
                 ],
@@ -559,7 +559,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.ProductResponse"
+                            "$ref": "#/definitions/dto.ProductResponse"
                         }
                     },
                     "400": {
@@ -634,7 +634,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/domain.ProductResponse"
+                                "$ref": "#/definitions/dto.ProductResponse"
                             }
                         }
                     }
@@ -667,7 +667,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.ProductResponse"
+                            "$ref": "#/definitions/dto.ProductResponse"
                         }
                     }
                 }
@@ -747,7 +747,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.QRCodeOrder"
+                            "$ref": "#/definitions/dto.QRCodeOrder"
                         }
                     }
                 ],
@@ -755,7 +755,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.QRCodeDataResponse"
+                            "$ref": "#/definitions/dto.QRCodeDataResponse"
                         }
                     }
                 }
@@ -781,7 +781,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.MercadoLivrePaymentForm"
+                            "$ref": "#/definitions/dto.MercadoLivrePaymentForm"
                         }
                     }
                 ],
@@ -797,7 +797,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "domain.Customer": {
+        "dto.Customer": {
             "type": "object",
             "required": [
                 "cpf",
@@ -819,7 +819,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.CustomerForm": {
+        "dto.CustomerForm": {
             "type": "object",
             "required": [
                 "cpf"
@@ -830,7 +830,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.CustomerResponse": {
+        "dto.CustomerResponse": {
             "type": "object",
             "properties": {
                 "id": {
@@ -838,7 +838,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.MercadoLivrePaymentForm": {
+        "dto.MercadoLivrePaymentForm": {
             "type": "object",
             "properties": {
                 "resource": {
@@ -849,7 +849,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.Order": {
+        "dto.Order": {
             "type": "object",
             "required": [
                 "orderProducts",
@@ -863,7 +863,7 @@ const docTemplate = `{
                 "orderProducts": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.OrderProduct"
+                        "$ref": "#/definitions/dto.OrderProduct"
                     }
                 },
                 "orderStatus": {
@@ -880,7 +880,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.OrderProduct": {
+        "dto.OrderProduct": {
             "type": "object",
             "required": [
                 "productId",
@@ -895,7 +895,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.OrderProductResponse": {
+        "dto.OrderProductResponse": {
             "type": "object",
             "properties": {
                 "description": {
@@ -909,7 +909,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.OrderResponse": {
+        "dto.OrderResponse": {
             "type": "object",
             "properties": {
                 "customerName": {
@@ -933,7 +933,7 @@ const docTemplate = `{
                 "orderProducts": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.OrderProductResponse"
+                        "$ref": "#/definitions/dto.OrderProductResponse"
                     }
                 },
                 "orderStatus": {
@@ -947,7 +947,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.Payment": {
+        "dto.Payment": {
             "type": "object",
             "required": [
                 "paymentType",
@@ -965,7 +965,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.PaymentResponse": {
+        "dto.PaymentResponse": {
             "type": "object",
             "properties": {
                 "paymentDate": {
@@ -979,7 +979,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.ProducImage": {
+        "dto.ProducImage": {
             "type": "object",
             "required": [
                 "imageUrl"
@@ -990,7 +990,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.ProductForm": {
+        "dto.ProductForm": {
             "type": "object",
             "required": [
                 "category",
@@ -1018,7 +1018,7 @@ const docTemplate = `{
                 "images": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.ProducImage"
+                        "$ref": "#/definitions/dto.ProducImage"
                     }
                 },
                 "name": {
@@ -1029,7 +1029,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.ProductResponse": {
+        "dto.ProductResponse": {
             "type": "object",
             "required": [
                 "category",
@@ -1045,7 +1045,7 @@ const docTemplate = `{
                 "comboProducts": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.ProductResponse"
+                        "$ref": "#/definitions/dto.ProductResponse"
                     }
                 },
                 "description": {
@@ -1057,7 +1057,7 @@ const docTemplate = `{
                 "images": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.ProducImage"
+                        "$ref": "#/definitions/dto.ProducImage"
                     }
                 },
                 "name": {
@@ -1068,7 +1068,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.QRCodeDataResponse": {
+        "dto.QRCodeDataResponse": {
             "type": "object",
             "properties": {
                 "data": {
@@ -1076,7 +1076,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.QRCodeOrder": {
+        "dto.QRCodeOrder": {
             "type": "object",
             "required": [
                 "orderProducts",
@@ -1089,7 +1089,7 @@ const docTemplate = `{
                 "orderProducts": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.OrderProduct"
+                        "$ref": "#/definitions/dto.OrderProduct"
                     }
                 },
                 "orderStatus": {

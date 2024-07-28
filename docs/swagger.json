@@ -38,7 +38,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Customer"
+                            "$ref": "#/definitions/dto.Customer"
                         }
                     }
                 ],
@@ -46,7 +46,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.CustomerResponse"
+                            "$ref": "#/definitions/dto.CustomerResponse"
                         }
                     },
                     "400": {
@@ -78,7 +78,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.CustomerForm"
+                            "$ref": "#/definitions/dto.CustomerForm"
                         }
                     }
                 ],
@@ -86,7 +86,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Customer"
+                            "$ref": "#/definitions/dto.Customer"
                         }
                     },
                     "404": {
@@ -121,7 +121,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Customer"
+                            "$ref": "#/definitions/dto.Customer"
                         }
                     },
                     "404": {
@@ -155,7 +155,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Customer"
+                            "$ref": "#/definitions/dto.Customer"
                         }
                     }
                 ],
@@ -192,7 +192,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Order"
+                            "$ref": "#/definitions/dto.Order"
                         }
                     }
                 ],
@@ -200,7 +200,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.OrderResponse"
+                            "$ref": "#/definitions/dto.OrderResponse"
                         }
                     },
                     "400": {
@@ -228,7 +228,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/domain.OrderResponse"
+                                "$ref": "#/definitions/dto.OrderResponse"
                             }
                         }
                     }
@@ -254,7 +254,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/domain.OrderResponse"
+                                "$ref": "#/definitions/dto.OrderResponse"
                             }
                         }
                     }
@@ -280,7 +280,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/domain.OrderResponse"
+                                "$ref": "#/definitions/dto.OrderResponse"
                             }
                         }
                     }
@@ -313,7 +313,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.OrderResponse"
+                            "$ref": "#/definitions/dto.OrderResponse"
                         }
                     },
                     "400": {
@@ -482,7 +482,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Payment"
+                            "$ref": "#/definitions/dto.Payment"
                         }
                     }
                 ],
@@ -490,7 +490,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.PaymentResponse"
+                            "$ref": "#/definitions/dto.PaymentResponse"
                         }
                     },
                     "400": {
@@ -545,7 +545,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.ProductForm"
+                            "$ref": "#/definitions/dto.ProductForm"
                         }
                     }
                 ],
@@ -553,7 +553,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.ProductResponse"
+                            "$ref": "#/definitions/dto.ProductResponse"
                         }
                     },
                     "400": {
@@ -628,7 +628,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/domain.ProductResponse"
+                                "$ref": "#/definitions/dto.ProductResponse"
                             }
                         }
                     }
@@ -661,7 +661,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.ProductResponse"
+                            "$ref": "#/definitions/dto.ProductResponse"
                         }
                     }
                 }
@@ -741,7 +741,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.QRCodeOrder"
+                            "$ref": "#/definitions/dto.QRCodeOrder"
                         }
                     }
                 ],
@@ -749,7 +749,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.QRCodeDataResponse"
+                            "$ref": "#/definitions/dto.QRCodeDataResponse"
                         }
                     }
                 }
@@ -775,7 +775,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.MercadoLivrePaymentForm"
+                            "$ref": "#/definitions/dto.MercadoLivrePaymentForm"
                         }
                     }
                 ],
@@ -791,7 +791,7 @@
         }
     },
     "definitions": {
-        "domain.Customer": {
+        "dto.Customer": {
             "type": "object",
             "required": [
                 "cpf",
@@ -813,7 +813,7 @@
                 }
             }
         },
-        "domain.CustomerForm": {
+        "dto.CustomerForm": {
             "type": "object",
             "required": [
                 "cpf"
@@ -824,7 +824,7 @@
                 }
             }
         },
-        "domain.CustomerResponse": {
+        "dto.CustomerResponse": {
             "type": "object",
             "properties": {
                 "id": {
@@ -832,7 +832,7 @@
                 }
             }
         },
-        "domain.MercadoLivrePaymentForm": {
+        "dto.MercadoLivrePaymentForm": {
             "type": "object",
             "properties": {
                 "resource": {
@@ -843,7 +843,7 @@
                 }
             }
         },
-        "domain.Order": {
+        "dto.Order": {
             "type": "object",
             "required": [
                 "orderProducts",
@@ -857,7 +857,7 @@
                 "orderProducts": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.OrderProduct"
+                        "$ref": "#/definitions/dto.OrderProduct"
                     }
                 },
                 "orderStatus": {
@@ -874,7 +874,7 @@
                 }
             }
         },
-        "domain.OrderProduct": {
+        "dto.OrderProduct": {
             "type": "object",
             "required": [
                 "productId",
@@ -889,7 +889,7 @@
                 }
             }
         },
-        "domain.OrderProductResponse": {
+        "dto.OrderProductResponse": {
             "type": "object",
             "properties": {
                 "description": {
@@ -903,7 +903,7 @@
                 }
             }
         },
-        "domain.OrderResponse": {
+        "dto.OrderResponse": {
             "type": "object",
             "properties": {
                 "customerName": {
@@ -927,7 +927,7 @@
                 "orderProducts": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.OrderProductResponse"
+                        "$ref": "#/definitions/dto.OrderProductResponse"
                     }
                 },
                 "orderStatus": {
@@ -941,7 +941,7 @@
                 }
             }
         },
-        "domain.Payment": {
+        "dto.Payment": {
             "type": "object",
             "required": [
                 "paymentType",
@@ -959,7 +959,7 @@
                 }
             }
         },
-        "domain.PaymentResponse": {
+        "dto.PaymentResponse": {
             "type": "object",
             "properties": {
                 "paymentDate": {
@@ -973,7 +973,7 @@
                 }
             }
         },
-        "domain.ProducImage": {
+        "dto.ProducImage": {
             "type": "object",
             "required": [
                 "imageUrl"
@@ -984,7 +984,7 @@
                 }
             }
         },
-        "domain.ProductForm": {
+        "dto.ProductForm": {
             "type": "object",
             "required": [
                 "category",
@@ -1012,7 +1012,7 @@
                 "images": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.ProducImage"
+                        "$ref": "#/definitions/dto.ProducImage"
                     }
                 },
                 "name": {
@@ -1023,7 +1023,7 @@
                 }
             }
         },
-        "domain.ProductResponse": {
+        "dto.ProductResponse": {
             "type": "object",
             "required": [
                 "category",
@@ -1039,7 +1039,7 @@
                 "comboProducts": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.ProductResponse"
+                        "$ref": "#/definitions/dto.ProductResponse"
                     }
                 },
                 "description": {
@@ -1051,7 +1051,7 @@
                 "images": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.ProducImage"
+                        "$ref": "#/definitions/dto.ProducImage"
                     }
                 },
                 "name": {
@@ -1062,7 +1062,7 @@
                 }
             }
         },
-        "domain.QRCodeDataResponse": {
+        "dto.QRCodeDataResponse": {
             "type": "object",
             "properties": {
                 "data": {
@@ -1070,7 +1070,7 @@
                 }
             }
         },
-        "domain.QRCodeOrder": {
+        "dto.QRCodeOrder": {
             "type": "object",
             "required": [
                 "orderProducts",
@@ -1083,7 +1083,7 @@
                 "orderProducts": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.OrderProduct"
+                        "$ref": "#/definitions/dto.OrderProduct"
                     }
                 },
                 "orderStatus": {
