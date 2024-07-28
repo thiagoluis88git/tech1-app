@@ -19,7 +19,29 @@ The project is structutred in specific components within the cluster to make the
  - ConfigMaps: in `k8s/configmaps` is stored all the environment variables used in **deployments**
  - Deployments: in `k8s/deployments` is the main App, devided in **Application** and **Database**. Inside the *.yml* files are also implemented some **Services** components to make the comunication works between the **Application** and **Database**
  - HPA: in `k8s/hpa` has the **HorizontalPodAutoscaler** specification. With *HorizontalPodAutoscaler* we can enable an auto scaling of application PODs
- - Metrics: in `k8s/metrics` has some components to enable the Cluster metrics access. To enable *HPA* work as expected, this component is required because its activate some deployments to consume the Cluster metrics. With these metrics, the *HPA* component can scale the PODs via some metric types
+ - Metrics: in `k8s/metrics` has some components to enable the Cluster metrics access. To enable *HPA* work as expected, this component is required because its activate some deployments to consume the Cluster metrics. With these metrics, the *HPA* component can scale the PODs via some metric types. 
+ 
+ To apply the metrics in the `AWS EKS`, run the command:
+
+ ```
+ kubectl apply -f infra/k8s/metrics/components.yaml
+ ```
+
+ To apply the metrics in the `Minikube`, run the command:
+
+ ```
+ kubectl apply -f infra/k8s/metrics/components-insecure.yaml
+ ```
+ 
+ After applied, wait some minutes. To show the metrics just run the command:
+
+ ```
+kubectl top nodes
+
+NAME                              CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%   
+ip-192-168-128-206.ec2.internal   34m          1%     584Mi           17% 
+ ```
+
  - Secret: in `k8s/secret` has the Kustomization component. **This folder is not tracked in Github**. This will set in the Kubernetes cluster some **environment secrets** to be consumed by the application. 
  To use tha same environment varibles, use the `kind: Kustomization` like this:
 
