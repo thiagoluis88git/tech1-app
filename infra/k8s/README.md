@@ -20,7 +20,23 @@ The project is structutred in specific components within the cluster to make the
  - Deployments: in `k8s/deployments` is the main App, devided in **Application** and **Database**. Inside the *.yml* files are also implemented some **Services** components to make the comunication works between the **Application** and **Database**
  - HPA: in `k8s/hpa` has the **HorizontalPodAutoscaler** specification. With *HorizontalPodAutoscaler* we can enable an auto scaling of application PODs
  - Metrics: in `k8s/metrics` has some components to enable the Cluster metrics access. To enable *HPA* work as expected, this component is required because its activate some deployments to consume the Cluster metrics. With these metrics, the *HPA* component can scale the PODs via some metric types
- - Secret: in `k8s/secret` has the Kustomization component. **This folder is not tracked in Github**. This will set in the Kubernetes cluster some **environment secrets** to be consumed by the application
+ - Secret: in `k8s/secret` has the Kustomization component. **This folder is not tracked in Github**. This will set in the Kubernetes cluster some **environment secrets** to be consumed by the application. 
+ To use tha same environment varibles, use the `kind: Kustomization` like this:
+
+```
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+generatorOptions:
+  disableNameSuffixHash: true
+secretGenerator:
+- name: app-env-secret
+  literals:
+  - QR_CODE_GATEWAY_ROOT_URL=<MERCADO_LIVRE_API>
+  - QR_CODE_GATEWAY_TOKEN=<MERCADO_LIVRE_TOKEN>
+  - WEBHOOK_MERCADO_LIVRE_PAYMENT=<FASTFOOD_API_WEBHOOK_HANDLER>
+  - POSTGRES_PASSWORD=<RDS_POSTGRES_PASSWORD>
+```
+
  - Volumes: in `k8s/volumes` have the **PV** and **PVC***. With those we can create a persistent storage to work with the Database application
 
 ## Minikube

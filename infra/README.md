@@ -29,7 +29,7 @@ With this approach the **FastFood API** is secure and safe from possible interne
 
 ### AWS RDS ###
 
-This API uses the `AWS RDS` with **PostgreSQL** for relational database data saving. To keep it **private** and **safe** the *RDS* are stored in `Private Subnets` within the VPC mentioned above. By doing this, only the `internal applications` can access the **database**
+This API uses the `AWS RDS` with **PostgreSQL** for relational database data saving. To keep it **private** and **safe** the *RDS* are stored in `Private Subnets` within the VPC mentioned above. By doing this, only the `internal applications` can access the **database**. `Anyone outside the cluster` can access the database.
 
 ## AWS EKS
 

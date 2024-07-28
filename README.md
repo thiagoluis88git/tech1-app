@@ -419,7 +419,10 @@ We can algo see the Miro project by accessing the link:[Event Storming](https://
 
 ### Postman collection
 
-In the root of this project we can find the file `postman_collection.json`. With this we can easly test all the Endpoints
+In the root of this project we can find the file `postman_collection.json`. With this we can easly test all the Endpoints. It also be in this repo all the `postman environments` to use in `localhost` and  with `EKS LoadBalancer DNS`. Just import also these:
+- eks_postman_environment.json
+- localhost_postman_environment.json
+- minikube_postman_environment.json
 
 ### Swagger
 

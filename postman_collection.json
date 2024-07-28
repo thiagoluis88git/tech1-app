@@ -54,14 +54,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/api/customers/15",
+							"raw": "{{base_url}}/api/customers/1",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
 								"customers",
-								"15"
+								"1"
 							]
 						}
 					},
@@ -282,7 +282,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/products/categories/Combo",
+							"raw": "{{base_url}}/api/products/categories/Lanche",
 							"host": [
 								"{{base_url}}"
 							],
@@ -290,7 +290,7 @@
 								"api",
 								"products",
 								"categories",
-								"Combo"
+								"Lanche"
 							]
 						}
 					},
@@ -548,7 +548,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"totalPrice\": 9.50,\n    \"paymentId\": 4,\n    \"orderProducts\": [\n        {\n            \"productId\": 4\n        }\n    ]\n}",
+							"raw": "{\n    \"totalPrice\": 34.50,\n    \"paymentId\": 4,\n    \"orderProducts\": [\n        {\n            \"productId\": 1\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -631,7 +631,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"totalPrice\": 24.55,\n    \"orderProducts\": [\n        {\n            \"productId\": 9,\n            \"productPrice\": 25.99\n        }\n    ]\n}",
+							"raw": "{\n    \"totalPrice\": 34.55,\n    \"orderProducts\": [\n        {\n            \"productId\": 1,\n            \"productPrice\": 35.99\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
