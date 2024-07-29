@@ -145,7 +145,7 @@ func main() {
 	})
 
 	router.Post("/api/qrcode/generate", handler.GenerateQRCodeHandler(generateQRCodePaymentUseCase))
-	router.Post("/api/webhook/ml/payment", webhook.PostMercadoLivreWebhook(finishOrderForQRCodeUseCase))
+	router.Post("/api/webhook/ml/payment", webhook.PostExternalPaymentEventWebhook(finishOrderForQRCodeUseCase))
 
 	router.Post("/api/customers", handler.CreateCustomerHandler(createCustomerUseCase))
 	router.Put("/api/customers/{id}", handler.UpdateCustomerHandler(updateCustomerUseCase))

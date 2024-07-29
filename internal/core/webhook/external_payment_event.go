@@ -16,13 +16,13 @@ import (
 // @Tags Webhook
 // @Accept json
 // @Produce json
-// @Param mercadoLivrePaymentForm body dto.MercadoLivrePaymentForm true "mercadoLivrePaymentForm"
+// @Param externalPaymentEvent body dto.ExternalPaymentEvent true "externalPaymentEvent"
 // @Success 204
 // @Failure 406 "StatusNotAcceptable - Topic is not 'merchant_order'"
 // @Router /api/webhook/ml/payment [post]
-func PostMercadoLivreWebhook(finishOrderForQRCode *usecases.FinishOrderForQRCodeUseCase) http.HandlerFunc {
+func PostExternalPaymentEventWebhook(finishOrderForQRCode *usecases.FinishOrderForQRCodeUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var form dto.MercadoLivrePaymentForm
+		var form dto.ExternalPaymentEvent
 
 		err := httpserver.DecodeJSONBody(w, r, &form)
 

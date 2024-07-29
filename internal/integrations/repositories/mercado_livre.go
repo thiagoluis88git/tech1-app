@@ -6,10 +6,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/thiagoluis88git/tech1/internal/integrations/model"
-	"github.com/thiagoluis88git/tech1/internal/integrations/remote"
 	"github.com/thiagoluis88git/tech1/internal/core/domain/dto"
 	"github.com/thiagoluis88git/tech1/internal/core/domain/repository"
+	"github.com/thiagoluis88git/tech1/internal/integrations/model"
+	"github.com/thiagoluis88git/tech1/internal/integrations/remote"
 	"github.com/thiagoluis88git/tech1/pkg/environment"
 )
 
@@ -68,14 +68,14 @@ func (repo *MercadoLivreRepositoryImpl) Generate(ctx context.Context, token stri
 	}, nil
 }
 
-func (repo *MercadoLivreRepositoryImpl) GetQRCodePaymentData(ctx context.Context, token string, endpoint string) (dto.MercadoLivrePayment, error) {
+func (repo *MercadoLivreRepositoryImpl) GetQRCodePaymentData(ctx context.Context, token string, endpoint string) (dto.ExternalPaymentInformation, error) {
 	response, err := repo.ds.GetPaymentData(ctx, token, endpoint)
 
 	if err != nil {
-		return dto.MercadoLivrePayment{}, err
+		return dto.ExternalPaymentInformation{}, err
 	}
 
-	mercadoLivrePayment := dto.MercadoLivrePayment(response)
+	mercadoLivrePayment := dto.ExternalPaymentInformation(response)
 
 	return mercadoLivrePayment, nil
 }

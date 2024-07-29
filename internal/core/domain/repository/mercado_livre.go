@@ -8,5 +8,5 @@ import (
 
 type QRCodePaymentRepository interface {
 	Generate(ctx context.Context, token string, form dto.Order, orderID int) (dto.QRCodeDataResponse, error)
-	GetQRCodePaymentData(ctx context.Context, token string, endpoint string) (dto.MercadoLivrePayment, error)
+	GetQRCodePaymentData(ctx context.Context, token string, endpoint string) (dto.ExternalPaymentInformation, error)
 }

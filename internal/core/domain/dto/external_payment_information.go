@@ -1,6 +1,6 @@
 package dto
 
-type MercadoLivrePayment struct {
+type ExternalPaymentInformation struct {
 	ID                int64
 	Status            string
 	ExternalReference string

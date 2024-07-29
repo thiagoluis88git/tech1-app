@@ -776,12 +776,12 @@ const docTemplate = `{
                 "summary": "Payment Webhook",
                 "parameters": [
                     {
-                        "description": "mercadoLivrePaymentForm",
-                        "name": "mercadoLivrePaymentForm",
+                        "description": "externalPaymentEvent",
+                        "name": "externalPaymentEvent",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.MercadoLivrePaymentForm"
+                            "$ref": "#/definitions/dto.ExternalPaymentEvent"
                         }
                     }
                 ],
@@ -838,7 +838,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.MercadoLivrePaymentForm": {
+        "dto.ExternalPaymentEvent": {
             "type": "object",
             "properties": {
                 "resource": {

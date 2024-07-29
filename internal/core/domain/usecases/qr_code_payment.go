@@ -107,7 +107,7 @@ func (service *GenerateQRCodePaymentUseCase) Execute(
 	return qrCode, nil
 }
 
-func (service *FinishOrderForQRCodeUseCase) Execute(ctx context.Context, token string, form dto.MercadoLivrePaymentForm) error {
+func (service *FinishOrderForQRCodeUseCase) Execute(ctx context.Context, token string, form dto.ExternalPaymentEvent) error {
 	if form.Topic != "merchant_order" {
 		return &responses.NetworkError{
 			Code: http.StatusNotAcceptable,

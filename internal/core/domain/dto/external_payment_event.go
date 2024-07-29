@@ -1,6 +1,6 @@
 package dto
 
-type MercadoLivrePaymentForm struct {
+type ExternalPaymentEvent struct {
 	Resource string `json:"resource"`
 	Topic    string `json:"topic"`
 }
