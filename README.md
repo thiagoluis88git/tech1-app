@@ -73,6 +73,8 @@ To design this application was chosen `DDD (Domain Drive Design)` architecture t
 
 The other one is `Clean Archtecture`. With it, we add some extra layers to organize even more the project.
 
+![CleanArchitecture](https://github.com/user-attachments/assets/a49c2aab-562c-4b6c-82f2-7ffe9e4aec74)
+
 The folder project was created to follow this main principle:
 
 - **data**: Here we have all the implementations, such as Repositories, Remotes and Locals
