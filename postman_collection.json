@@ -153,14 +153,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/products/1",
+							"raw": "{{base_url}}/api/products/3",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
 								"products",
-								"1"
+								"3"
 							]
 						}
 					},
@@ -173,7 +173,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Combo pequeno\",\n    \"description\": \"Hamburguer, batata e bebida\",\n    \"category\": \"Combo\",\n    \"price\": 25.99,\n    \"images\": [\n        {\n            \"imageUrl\": \"url1\"\n        },\n        {\n            \"imageUrl\": \"url2\"\n        },\n        {\n            \"imageUrl\": \"url3\"\n        }\n    ],\n    \"comboProductsIds\": [6,4, 1]\n}",
+							"raw": "{\n    \"name\": \"Batata frita grande\",\n    \"description\": \"Batata frita grande de 350g com queijo e bacon\",\n    \"category\": \"Acompanhamento\",\n    \"price\": 17.99,\n    \"images\": [\n        {\n            \"imageUrl\": \"url1\"\n        },\n        {\n            \"imageUrl\": \"url2\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -181,14 +181,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/api/products/9",
+							"raw": "{{base_url}}/api/products/7",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
 								"products",
-								"9"
+								"7"
 							]
 						}
 					},
@@ -228,7 +228,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Hamburguer 3\",\n    \"description\": \"Hamburguer com 2 carnes de 150g, queijo, alface e bacon\",\n    \"category\": \"Lanche\",\n    \"price\": 32.99,\n    \"images\": [\n        {\n            \"imageUrl\": \"url1\"\n        },\n        {\n            \"imageUrl\": \"url1\"\n        }\n    ]\n}",
+							"raw": "{\n    \"name\": \"Hamburguer simples\",\n    \"description\": \"Hamburguer carne smash com quejo prato\",\n    \"category\": \"Lanche\",\n    \"price\": 17.99,\n    \"images\": [\n        {\n            \"imageUrl\": \"url1\"\n        },\n        {\n            \"imageUrl\": \"url2\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -282,7 +282,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/products/categories/Lanche",
+							"raw": "{{base_url}}/api/products/categories/Acompanhamento",
 							"host": [
 								"{{base_url}}"
 							],
@@ -290,7 +290,7 @@
 								"api",
 								"products",
 								"categories",
-								"Lanche"
+								"Acompanhamento"
 							]
 						}
 					},
@@ -440,14 +440,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/api/orders/3/preparing",
+							"raw": "{{base_url}}/api/orders/13/preparing",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
 								"orders",
-								"3",
+								"13",
 								"preparing"
 							]
 						}
@@ -469,14 +469,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/api/orders/2/done",
+							"raw": "{{base_url}}/api/orders/13/done",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
 								"orders",
-								"2",
+								"13",
 								"done"
 							]
 						}
@@ -548,7 +548,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"totalPrice\": 34.50,\n    \"paymentId\": 4,\n    \"orderProducts\": [\n        {\n            \"productId\": 1\n        }\n    ]\n}",
+							"raw": "{\n    \"totalPrice\": 44.50,\n    \"paymentId\": 12,\n    \"orderProducts\": [\n        {\n            \"productId\": 9\n        },\n        {\n            \"productId\": 4\n        },\n        {\n            \"productId\": 6\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -580,7 +580,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"paymentType\": \"Credito\",\n    \"totalPrice\": 9.50\n}",
+							"raw": "{\n    \"paymentType\": \"Credito\",\n    \"totalPrice\": 44.50\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -647,6 +647,35 @@
 								"api",
 								"qrcode",
 								"generate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Webhook Handler Payment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"resource\": \"teste\",\n    \"topic\": \"merchant_order\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/webhook/ml/payment",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"webhook",
+								"ml",
+								"payment"
 							]
 						}
 					},
