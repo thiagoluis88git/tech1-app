@@ -185,7 +185,7 @@ export AWS_SESSION_TOKEN="<TOKEN>"
 
 After that, we can run this command:
 ```
-aws eks update-kubeconfig --region us-east-1 --name cluster-fastfood
+aws eks update-kubeconfig --region us-east-1 --name fastfood-cluster
 ```
 
 ## Section 1 Restaurant owner

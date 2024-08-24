@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: cm-app
 data:
-  DB_HOST: rds-fastfood-2.cfpviz6zbrty.us-east-1.rds.amazonaws.com
+  DB_HOST: fastfood-database.cevl7wigxbt3.us-east-1.rds.amazonaws.com
   DB_PORT: "5432"
