@@ -19,14 +19,22 @@ func (suite *RepositoryTestSuite) TestCreateCustomerWithSuccess() {
 	suite.NoError(result.Error)
 	suite.Empty(customers)
 
-	repo := NewCustomerRepository(suite.db)
+	mockCognito := new(MockCognitoRemoteDataSource)
+	repo := NewCustomerRepository(suite.db, mockCognito)
 
-	// Product 1
 	newCustomer := dto.Customer{
 		Name:  "Teste",
 		CPF:   "12312312312",
 		Email: "teste@teste.com",
 	}
+
+	newCustomerModel := &model.Customer{
+		Name:  "Teste",
+		CPF:   "12312312312",
+		Email: "teste@teste.com",
+	}
+
+	mockCognito.On("SignUp", newCustomerModel).Return(nil)
 
 	newId, err := repo.CreateCustomer(suite.ctx, newCustomer)
 
@@ -45,7 +53,8 @@ func (suite *RepositoryTestSuite) TestGetCustomerByCPFWithSuccess() {
 	suite.NoError(result.Error)
 	suite.Empty(customers)
 
-	repo := NewCustomerRepository(suite.db)
+	mockCognito := new(MockCognitoRemoteDataSource)
+	repo := NewCustomerRepository(suite.db, mockCognito)
 
 	// Product 1
 	newCustomer := dto.Customer{
@@ -53,6 +62,14 @@ func (suite *RepositoryTestSuite) TestGetCustomerByCPFWithSuccess() {
 		CPF:   "12312312312",
 		Email: "teste@teste.com",
 	}
+
+	newCustomerModel := &model.Customer{
+		Name:  "Teste",
+		CPF:   "12312312312",
+		Email: "teste@teste.com",
+	}
+
+	mockCognito.On("SignUp", newCustomerModel).Return(nil)
 
 	newId, err := repo.CreateCustomer(suite.ctx, newCustomer)
 

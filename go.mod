@@ -3,6 +3,7 @@ module github.com/thiagoluis88git/tech1
 go 1.22.2
 
 require (
+	github.com/aws/aws-sdk-go v1.55.5
 	github.com/go-chi/chi/v5 v5.0.12
 	github.com/go-playground/validator/v10 v10.19.0
 	github.com/golang/gddo v0.0.0-20210115222349-20d68f94ee1f
@@ -53,6 +54,7 @@ require (
 	github.com/jackc/puddle/v2 v2.2.1 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
+	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/klauspost/compress v1.16.0 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect

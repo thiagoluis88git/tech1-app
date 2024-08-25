@@ -73,7 +73,8 @@ func main() {
 	updateProductUseCase := usecases.NewUpdateProductUseCase(productRepo)
 	createProductUseCase := usecases.NewCreateProductUseCase(validateProductCategoryUseCase, productRepo)
 
-	customerRepo := repositories.NewCustomerRepository(db)
+	cognitoRemote := remote.NewCognitoRemoteDataSource(environment.GetCognitoClientID(), environment.GetRegion())
+	customerRepo := repositories.NewCustomerRepository(db, cognitoRemote)
 	validateCPFUseCase := usecases.NewValidateCPFUseCase()
 	createCustomerUseCase := usecases.NewCreateCustomerUseCase(validateCPFUseCase, customerRepo)
 	updateCustomerUseCase := usecases.NewUpdateCustomerUseCase(validateCPFUseCase, customerRepo)

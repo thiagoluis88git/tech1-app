@@ -6,18 +6,21 @@ import (
 	"github.com/thiagoluis88git/tech1/internal/core/data/model"
 	"github.com/thiagoluis88git/tech1/internal/core/domain/dto"
 	"github.com/thiagoluis88git/tech1/internal/core/domain/repository"
+	"github.com/thiagoluis88git/tech1/internal/integrations/remote"
 	"github.com/thiagoluis88git/tech1/pkg/responses"
 
 	"gorm.io/gorm"
 )
 
 type CustomerRepository struct {
-	db *gorm.DB
+	db            *gorm.DB
+	cognitoRemote remote.CognitoRemoteDataSource
 }
 
-func NewCustomerRepository(db *gorm.DB) repository.CustomerRepository {
+func NewCustomerRepository(db *gorm.DB, cognitoRemote remote.CognitoRemoteDataSource) repository.CustomerRepository {
 	return &CustomerRepository{
-		db: db,
+		db:            db,
+		cognitoRemote: cognitoRemote,
 	}
 }
 
@@ -28,7 +31,13 @@ func (repository *CustomerRepository) CreateCustomer(ctx context.Context, custom
 		Email: customer.Email,
 	}
 
-	err := repository.db.WithContext(ctx).Create(customerEntity).Error
+	err := repository.cognitoRemote.SignUp(customerEntity)
+
+	if err != nil {
+		return 0, responses.GetDatabaseError(err)
+	}
+
+	err = repository.db.WithContext(ctx).Create(customerEntity).Error
 
 	if err != nil {
 		return 0, responses.GetDatabaseError(err)
