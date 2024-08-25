@@ -34,7 +34,7 @@ func (repository *CustomerRepository) CreateCustomer(ctx context.Context, custom
 	err := repository.cognitoRemote.SignUp(customerEntity)
 
 	if err != nil {
-		return 0, responses.GetDatabaseError(err)
+		return 0, responses.GetCognitoError(err)
 	}
 
 	err = repository.db.WithContext(ctx).Create(customerEntity).Error

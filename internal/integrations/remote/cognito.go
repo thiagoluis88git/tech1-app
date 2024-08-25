@@ -24,6 +24,16 @@ func NewCognitoRemoteDataSource(appClientId string, region string) CognitoRemote
 	}
 	client := cognito.New(sess)
 
+	client.AdminUpdateUserAttributes(&cognito.AdminUpdateUserAttributesInput{
+		UserAttributes: []*cognito.AttributeType{
+			{
+				Name:  aws.String("email_verified"),
+				Value: aws.String("true"),
+			},
+		},
+	})
+
+	// teste, testee := client.CreateUserPoolRequest()
 	return &CognitoRemoteDataSourceImpl{
 		cognitoClient: client,
 		appClientID:   appClientId,
@@ -50,7 +60,6 @@ func (c *CognitoRemoteDataSourceImpl) SignUp(user *model.Customer) error {
 	_, err := c.cognitoClient.SignUp(userCognito)
 
 	if err != nil {
-		// Verificar UsernameExistsException: User already exists
 		return err
 	}
 
