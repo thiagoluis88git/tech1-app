@@ -1,8 +1,6 @@
 package remote
 
 import (
-	"fmt"
-
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
@@ -43,10 +41,9 @@ func NewCognitoRemoteDataSource(appClientId string, region string) CognitoRemote
 }
 
 func (c *CognitoRemoteDataSourceImpl) SignUp(user *model.Customer) error {
-	userCognito := &cognito.SignUpInput{
-		ClientId: aws.String(c.appClientID),
-		Username: aws.String(user.CPF),
-		Password: aws.String(user.CPF),
+	userCognito := &cognito.AdminCreateUserInput{
+		UserPoolId: aws.String(c.appClientID),
+		Username:   aws.String(user.Email),
 		UserAttributes: []*cognito.AttributeType{
 			{
 				Name:  aws.String("name"),
@@ -56,29 +53,16 @@ func (c *CognitoRemoteDataSourceImpl) SignUp(user *model.Customer) error {
 				Name:  aws.String("email"),
 				Value: aws.String(user.Email),
 			},
+			{
+				Name:  aws.String("email_verified"),
+				Value: aws.String("true"),
+			},
 		},
 	}
 
-	result, err := c.cognitoClient.SignUp(userCognito)
+	_, err := c.cognitoClient.AdminCreateUser(userCognito)
 
 	if err != nil {
-		return err
-	}
-
-	output := result.SetUserConfirmed(true)
-
-	print(output)
-
-	// Confirm the user immediately using the temporary password
-	confirmRequest := &cognito.ConfirmSignUpInput{
-		Username: aws.String(user.CPF),
-		ClientId: &c.appClientID,
-	}
-
-	_, err = c.cognitoClient.ConfirmSignUp(confirmRequest)
-
-	if err != nil {
-		fmt.Println("Error confirming user:", err)
 		return err
 	}
 
