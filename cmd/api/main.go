@@ -73,9 +73,14 @@ func main() {
 	updateProductUseCase := usecases.NewUpdateProductUseCase(productRepo)
 	createProductUseCase := usecases.NewCreateProductUseCase(validateProductCategoryUseCase, productRepo)
 
-	cognitoRemote := remote.NewCognitoRemoteDataSource(environment.GetCognitoClientID(), environment.GetRegion())
+	cognitoRemote := remote.NewCognitoRemoteDataSource(
+		environment.GetRegion(),
+		environment.GetCognitoUserPoolID(),
+		environment.GetCognitoClientID(),
+	)
 	customerRepo := repositories.NewCustomerRepository(db, cognitoRemote)
 	validateCPFUseCase := usecases.NewValidateCPFUseCase()
+	loginCustomerUseCase := usecases.NewLoginCustomerUseCase(customerRepo)
 	createCustomerUseCase := usecases.NewCreateCustomerUseCase(validateCPFUseCase, customerRepo)
 	updateCustomerUseCase := usecases.NewUpdateCustomerUseCase(validateCPFUseCase, customerRepo)
 	getCustomerByIdUseCase := usecases.NewGetCustomerByIdUseCase(customerRepo)
@@ -145,6 +150,7 @@ func main() {
 		})
 	})
 
+	router.Post("/auth/login", handler.LoginCustomerHandler(loginCustomerUseCase))
 	router.Post("/api/qrcode/generate", handler.GenerateQRCodeHandler(generateQRCodePaymentUseCase))
 	router.Post("/api/webhook/ml/payment", webhook.PostExternalPaymentEventWebhook(finishOrderForQRCodeUseCase))
 

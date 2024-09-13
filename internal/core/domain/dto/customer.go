@@ -1,5 +1,9 @@
 package dto
 
+type Token struct {
+	AccessToken string `json:"accessToken"`
+}
+
 type Customer struct {
 	ID    uint   `json:"id"`
 	Name  string `json:"name" validate:"required"`

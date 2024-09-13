@@ -102,3 +102,13 @@ func (repository *CustomerRepository) populateCustomer(customerEntity model.Cust
 		Email: customerEntity.Email,
 	}
 }
+
+func (repository *CustomerRepository) Login(ctx context.Context, cpf string) (string, error) {
+	token, err := repository.cognitoRemote.Login(cpf)
+
+	if err != nil {
+		return "", responses.GetDatabaseError(err)
+	}
+
+	return token, nil
+}

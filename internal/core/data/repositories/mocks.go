@@ -29,6 +29,17 @@ func (mock *MockCognitoRemoteDataSource) SignUp(user *model.Customer) error {
 	return nil
 }
 
+func (mock *MockCognitoRemoteDataSource) Login(cpf string) (string, error) {
+	args := mock.Called(cpf)
+	err := args.Error(1)
+
+	if err != nil {
+		return "", err
+	}
+
+	return args.Get(0).(string), nil
+}
+
 type RepositoryTestSuite struct {
 	suite.Suite
 	ctx                context.Context

@@ -9,16 +9,23 @@ import (
 	"github.com/thiagoluis88git/tech1/internal/core/data/model"
 )
 
+const (
+	passwordSufixTemp = "12!@Az"
+	passwordSufix     = "1234&$sWa"
+)
+
 type CognitoRemoteDataSource interface {
 	SignUp(user *model.Customer) error
+	Login(cpf string) (string, error)
 }
 
 type CognitoRemoteDataSourceImpl struct {
 	cognitoClient *cognito.CognitoIdentityProvider
 	appClientID   string
+	userPoolID    string
 }
 
-func NewCognitoRemoteDataSource(appClientId string, region string) CognitoRemoteDataSource {
+func NewCognitoRemoteDataSource(region string, userPoolID string, appClientId string) CognitoRemoteDataSource {
 	config := &aws.Config{Region: aws.String(region)}
 	sess, err := session.NewSession(config)
 	if err != nil {
@@ -39,17 +46,18 @@ func NewCognitoRemoteDataSource(appClientId string, region string) CognitoRemote
 	return &CognitoRemoteDataSourceImpl{
 		cognitoClient: client,
 		appClientID:   appClientId,
+		userPoolID:    userPoolID,
 	}
 }
 
-func (c *CognitoRemoteDataSourceImpl) SignUp(user *model.Customer) error {
+func (ds *CognitoRemoteDataSourceImpl) SignUp(user *model.Customer) error {
 	messageAction := "SUPPRESS"
 
-	pass := fmt.Sprintf("%v%v", user.Email, "12!@Az")
+	pass := fmt.Sprintf("%v%v", user.CPF, passwordSufixTemp)
 
 	userCognito := &cognito.AdminCreateUserInput{
-		UserPoolId:        aws.String(c.appClientID),
-		Username:          aws.String(user.Email),
+		UserPoolId:        aws.String(ds.userPoolID),
+		Username:          aws.String(user.CPF),
 		MessageAction:     &messageAction,
 		TemporaryPassword: &pass,
 		UserAttributes: []*cognito.AttributeType{
@@ -68,27 +76,47 @@ func (c *CognitoRemoteDataSourceImpl) SignUp(user *model.Customer) error {
 		},
 	}
 
-	_, err := c.cognitoClient.AdminCreateUser(userCognito)
+	_, err := ds.cognitoClient.AdminCreateUser(userCognito)
 
 	if err != nil {
 		return err
 	}
 
-	password := fmt.Sprintf("%v%v", user.Email, "1234&$sWa")
+	password := fmt.Sprintf("%v%v", user.CPF, passwordSufix)
 	permanent := true
 
 	setPasswordInput := &cognito.AdminSetUserPasswordInput{
 		Password:   &password,
-		UserPoolId: aws.String(c.appClientID),
-		Username:   aws.String(user.Email),
+		UserPoolId: aws.String(ds.userPoolID),
+		Username:   aws.String(user.CPF),
 		Permanent:  &permanent,
 	}
 
-	_, errPasswd := c.cognitoClient.AdminSetUserPassword(setPasswordInput)
+	_, errPasswd := ds.cognitoClient.AdminSetUserPassword(setPasswordInput)
 
 	if errPasswd != nil {
 		return errPasswd
 	}
 
 	return nil
+}
+
+func (ds *CognitoRemoteDataSourceImpl) Login(cpf string) (string, error) {
+	password := fmt.Sprintf("%v%v", cpf, passwordSufix)
+
+	authInput := &cognito.InitiateAuthInput{
+		AuthFlow: aws.String("USER_PASSWORD_AUTH"),
+		AuthParameters: aws.StringMap(map[string]string{
+			"USERNAME": cpf,
+			"PASSWORD": password,
+		}),
+		ClientId: aws.String(ds.appClientID),
+	}
+	result, err := ds.cognitoClient.InitiateAuth(authInput)
+
+	if err != nil {
+		return "", err
+	}
+
+	return *result.AuthenticationResult.AccessToken, nil
 }
