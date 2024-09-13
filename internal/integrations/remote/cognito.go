@@ -45,7 +45,7 @@ func NewCognitoRemoteDataSource(appClientId string, region string) CognitoRemote
 func (c *CognitoRemoteDataSourceImpl) SignUp(user *model.Customer) error {
 	messageAction := "SUPPRESS"
 
-	pass := fmt.Sprintf("%v%v", &user.Email, "12!@Az")
+	pass := fmt.Sprintf("%v%v", user.Email, "12!@Az")
 
 	userCognito := &cognito.AdminCreateUserInput{
 		UserPoolId:        aws.String(c.appClientID),
