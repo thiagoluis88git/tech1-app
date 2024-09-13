@@ -1,6 +1,8 @@
 package remote
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
@@ -41,9 +43,13 @@ func NewCognitoRemoteDataSource(appClientId string, region string) CognitoRemote
 }
 
 func (c *CognitoRemoteDataSourceImpl) SignUp(user *model.Customer) error {
+	messageAction := "SUPPRESS"
+
 	userCognito := &cognito.AdminCreateUserInput{
-		UserPoolId: aws.String(c.appClientID),
-		Username:   aws.String(user.Email),
+		UserPoolId:        aws.String(c.appClientID),
+		Username:          aws.String(user.Email),
+		MessageAction:     &messageAction,
+		TemporaryPassword: &user.Email,
 		UserAttributes: []*cognito.AttributeType{
 			{
 				Name:  aws.String("name"),
@@ -55,7 +61,7 @@ func (c *CognitoRemoteDataSourceImpl) SignUp(user *model.Customer) error {
 			},
 			{
 				Name:  aws.String("email_verified"),
-				Value: aws.String("true"),
+				Value: aws.String("True"),
 			},
 		},
 	}
@@ -64,6 +70,22 @@ func (c *CognitoRemoteDataSourceImpl) SignUp(user *model.Customer) error {
 
 	if err != nil {
 		return err
+	}
+
+	password := fmt.Sprintf("%v%v", user.Email, "1234")
+	permanent := true
+
+	setPasswordInput := &cognito.AdminSetUserPasswordInput{
+		Password:   &password,
+		UserPoolId: aws.String(c.appClientID),
+		Username:   aws.String(user.Email),
+		Permanent:  &permanent,
+	}
+
+	_, errPasswd := c.cognitoClient.AdminSetUserPassword(setPasswordInput)
+
+	if errPasswd != nil {
+		return errPasswd
 	}
 
 	return nil
