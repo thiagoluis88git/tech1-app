@@ -45,11 +45,13 @@ func NewCognitoRemoteDataSource(appClientId string, region string) CognitoRemote
 func (c *CognitoRemoteDataSourceImpl) SignUp(user *model.Customer) error {
 	messageAction := "SUPPRESS"
 
+	pass := fmt.Sprintf("%v%v", &user.Email, "12!@Az")
+
 	userCognito := &cognito.AdminCreateUserInput{
 		UserPoolId:        aws.String(c.appClientID),
 		Username:          aws.String(user.Email),
 		MessageAction:     &messageAction,
-		TemporaryPassword: &user.Email,
+		TemporaryPassword: &pass,
 		UserAttributes: []*cognito.AttributeType{
 			{
 				Name:  aws.String("name"),
@@ -72,7 +74,7 @@ func (c *CognitoRemoteDataSourceImpl) SignUp(user *model.Customer) error {
 		return err
 	}
 
-	password := fmt.Sprintf("%v%v", user.Email, "1234")
+	password := fmt.Sprintf("%v%v", user.Email, "1234&$sWa")
 	permanent := true
 
 	setPasswordInput := &cognito.AdminSetUserPasswordInput{
