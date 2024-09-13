@@ -206,6 +206,11 @@ definitions:
     - orderProducts
     - totalPrice
     type: object
+  dto.Token:
+    properties:
+      accessToken:
+        type: string
+    type: object
 host: localshot:3210
 info:
   contact:
@@ -220,32 +225,6 @@ info:
   title: Tech1 API Docs
   version: "1.0"
 paths:
-  /api/customers:
-    post:
-      consumes:
-      - application/json
-      description: Create new customer. This process is not required to make an order
-      parameters:
-      - description: customer
-        in: body
-        name: product
-        required: true
-        schema:
-          $ref: '#/definitions/dto.Customer'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/dto.CustomerResponse'
-        "400":
-          description: Customer has required fields
-        "409":
-          description: This Customer is already added
-      summary: Create new customer
-      tags:
-      - Customer
   /api/customers/{id}:
     get:
       consumes:
@@ -741,4 +720,54 @@ paths:
       summary: Payment Webhook
       tags:
       - Webhook
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login the customer by its CPF
+      parameters:
+      - description: customer form
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CustomerForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Token'
+        "404":
+          description: Customer not found
+      summary: Login
+      tags:
+      - Customer
+  /customers:
+    post:
+      consumes:
+      - application/json
+      description: Create new customer. This process is not required to make an order
+      parameters:
+      - description: customer
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/dto.Customer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.CustomerResponse'
+        "400":
+          description: Customer has required fields
+        "409":
+          description: This Customer is already added
+      summary: Create new customer
+      tags:
+      - Customer
 swagger: "2.0"

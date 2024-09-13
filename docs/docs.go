@@ -24,46 +24,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/customers": {
-            "post": {
-                "description": "Create new customer. This process is not required to make an order",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Customer"
-                ],
-                "summary": "Create new customer",
-                "parameters": [
-                    {
-                        "description": "customer",
-                        "name": "product",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.Customer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.CustomerResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Customer has required fields"
-                    },
-                    "409": {
-                        "description": "This Customer is already added"
-                    }
-                }
-            }
-        },
         "/api/customers/login": {
             "post": {
                 "description": "Get customer by CPF. This Endpoint can be used as a Login",
@@ -794,6 +754,83 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/auth/login": {
+            "post": {
+                "description": "Login the customer by its CPF",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "Login",
+                "parameters": [
+                    {
+                        "description": "customer form",
+                        "name": "customer",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CustomerForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.Token"
+                        }
+                    },
+                    "404": {
+                        "description": "Customer not found"
+                    }
+                }
+            }
+        },
+        "/customers": {
+            "post": {
+                "description": "Create new customer. This process is not required to make an order",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "Create new customer",
+                "parameters": [
+                    {
+                        "description": "customer",
+                        "name": "product",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.Customer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.CustomerResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Customer has required fields"
+                    },
+                    "409": {
+                        "description": "This Customer is already added"
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -1103,6 +1140,14 @@ const docTemplate = `{
                 },
                 "totalPrice": {
                     "type": "number"
+                }
+            }
+        },
+        "dto.Token": {
+            "type": "object",
+            "properties": {
+                "accessToken": {
+                    "type": "string"
                 }
             }
         }
