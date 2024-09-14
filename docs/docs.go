@@ -792,7 +792,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/customers": {
+        "/auth/signup": {
             "post": {
                 "description": "Create new customer. This process is not required to make an order",
                 "consumes": [

@@ -151,10 +151,10 @@ func main() {
 	})
 
 	router.Post("/auth/login", handler.LoginCustomerHandler(loginCustomerUseCase))
+	router.Post("/auth/signup", handler.CreateCustomerHandler(createCustomerUseCase))
 	router.Post("/api/qrcode/generate", handler.GenerateQRCodeHandler(generateQRCodePaymentUseCase))
 	router.Post("/api/webhook/ml/payment", webhook.PostExternalPaymentEventWebhook(finishOrderForQRCodeUseCase))
 
-	router.Post("/api/customers", handler.CreateCustomerHandler(createCustomerUseCase))
 	router.Put("/api/customers/{id}", handler.UpdateCustomerHandler(updateCustomerUseCase))
 	router.Get("/api/customers/{id}", handler.GetCustomerByIdHandler(getCustomerByIdUseCase))
 	router.Post("/api/customers/login", handler.GetCustomerByCPFHandler(getCustomerByCPFUseCase))

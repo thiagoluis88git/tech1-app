@@ -744,7 +744,7 @@ paths:
       summary: Login
       tags:
       - Customer
-  /customers:
+  /auth/signup:
     post:
       consumes:
       - application/json

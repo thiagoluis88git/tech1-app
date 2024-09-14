@@ -19,7 +19,7 @@ import (
 // @Success 200 {object} dto.CustomerResponse
 // @Failure 400 "Customer has required fields"
 // @Failure 409 "This Customer is already added"
-// @Router /customers [post]
+// @Router /auth/signup [post]
 func CreateCustomerHandler(createCustomer *usecases.CreateCustomerUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var customer dto.Customer
