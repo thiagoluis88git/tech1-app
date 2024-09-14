@@ -3,6 +3,9 @@ FROM golang:1.22 AS build-stage
 WORKDIR /go/src
 ENV PATH="/go/src:${PATH}"
 
+# Install Certificate
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates
+
 COPY . ./
 
 RUN go mod download
@@ -22,6 +25,9 @@ RUN \
 FROM scratch
 
 WORKDIR /app
+
+# Copy Certificate
+COPY --from=build-stage /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 COPY --from=build-stage /FasfoodApp /FasfoodApp
 COPY --from=build-stage /go/src/docs/ /docs/

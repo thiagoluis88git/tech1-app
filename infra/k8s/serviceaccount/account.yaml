@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sa-fastfood
+  namespace: default
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::714167738697:role/LabRole
