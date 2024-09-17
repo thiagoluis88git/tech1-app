@@ -79,14 +79,14 @@ spec:
         #   name: redoc
         livenessProbe:
           httpGet:
-            path: /api/health
+            path: /health
             port: 3210
           periodSeconds: 10
           failureThreshold: 3
           initialDelaySeconds: 15
         readinessProbe:
           httpGet:
-            path: /api/health
+            path: /health
             port: 3210
           periodSeconds: 10
           failureThreshold: 5
