@@ -211,6 +211,33 @@ definitions:
       accessToken:
         type: string
     type: object
+  dto.UserAdmin:
+    properties:
+      cpf:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - cpf
+    - email
+    - name
+    type: object
+  dto.UserAdminForm:
+    properties:
+      cpf:
+        type: string
+    required:
+    - cpf
+    type: object
+  dto.UserAdminResponse:
+    properties:
+      id:
+        type: integer
+    type: object
 host: localshot:3210
 info:
   contact:
@@ -696,6 +723,81 @@ paths:
       summary: Generate a QR Code
       tags:
       - QRCode
+  /api/users/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get user by ID
+      parameters:
+      - description: "12"
+        in: path
+        name: Id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserAdmin'
+        "404":
+          description: User not found
+      summary: Get user by ID
+      tags:
+      - UserAdmin
+    put:
+      consumes:
+      - application/json
+      description: Update user
+      parameters:
+      - description: "12"
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: customer
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/dto.Customer'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: User has required fields
+        "404":
+          description: User not found
+      summary: Update user
+      tags:
+      - UserAdmin
+  /api/users/login:
+    post:
+      consumes:
+      - application/json
+      description: Get user by CPF. This Endpoint can be used as a Login
+      parameters:
+      - description: UserAdminForm
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserAdminForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserAdmin'
+        "404":
+          description: User not found
+      summary: Get user by CPF
+      tags:
+      - UserAdmin
   /api/webhook/ml/payment:
     post:
       consumes:
@@ -720,6 +822,56 @@ paths:
       summary: Payment Webhook
       tags:
       - Webhook
+  /auth/admin/login:
+    post:
+      consumes:
+      - application/json
+      description: Login the user by its CPF
+      parameters:
+      - description: user form
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserAdminForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Token'
+        "404":
+          description: User not found
+      summary: Login
+      tags:
+      - UserAdmin
+  /auth/admin/signup:
+    post:
+      consumes:
+      - application/json
+      description: Create new customer. This process is not required to make an order
+      parameters:
+      - description: user admin
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserAdmin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserAdminResponse'
+        "400":
+          description: Customer has required fields
+        "409":
+          description: This user is already added
+      summary: Create new user admin
+      tags:
+      - UserAdmin
   /auth/login:
     post:
       consumes:
