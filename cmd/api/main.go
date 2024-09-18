@@ -77,14 +77,23 @@ func main() {
 		environment.GetRegion(),
 		environment.GetCognitoUserPoolID(),
 		environment.GetCognitoClientID(),
+		environment.GetCognitoGroupUser(),
+		environment.GetCognitoGroupAdmin(),
 	)
 	customerRepo := repositories.NewCustomerRepository(db, cognitoRemote)
+	userRepo := repositories.NewUserAdminRepository(db, cognitoRemote)
 	validateCPFUseCase := usecases.NewValidateCPFUseCase()
 	loginCustomerUseCase := usecases.NewLoginCustomerUseCase(customerRepo)
 	createCustomerUseCase := usecases.NewCreateCustomerUseCase(validateCPFUseCase, customerRepo)
 	updateCustomerUseCase := usecases.NewUpdateCustomerUseCase(validateCPFUseCase, customerRepo)
 	getCustomerByIdUseCase := usecases.NewGetCustomerByIdUseCase(customerRepo)
 	getCustomerByCPFUseCase := usecases.NewGetCustomerByCPFUseCase(validateCPFUseCase, customerRepo)
+
+	loginUserUseCase := usecases.NewLoginUserUseCase(userRepo)
+	createUserUseCase := usecases.NewCreateUserUseCase(validateCPFUseCase, userRepo)
+	updateUserUseCase := usecases.NewUpdateUserUseCase(validateCPFUseCase, userRepo)
+	getUserByIdUseCase := usecases.NewGetUserByIdUseCase(userRepo)
+	getUserByCPFUseCase := usecases.NewGetUserByCPFUseCase(validateCPFUseCase, userRepo)
 
 	orderRepo := repositories.NewOrderRespository(db)
 	validateToPreare := usecases.NewValidateOrderToPrepareUseCase(orderRepo)
@@ -151,14 +160,20 @@ func main() {
 	})
 
 	router.Post("/auth/login", handler.LoginCustomerHandler(loginCustomerUseCase))
+	router.Post("/auth/admin/login", handler.LoginUserHandler(loginUserUseCase))
 	router.Post("/auth/signup", handler.CreateCustomerHandler(createCustomerUseCase))
-	
+	router.Post("/auth/admin/signup", handler.CreateUserHandler(createUserUseCase))
+
 	router.Post("/api/qrcode/generate", handler.GenerateQRCodeHandler(generateQRCodePaymentUseCase))
 	router.Post("/api/webhook/ml/payment", webhook.PostExternalPaymentEventWebhook(finishOrderForQRCodeUseCase))
 
 	router.Put("/api/customers/{id}", handler.UpdateCustomerHandler(updateCustomerUseCase))
 	router.Get("/api/customers/{id}", handler.GetCustomerByIdHandler(getCustomerByIdUseCase))
 	router.Post("/api/customers/login", handler.GetCustomerByCPFHandler(getCustomerByCPFUseCase))
+
+	router.Put("/api/users/{id}", handler.UpdateUserHandler(updateUserUseCase))
+	router.Get("/api/users/{id}", handler.GetUserByIdHandler(getUserByIdUseCase))
+	router.Post("/api/users/login", handler.GetUserByCPFHandler(getUserByCPFUseCase))
 
 	router.Post("/api/products", handler.CreateProductHandler(createProductUseCase))
 	router.Delete("/api/products/{id}", handler.DeleteProductHandler(deleteProductUseCase))

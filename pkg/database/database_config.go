@@ -25,6 +25,7 @@ func ConfigDatabase() *gorm.DB {
 	}
 
 	db.AutoMigrate(
+		&model.UserAdmin{},
 		&model.Customer{},
 		&model.Order{},
 		&model.OrderProduct{},

@@ -29,6 +29,17 @@ func (mock *MockCognitoRemoteDataSource) SignUp(user *model.Customer) error {
 	return nil
 }
 
+func (mock *MockCognitoRemoteDataSource) SignUpAdmin(user *model.UserAdmin) error {
+	args := mock.Called(user)
+	err := args.Error(0)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (mock *MockCognitoRemoteDataSource) Login(cpf string) (string, error) {
 	args := mock.Called(cpf)
 	err := args.Error(1)

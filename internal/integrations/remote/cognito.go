@@ -16,6 +16,7 @@ const (
 
 type CognitoRemoteDataSource interface {
 	SignUp(user *model.Customer) error
+	SignUpAdmin(user *model.UserAdmin) error
 	Login(cpf string) (string, error)
 }
 
@@ -23,9 +24,17 @@ type CognitoRemoteDataSourceImpl struct {
 	cognitoClient *cognito.CognitoIdentityProvider
 	appClientID   string
 	userPoolID    string
+	groupUser     string
+	groupAdmin    string
 }
 
-func NewCognitoRemoteDataSource(region string, userPoolID string, appClientId string) CognitoRemoteDataSource {
+func NewCognitoRemoteDataSource(
+	region string,
+	userPoolID string,
+	appClientId string,
+	groupUser string,
+	groupAdmin string,
+) CognitoRemoteDataSource {
 	config := &aws.Config{Region: aws.String(region)}
 	sess, err := session.NewSession(config)
 	if err != nil {
@@ -47,27 +56,37 @@ func NewCognitoRemoteDataSource(region string, userPoolID string, appClientId st
 		cognitoClient: client,
 		appClientID:   appClientId,
 		userPoolID:    userPoolID,
+		groupUser:     groupUser,
+		groupAdmin:    groupAdmin,
 	}
 }
 
+func (ds *CognitoRemoteDataSourceImpl) SignUpAdmin(user *model.UserAdmin) error {
+	return ds.signUp(user.CPF, user.Name, user.Email, ds.appClientID)
+}
+
 func (ds *CognitoRemoteDataSourceImpl) SignUp(user *model.Customer) error {
+	return ds.signUp(user.CPF, user.Name, user.Email, ds.appClientID)
+}
+
+func (ds *CognitoRemoteDataSourceImpl) signUp(cpf, name, email, groupName string) error {
 	messageAction := "SUPPRESS"
 
-	pass := fmt.Sprintf("%v%v", user.CPF, passwordSufixTemp)
+	pass := fmt.Sprintf("%v%v", cpf, passwordSufixTemp)
 
 	userCognito := &cognito.AdminCreateUserInput{
 		UserPoolId:        aws.String(ds.userPoolID),
-		Username:          aws.String(user.CPF),
+		Username:          aws.String(cpf),
 		MessageAction:     &messageAction,
 		TemporaryPassword: &pass,
 		UserAttributes: []*cognito.AttributeType{
 			{
 				Name:  aws.String("name"),
-				Value: aws.String(user.Name),
+				Value: aws.String(name),
 			},
 			{
 				Name:  aws.String("email"),
-				Value: aws.String(user.Email),
+				Value: aws.String(email),
 			},
 			{
 				Name:  aws.String("email_verified"),
@@ -82,13 +101,13 @@ func (ds *CognitoRemoteDataSourceImpl) SignUp(user *model.Customer) error {
 		return err
 	}
 
-	password := fmt.Sprintf("%v%v", user.CPF, passwordSufix)
+	password := fmt.Sprintf("%v%v", cpf, passwordSufix)
 	permanent := true
 
 	setPasswordInput := &cognito.AdminSetUserPasswordInput{
 		Password:   &password,
 		UserPoolId: aws.String(ds.userPoolID),
-		Username:   aws.String(user.CPF),
+		Username:   aws.String(cpf),
 		Permanent:  &permanent,
 	}
 
@@ -96,6 +115,18 @@ func (ds *CognitoRemoteDataSourceImpl) SignUp(user *model.Customer) error {
 
 	if errPasswd != nil {
 		return errPasswd
+	}
+
+	addUserToGroupInput := &cognito.AdminAddUserToGroupInput{
+		GroupName:  &groupName,
+		UserPoolId: &ds.userPoolID,
+		Username:   aws.String(cpf),
+	}
+
+	_, errGroup := ds.cognitoClient.AdminAddUserToGroup(addUserToGroupInput)
+
+	if errGroup != nil {
+		return errGroup
 	}
 
 	return nil
