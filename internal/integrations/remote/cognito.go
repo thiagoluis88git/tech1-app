@@ -62,11 +62,11 @@ func NewCognitoRemoteDataSource(
 }
 
 func (ds *CognitoRemoteDataSourceImpl) SignUpAdmin(user *model.UserAdmin) error {
-	return ds.signUp(user.CPF, user.Name, user.Email, ds.appClientID)
+	return ds.signUp(user.CPF, user.Name, user.Email, ds.groupAdmin)
 }
 
 func (ds *CognitoRemoteDataSourceImpl) SignUp(user *model.Customer) error {
-	return ds.signUp(user.CPF, user.Name, user.Email, ds.appClientID)
+	return ds.signUp(user.CPF, user.Name, user.Email, ds.groupUser)
 }
 
 func (ds *CognitoRemoteDataSourceImpl) signUp(cpf, name, email, groupName string) error {
