@@ -167,7 +167,7 @@ func main() {
 	router.Post("/api/qrcode/generate", handler.GenerateQRCodeHandler(generateQRCodePaymentUseCase))
 	router.Post("/api/webhook/ml/payment", webhook.PostExternalPaymentEventWebhook(finishOrderForQRCodeUseCase))
 
-	router.Put("/api/customers/{id}", handler.UpdateCustomerHandler(updateCustomerUseCase))
+	router.Put("/api/admin/customers/{id}", handler.UpdateCustomerHandler(updateCustomerUseCase))
 	router.Get("/api/customers/{id}", handler.GetCustomerByIdHandler(getCustomerByIdUseCase))
 	router.Post("/api/customers/login", handler.GetCustomerByCPFHandler(getCustomerByCPFUseCase))
 
@@ -175,9 +175,9 @@ func main() {
 	router.Get("/api/users/{id}", handler.GetUserByIdHandler(getUserByIdUseCase))
 	router.Post("/api/users/login", handler.GetUserByCPFHandler(getUserByCPFUseCase))
 
-	router.Post("/api/products", handler.CreateProductHandler(createProductUseCase))
-	router.Delete("/api/products/{id}", handler.DeleteProductHandler(deleteProductUseCase))
-	router.Put("/api/products/{id}", handler.UpdateProductHandler(updateProductUseCase))
+	router.Post("/api/admin/products", handler.CreateProductHandler(createProductUseCase))
+	router.Delete("/api/admin/products/{id}", handler.DeleteProductHandler(deleteProductUseCase))
+	router.Put("/api/admin/products/{id}", handler.UpdateProductHandler(updateProductUseCase))
 	router.Get("/api/products/{id}", handler.GetProductsByIdHandler(getProductByIdUseCase))
 	router.Get("/api/products/categories", handler.GetCategoriesHandler(getCategoriesUseCase))
 	router.Get("/api/products/categories/{category}", handler.GetProductsByCategoryHandler(getProductsUseCase))

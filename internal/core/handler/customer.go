@@ -60,7 +60,7 @@ func CreateCustomerHandler(createCustomer *usecases.CreateCustomerUseCase) http.
 // @Success 204
 // @Failure 400 "Customer has required fields"
 // @Failure 404 "Customer not found"
-// @Router /api/customers/{id} [put]
+// @Router /api/admin/customers/{id} [put]
 func UpdateCustomerHandler(updateCustomer *usecases.UpdateCustomerUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		customerIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
