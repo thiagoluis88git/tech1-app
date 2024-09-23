@@ -18,6 +18,7 @@ type CognitoRemoteDataSource interface {
 	SignUp(user *model.Customer) error
 	SignUpAdmin(user *model.UserAdmin) error
 	Login(cpf string) (string, error)
+	LoginUnknown() (string, error)
 }
 
 type CognitoRemoteDataSourceImpl struct {
@@ -140,6 +141,24 @@ func (ds *CognitoRemoteDataSourceImpl) Login(cpf string) (string, error) {
 		AuthParameters: aws.StringMap(map[string]string{
 			"USERNAME": cpf,
 			"PASSWORD": password,
+		}),
+		ClientId: aws.String(ds.appClientID),
+	}
+	result, err := ds.cognitoClient.InitiateAuth(authInput)
+
+	if err != nil {
+		return "", err
+	}
+
+	return *result.AuthenticationResult.AccessToken, nil
+}
+
+func (ds *CognitoRemoteDataSourceImpl) LoginUnknown() (string, error) {
+	authInput := &cognito.InitiateAuthInput{
+		AuthFlow: aws.String("USER_PASSWORD_AUTH"),
+		AuthParameters: aws.StringMap(map[string]string{
+			"USERNAME": "unknown-user",
+			"PASSWORD": "unknown-user",
 		}),
 		ClientId: aws.String(ds.appClientID),
 	}

@@ -51,6 +51,17 @@ func (mock *MockCognitoRemoteDataSource) Login(cpf string) (string, error) {
 	return args.Get(0).(string), nil
 }
 
+func (mock *MockCognitoRemoteDataSource) LoginUnknown() (string, error) {
+	args := mock.Called()
+	err := args.Error(1)
+
+	if err != nil {
+		return "", err
+	}
+
+	return args.Get(0).(string), nil
+}
+
 type RepositoryTestSuite struct {
 	suite.Suite
 	ctx                context.Context

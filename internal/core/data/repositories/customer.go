@@ -112,3 +112,13 @@ func (repository *CustomerRepository) Login(ctx context.Context, cpf string) (st
 
 	return token, nil
 }
+
+func (repository *CustomerRepository) LoginUnknown() (string, error) {
+	token, err := repository.cognitoRemote.LoginUnknown()
+
+	if err != nil {
+		return "", responses.GetDatabaseError(err)
+	}
+
+	return token, nil
+}

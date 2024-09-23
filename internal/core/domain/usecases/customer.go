@@ -32,6 +32,10 @@ type LoginCustomerUseCase struct {
 	repository repository.CustomerRepository
 }
 
+type LoginUnknownCustomerUseCase struct {
+	repository repository.CustomerRepository
+}
+
 func NewUpdateCustomerUseCase(validateCPFUseCase *ValidateCPFUseCase, repository repository.CustomerRepository) *UpdateCustomerUseCase {
 	return &UpdateCustomerUseCase{
 		validateCPFUseCase: validateCPFUseCase,
@@ -61,6 +65,12 @@ func NewGetCustomerByIdUseCase(repository repository.CustomerRepository) *GetCus
 
 func NewLoginCustomerUseCase(repository repository.CustomerRepository) *LoginCustomerUseCase {
 	return &LoginCustomerUseCase{
+		repository: repository,
+	}
+}
+
+func NewLoginUnknownCustomerUseCase(repository repository.CustomerRepository) *LoginUnknownCustomerUseCase {
+	return &LoginUnknownCustomerUseCase{
 		repository: repository,
 	}
 }
@@ -138,6 +148,18 @@ func (service *GetCustomerByCPFUseCase) Execute(ctx context.Context, cpf string)
 
 func (uc *LoginCustomerUseCase) Execute(ctx context.Context, cpf string) (dto.Token, error) {
 	token, err := uc.repository.Login(ctx, cpf)
+
+	if err != nil {
+		return dto.Token{}, responses.GetResponseError(err, "CustomerService")
+	}
+
+	return dto.Token{
+		AccessToken: token,
+	}, nil
+}
+
+func (uc *LoginUnknownCustomerUseCase) Execute(ctx context.Context) (dto.Token, error) {
+	token, err := uc.repository.LoginUnknown()
 
 	if err != nil {
 		return dto.Token{}, responses.GetResponseError(err, "CustomerService")

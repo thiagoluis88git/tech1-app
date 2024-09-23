@@ -84,6 +84,7 @@ func main() {
 	userRepo := repositories.NewUserAdminRepository(db, cognitoRemote)
 	validateCPFUseCase := usecases.NewValidateCPFUseCase()
 	loginCustomerUseCase := usecases.NewLoginCustomerUseCase(customerRepo)
+	loginUnknownCustomerUseCase := usecases.NewLoginUnknownCustomerUseCase(customerRepo)
 	createCustomerUseCase := usecases.NewCreateCustomerUseCase(validateCPFUseCase, customerRepo)
 	updateCustomerUseCase := usecases.NewUpdateCustomerUseCase(validateCPFUseCase, customerRepo)
 	getCustomerByIdUseCase := usecases.NewGetCustomerByIdUseCase(customerRepo)
@@ -160,6 +161,7 @@ func main() {
 	})
 
 	router.Post("/auth/login", handler.LoginCustomerHandler(loginCustomerUseCase))
+	router.Post("/auth/login/unknown", handler.LoginUnknownCustomerHandler(loginUnknownCustomerUseCase))
 	router.Post("/auth/admin/login", handler.LoginUserHandler(loginUserUseCase))
 	router.Post("/auth/signup", handler.CreateCustomerHandler(createCustomerUseCase))
 	router.Post("/auth/admin/signup", handler.CreateUserHandler(createUserUseCase))
