@@ -5,8 +5,8 @@ metadata:
 data:
   DB_HOST: fastfood-database.cevl7wigxbt3.us-east-1.rds.amazonaws.com
   DB_PORT: "5432"
-  AWS_COGNITO_CLIENT_ID: 28cepph8vm0q0lpmgtjc8352sa
-  AWS_COGNITO_USER_POOL_ID: us-east-1_rn041S0Fd
+  AWS_COGNITO_USER_POOL_ID: us-east-1_nxOsET7Vt
+  AWS_COGNITO_CLIENT_ID: 28vfjml2i50jduaidda6v2cjeg
   AWS_COGNITO_GROUP_USER: group-users
   AWS_COGNITO_GROUP_ADMIN: group-admin
   AWS_REGION: us-east-1
