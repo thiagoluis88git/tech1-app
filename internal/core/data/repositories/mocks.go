@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
@@ -12,6 +13,54 @@ import (
 	pg "gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
+
+type MockCognitoRemoteDataSource struct {
+	mock.Mock
+}
+
+func (mock *MockCognitoRemoteDataSource) SignUp(user *model.Customer) error {
+	args := mock.Called(user)
+	err := args.Error(0)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (mock *MockCognitoRemoteDataSource) SignUpAdmin(user *model.UserAdmin) error {
+	args := mock.Called(user)
+	err := args.Error(0)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (mock *MockCognitoRemoteDataSource) Login(cpf string) (string, error) {
+	args := mock.Called(cpf)
+	err := args.Error(1)
+
+	if err != nil {
+		return "", err
+	}
+
+	return args.Get(0).(string), nil
+}
+
+func (mock *MockCognitoRemoteDataSource) LoginUnknown() (string, error) {
+	args := mock.Called()
+	err := args.Error(1)
+
+	if err != nil {
+		return "", err
+	}
+
+	return args.Get(0).(string), nil
+}
 
 type RepositoryTestSuite struct {
 	suite.Suite

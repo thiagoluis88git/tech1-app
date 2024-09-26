@@ -15,6 +15,20 @@ func (er NetworkError) Error() string {
 	return er.Message
 }
 
+func GetCognitoError(err error) *NetworkError {
+	code := http.StatusInternalServerError
+	message := err.Error()
+
+	if strings.Contains(err.Error(), "UsernameExistsException") {
+		code = http.StatusConflict
+	}
+
+	return &NetworkError{
+		Code:    code,
+		Message: message,
+	}
+}
+
 func GetNetworkError(urlError *url.Error) *NetworkError {
 	code := http.StatusInternalServerError
 	message := urlError.Unwrap().Error()

@@ -73,12 +73,28 @@ func main() {
 	updateProductUseCase := usecases.NewUpdateProductUseCase(productRepo)
 	createProductUseCase := usecases.NewCreateProductUseCase(validateProductCategoryUseCase, productRepo)
 
-	customerRepo := repositories.NewCustomerRepository(db)
+	cognitoRemote := remote.NewCognitoRemoteDataSource(
+		environment.GetRegion(),
+		environment.GetCognitoUserPoolID(),
+		environment.GetCognitoClientID(),
+		environment.GetCognitoGroupUser(),
+		environment.GetCognitoGroupAdmin(),
+	)
+	customerRepo := repositories.NewCustomerRepository(db, cognitoRemote)
+	userRepo := repositories.NewUserAdminRepository(db, cognitoRemote)
 	validateCPFUseCase := usecases.NewValidateCPFUseCase()
+	loginCustomerUseCase := usecases.NewLoginCustomerUseCase(customerRepo)
+	loginUnknownCustomerUseCase := usecases.NewLoginUnknownCustomerUseCase(customerRepo)
 	createCustomerUseCase := usecases.NewCreateCustomerUseCase(validateCPFUseCase, customerRepo)
 	updateCustomerUseCase := usecases.NewUpdateCustomerUseCase(validateCPFUseCase, customerRepo)
 	getCustomerByIdUseCase := usecases.NewGetCustomerByIdUseCase(customerRepo)
 	getCustomerByCPFUseCase := usecases.NewGetCustomerByCPFUseCase(validateCPFUseCase, customerRepo)
+
+	loginUserUseCase := usecases.NewLoginUserUseCase(userRepo)
+	createUserUseCase := usecases.NewCreateUserUseCase(validateCPFUseCase, userRepo)
+	updateUserUseCase := usecases.NewUpdateUserUseCase(validateCPFUseCase, userRepo)
+	getUserByIdUseCase := usecases.NewGetUserByIdUseCase(userRepo)
+	getUserByCPFUseCase := usecases.NewGetUserByCPFUseCase(validateCPFUseCase, userRepo)
 
 	orderRepo := repositories.NewOrderRespository(db)
 	validateToPreare := usecases.NewValidateOrderToPrepareUseCase(orderRepo)
@@ -137,24 +153,33 @@ func main() {
 		paymentRepo,
 	)
 
-	router.Get("/api/health", func(w http.ResponseWriter, r *http.Request) {
+	router.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		httpserver.SendResponseSuccess(w, &responses.BusinessResponse{
 			StatusCode: 200,
 			Message:    "ok",
 		})
 	})
 
+	router.Post("/auth/login", handler.LoginCustomerHandler(loginCustomerUseCase))
+	router.Post("/auth/login/unknown", handler.LoginUnknownCustomerHandler(loginUnknownCustomerUseCase))
+	router.Post("/auth/admin/login", handler.LoginUserHandler(loginUserUseCase))
+	router.Post("/auth/signup", handler.CreateCustomerHandler(createCustomerUseCase))
+	router.Post("/auth/admin/signup", handler.CreateUserHandler(createUserUseCase))
+
 	router.Post("/api/qrcode/generate", handler.GenerateQRCodeHandler(generateQRCodePaymentUseCase))
 	router.Post("/api/webhook/ml/payment", webhook.PostExternalPaymentEventWebhook(finishOrderForQRCodeUseCase))
 
-	router.Post("/api/customers", handler.CreateCustomerHandler(createCustomerUseCase))
-	router.Put("/api/customers/{id}", handler.UpdateCustomerHandler(updateCustomerUseCase))
+	router.Put("/api/admin/customers/{id}", handler.UpdateCustomerHandler(updateCustomerUseCase))
 	router.Get("/api/customers/{id}", handler.GetCustomerByIdHandler(getCustomerByIdUseCase))
 	router.Post("/api/customers/login", handler.GetCustomerByCPFHandler(getCustomerByCPFUseCase))
 
-	router.Post("/api/products", handler.CreateProductHandler(createProductUseCase))
-	router.Delete("/api/products/{id}", handler.DeleteProductHandler(deleteProductUseCase))
-	router.Put("/api/products/{id}", handler.UpdateProductHandler(updateProductUseCase))
+	router.Put("/api/users/{id}", handler.UpdateUserHandler(updateUserUseCase))
+	router.Get("/api/users/{id}", handler.GetUserByIdHandler(getUserByIdUseCase))
+	router.Post("/api/users/login", handler.GetUserByCPFHandler(getUserByCPFUseCase))
+
+	router.Post("/api/admin/products", handler.CreateProductHandler(createProductUseCase))
+	router.Delete("/api/admin/products/{id}", handler.DeleteProductHandler(deleteProductUseCase))
+	router.Put("/api/admin/products/{id}", handler.UpdateProductHandler(updateProductUseCase))
 	router.Get("/api/products/{id}", handler.GetProductsByIdHandler(getProductByIdUseCase))
 	router.Get("/api/products/categories", handler.GetCategoriesHandler(getCategoriesUseCase))
 	router.Get("/api/products/categories/{category}", handler.GetProductsByCategoryHandler(getProductsUseCase))

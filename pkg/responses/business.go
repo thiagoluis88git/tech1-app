@@ -60,7 +60,7 @@ func GetResponseError(err error, service string) error {
 
 	businessResponse := &BusinessResponse{
 		StatusCode: statusCode,
-		Message:    message,
+		Message:    fmt.Sprintf("%v - %v", message, err.Error()),
 	}
 
 	return businessResponse

@@ -20,7 +20,7 @@ import (
 // @Success 200 {object} dto.ProductResponse
 // @Failure 400 "Product has required fields"
 // @Failure 409 "This Product is already added"
-// @Router /api/products [post]
+// @Router /api/admin/products [post]
 func CreateProductHandler(createUseCase *usecases.CreateProductUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var product dto.ProductForm
@@ -143,7 +143,7 @@ func GetProductsByIdHandler(getProductById *usecases.GetProductByIdUseCase) http
 // @Accept json
 // @Produce json
 // @Success 204
-// @Router /api/products/{id} [delete]
+// @Router /api/admin/products/{id} [delete]
 func DeleteProductHandler(deleteProduct *usecases.DeleteProductUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		productIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
@@ -190,7 +190,7 @@ func DeleteProductHandler(deleteProduct *usecases.DeleteProductUseCase) http.Han
 // @Accept json
 // @Produce json
 // @Success 204
-// @Router /api/products/{id} [put]
+// @Router /api/admin/products/{id} [put]
 func UpdateProductHandler(updateProduct *usecases.UpdateProductUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		productIdStr, err := httpserver.GetPathParamFromRequest(r, "id")

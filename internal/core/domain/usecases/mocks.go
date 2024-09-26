@@ -223,6 +223,28 @@ func (mock *MockCustomerRepository) CreateCustomer(ctx context.Context, customer
 	return args.Get(0).(uint), nil
 }
 
+func (mock *MockCustomerRepository) Login(ctx context.Context, cpf string) (string, error) {
+	args := mock.Called(ctx, cpf)
+	err := args.Error(1)
+
+	if err != nil {
+		return "", err
+	}
+
+	return args.Get(0).(string), nil
+}
+
+func (mock *MockCustomerRepository) LoginUnknown() (string, error) {
+	args := mock.Called()
+	err := args.Error(1)
+
+	if err != nil {
+		return "", err
+	}
+
+	return args.Get(0).(string), nil
+}
+
 func (mock *MockCustomerRepository) UpdateCustomer(ctx context.Context, customer dto.Customer) error {
 	args := mock.Called(ctx, customer)
 	err := args.Error(0)
