@@ -55,8 +55,8 @@ func LoginCustomerHandler(loginCustomerUseCase usecases.LoginCustomerUseCase) ht
 // @Produce json
 // @Success 200 {object} dto.Token
 // @Failure 404 "Customer not found"
-// @Router /auth/login [post]
-func LoginUnknownCustomerHandler(loginCustomerUseCase *usecases.LoginUnknownCustomerUseCase) http.HandlerFunc {
+// @Router /auth/login/unknown [post]
+func LoginUnknownCustomerHandler(loginCustomerUseCase usecases.LoginUnknownCustomerUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		token, err := loginCustomerUseCase.Execute(r.Context())
 

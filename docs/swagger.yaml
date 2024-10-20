@@ -252,29 +252,7 @@ info:
   title: Tech1 API Docs
   version: "1.0"
 paths:
-  /api/customers/{id}:
-    get:
-      consumes:
-      - application/json
-      description: Get customer by ID
-      parameters:
-      - description: "12"
-        in: path
-        name: Id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/dto.Customer'
-        "404":
-          description: Customer not found
-      summary: Get customer by ID
-      tags:
-      - Customer
+  /api/admin/customers/{id}:
     put:
       consumes:
       - application/json
@@ -301,6 +279,92 @@ paths:
         "404":
           description: Customer not found
       summary: Update customer
+      tags:
+      - Customer
+  /api/admin/products:
+    post:
+      consumes:
+      - application/json
+      description: Create new product
+      parameters:
+      - description: product
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ProductForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ProductResponse'
+        "400":
+          description: Product has required fields
+        "409":
+          description: This Product is already added
+      summary: Create new product
+      tags:
+      - Product
+  /api/admin/products/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a product by ID
+      parameters:
+      - description: "12"
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Delete a product
+      tags:
+      - Product
+    put:
+      consumes:
+      - application/json
+      description: Update a product by ID
+      parameters:
+      - description: "12"
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Update a product
+      tags:
+      - Product
+  /api/customers/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get customer by ID
+      parameters:
+      - description: "12"
+        in: path
+        name: Id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Customer'
+        "404":
+          description: Customer not found
+      summary: Get customer by ID
       tags:
       - Customer
   /api/customers/login:
@@ -570,51 +634,7 @@ paths:
       summary: Get payment types
       tags:
       - Payment
-  /api/products:
-    post:
-      consumes:
-      - application/json
-      description: Create new product
-      parameters:
-      - description: product
-        in: body
-        name: product
-        required: true
-        schema:
-          $ref: '#/definitions/dto.ProductForm'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/dto.ProductResponse'
-        "400":
-          description: Product has required fields
-        "409":
-          description: This Product is already added
-      summary: Create new product
-      tags:
-      - Product
   /api/products/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Delete a product by ID
-      parameters:
-      - description: "12"
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-      summary: Delete a product
-      tags:
-      - Product
     get:
       consumes:
       - application/json
@@ -633,24 +653,6 @@ paths:
           schema:
             $ref: '#/definitions/dto.ProductResponse'
       summary: Get product by ID
-      tags:
-      - Product
-    put:
-      consumes:
-      - application/json
-      description: Update a product by ID
-      parameters:
-      - description: "12"
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-      summary: Update a product
       tags:
       - Product
   /api/products/categories:
@@ -894,6 +896,24 @@ paths:
         "404":
           description: Customer not found
       summary: Login
+      tags:
+      - Customer
+  /auth/login/unknown:
+    post:
+      consumes:
+      - application/json
+      description: Login with unknown user. This is important if the user doesn't
+        want to create an account
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Token'
+        "404":
+          description: Customer not found
+      summary: Login with unknown user
       tags:
       - Customer
   /auth/signup:

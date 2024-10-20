@@ -52,7 +52,11 @@ type LoginCustomerUseCaseImpl struct {
 	repository repository.CustomerRepository
 }
 
-type LoginUnknownCustomerUseCase struct {
+type LoginUnknownCustomerUseCase interface {
+	Execute(ctx context.Context) (dto.Token, error)
+}
+
+type LoginUnknownCustomerUseCaseImpl struct {
 	repository repository.CustomerRepository
 }
 
@@ -89,8 +93,8 @@ func NewLoginCustomerUseCase(repository repository.CustomerRepository) LoginCust
 	}
 }
 
-func NewLoginUnknownCustomerUseCase(repository repository.CustomerRepository) *LoginUnknownCustomerUseCase {
-	return &LoginUnknownCustomerUseCase{
+func NewLoginUnknownCustomerUseCase(repository repository.CustomerRepository) LoginUnknownCustomerUseCase {
+	return &LoginUnknownCustomerUseCaseImpl{
 		repository: repository,
 	}
 }
@@ -178,7 +182,7 @@ func (uc *LoginCustomerUseCaseImpl) Execute(ctx context.Context, cpf string) (dt
 	}, nil
 }
 
-func (uc *LoginUnknownCustomerUseCase) Execute(ctx context.Context) (dto.Token, error) {
+func (uc *LoginUnknownCustomerUseCaseImpl) Execute(ctx context.Context) (dto.Token, error) {
 	token, err := uc.repository.LoginUnknown()
 
 	if err != nil {

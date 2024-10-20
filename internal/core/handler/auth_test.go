@@ -118,4 +118,61 @@ func TestAuthHandler(t *testing.T) {
 
 		assert.Equal(t, http.StatusBadRequest, recorder.Code)
 	})
+
+	t.Run("got success when calling login unknown user handler", func(t *testing.T) {
+		t.Parallel()
+
+		req := httptest.NewRequest(http.MethodPost, "/auth/login/unknown", nil)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		loginCustomerUseCase := new(MockLoginUnknownCustomerUseCase)
+
+		loginCustomerUseCase.On("Execute", req.Context()).Return(dto.Token{
+			AccessToken: "eYmly",
+		}, nil)
+
+		loginCustomerHandler := handler.LoginUnknownCustomerHandler(loginCustomerUseCase)
+
+		loginCustomerHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusOK, recorder.Code)
+
+		var customer dto.Token
+		err := json.Unmarshal(recorder.Body.Bytes(), &customer)
+
+		assert.NoError(t, err)
+
+		assert.Equal(t, "eYmly", customer.AccessToken)
+	})
+
+	t.Run("got error on UseCase when calling login unknown user handler", func(t *testing.T) {
+		t.Parallel()
+
+		req := httptest.NewRequest(http.MethodPost, "/auth/login/unknown", nil)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		loginCustomerUseCase := new(MockLoginUnknownCustomerUseCase)
+
+		loginCustomerUseCase.On("Execute", req.Context()).Return(dto.Token{}, &responses.BusinessResponse{
+			StatusCode: 500,
+		})
+
+		loginCustomerHandler := handler.LoginUnknownCustomerHandler(loginCustomerUseCase)
+
+		loginCustomerHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusInternalServerError, recorder.Code)
+	})
 }
