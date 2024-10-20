@@ -9,7 +9,11 @@ import (
 	"github.com/thiagoluis88git/tech1/pkg/responses"
 )
 
-type CreateCustomerUseCase struct {
+type CreateCustomerUseCase interface {
+	Execute(ctx context.Context, customer dto.Customer) (dto.CustomerResponse, error)
+}
+
+type CreateCustomerUseCaseImpl struct {
 	validateCPFUseCase *ValidateCPFUseCase
 	repository         repository.CustomerRepository
 }
@@ -43,8 +47,8 @@ func NewUpdateCustomerUseCase(validateCPFUseCase *ValidateCPFUseCase, repository
 	}
 }
 
-func NewCreateCustomerUseCase(validateCPFUseCase *ValidateCPFUseCase, repository repository.CustomerRepository) *CreateCustomerUseCase {
-	return &CreateCustomerUseCase{
+func NewCreateCustomerUseCase(validateCPFUseCase *ValidateCPFUseCase, repository repository.CustomerRepository) CreateCustomerUseCase {
+	return &CreateCustomerUseCaseImpl{
 		validateCPFUseCase: validateCPFUseCase,
 		repository:         repository,
 	}
@@ -75,7 +79,7 @@ func NewLoginUnknownCustomerUseCase(repository repository.CustomerRepository) *L
 	}
 }
 
-func (service *CreateCustomerUseCase) Execute(ctx context.Context, customer dto.Customer) (dto.CustomerResponse, error) {
+func (service *CreateCustomerUseCaseImpl) Execute(ctx context.Context, customer dto.Customer) (dto.CustomerResponse, error) {
 	cleanedCPF, validate := service.validateCPFUseCase.Execute(customer.CPF)
 
 	if !validate {
