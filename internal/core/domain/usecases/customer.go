@@ -18,7 +18,11 @@ type CreateCustomerUseCaseImpl struct {
 	repository         repository.CustomerRepository
 }
 
-type UpdateCustomerUseCase struct {
+type UpdateCustomerUseCase interface {
+	Execute(ctx context.Context, customer dto.Customer) error
+}
+
+type UpdateCustomerUseCaseImpl struct {
 	validateCPFUseCase *ValidateCPFUseCase
 	repository         repository.CustomerRepository
 }
@@ -40,8 +44,8 @@ type LoginUnknownCustomerUseCase struct {
 	repository repository.CustomerRepository
 }
 
-func NewUpdateCustomerUseCase(validateCPFUseCase *ValidateCPFUseCase, repository repository.CustomerRepository) *UpdateCustomerUseCase {
-	return &UpdateCustomerUseCase{
+func NewUpdateCustomerUseCase(validateCPFUseCase *ValidateCPFUseCase, repository repository.CustomerRepository) UpdateCustomerUseCase {
+	return &UpdateCustomerUseCaseImpl{
 		validateCPFUseCase: validateCPFUseCase,
 		repository:         repository,
 	}
@@ -101,7 +105,7 @@ func (service *CreateCustomerUseCaseImpl) Execute(ctx context.Context, customer 
 	}, nil
 }
 
-func (service *UpdateCustomerUseCase) Execute(ctx context.Context, customer dto.Customer) error {
+func (service *UpdateCustomerUseCaseImpl) Execute(ctx context.Context, customer dto.Customer) error {
 	cleanedCPF, validate := service.validateCPFUseCase.Execute(customer.CPF)
 
 	if !validate {

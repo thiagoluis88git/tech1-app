@@ -11,6 +11,10 @@ type MockCreateCustomerUseCase struct {
 	mock.Mock
 }
 
+type MockUpdateCustomerUseCase struct {
+	mock.Mock
+}
+
 func (mock *MockCreateCustomerUseCase) Execute(ctx context.Context, customer dto.Customer) (dto.CustomerResponse, error) {
 	args := mock.Called(ctx, customer)
 	err := args.Error(1)
@@ -20,4 +24,15 @@ func (mock *MockCreateCustomerUseCase) Execute(ctx context.Context, customer dto
 	}
 
 	return args.Get(0).(dto.CustomerResponse), nil
+}
+
+func (mock *MockUpdateCustomerUseCase) Execute(ctx context.Context, customer dto.Customer) error {
+	args := mock.Called(ctx, customer)
+	err := args.Error(0)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

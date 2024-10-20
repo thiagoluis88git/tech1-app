@@ -127,4 +127,176 @@ func TestCustomerHandler(t *testing.T) {
 
 		assert.Equal(t, http.StatusBadRequest, recorder.Code)
 	})
+
+	t.Run("got success when calling update customer handler", func(t *testing.T) {
+		t.Parallel()
+
+		jsonData, err := json.Marshal(mockCustomer())
+
+		assert.NoError(t, err)
+
+		body := bytes.NewBuffer(jsonData)
+
+		req := httptest.NewRequest(http.MethodPost, "/api/customer/{id}", body)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+		rctx.URLParams.Add("id", "123")
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		updateCustomerUseCase := new(MockUpdateCustomerUseCase)
+
+		updateCustomerUseCase.On("Execute", req.Context(), dto.Customer{
+			ID:    uint(123),
+			Name:  "Teste",
+			CPF:   "83212446293",
+			Email: "teste@gmail.com",
+		}).Return(nil)
+
+		createCustomerHandler := handler.UpdateCustomerHandler(updateCustomerUseCase)
+
+		createCustomerHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusNoContent, recorder.Code)
+	})
+
+	t.Run("got error without param when calling update customer handler", func(t *testing.T) {
+		t.Parallel()
+
+		jsonData, err := json.Marshal(mockCustomer())
+
+		assert.NoError(t, err)
+
+		body := bytes.NewBuffer(jsonData)
+
+		req := httptest.NewRequest(http.MethodPost, "/api/customer/{id}", body)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		updateCustomerUseCase := new(MockUpdateCustomerUseCase)
+
+		updateCustomerUseCase.On("Execute", req.Context(), dto.Customer{
+			ID:    uint(123),
+			Name:  "Teste",
+			CPF:   "83212446293",
+			Email: "teste@gmail.com",
+		}).Return(nil)
+
+		createCustomerHandler := handler.UpdateCustomerHandler(updateCustomerUseCase)
+
+		createCustomerHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusBadRequest, recorder.Code)
+	})
+
+	t.Run("got error with invalid param when calling update customer handler", func(t *testing.T) {
+		t.Parallel()
+
+		jsonData, err := json.Marshal(mockCustomer())
+
+		assert.NoError(t, err)
+
+		body := bytes.NewBuffer(jsonData)
+
+		req := httptest.NewRequest(http.MethodPost, "/api/customer/{id}", body)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+		rctx.URLParams.Add("id", "123xxc")
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		updateCustomerUseCase := new(MockUpdateCustomerUseCase)
+
+		updateCustomerUseCase.On("Execute", req.Context(), dto.Customer{
+			ID:    uint(123),
+			Name:  "Teste",
+			CPF:   "83212446293",
+			Email: "teste@gmail.com",
+		}).Return(nil)
+
+		createCustomerHandler := handler.UpdateCustomerHandler(updateCustomerUseCase)
+
+		createCustomerHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusBadRequest, recorder.Code)
+	})
+
+	t.Run("got error calling UseCase when calling update customer handler", func(t *testing.T) {
+		t.Parallel()
+
+		jsonData, err := json.Marshal(mockCustomer())
+
+		assert.NoError(t, err)
+
+		body := bytes.NewBuffer(jsonData)
+
+		req := httptest.NewRequest(http.MethodPost, "/api/customer/{id}", body)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+		rctx.URLParams.Add("id", "123")
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		updateCustomerUseCase := new(MockUpdateCustomerUseCase)
+
+		updateCustomerUseCase.On("Execute", req.Context(), dto.Customer{
+			ID:    uint(123),
+			Name:  "Teste",
+			CPF:   "83212446293",
+			Email: "teste@gmail.com",
+		}).Return(&responses.BusinessResponse{
+			StatusCode: 500,
+		})
+
+		createCustomerHandler := handler.UpdateCustomerHandler(updateCustomerUseCase)
+
+		createCustomerHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusInternalServerError, recorder.Code)
+	})
+
+	t.Run("got error with invalid json when calling update customer handler", func(t *testing.T) {
+		t.Parallel()
+
+		body := bytes.NewBuffer([]byte("ffdd{{}"))
+
+		req := httptest.NewRequest(http.MethodPost, "/api/customer/{id}", body)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+		rctx.URLParams.Add("id", "123xxc")
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		updateCustomerUseCase := new(MockUpdateCustomerUseCase)
+
+		updateCustomerUseCase.On("Execute", req.Context(), dto.Customer{
+			ID:    uint(123),
+			Name:  "Teste",
+			CPF:   "83212446293",
+			Email: "teste@gmail.com",
+		}).Return(nil)
+
+		createCustomerHandler := handler.UpdateCustomerHandler(updateCustomerUseCase)
+
+		createCustomerHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusBadRequest, recorder.Code)
+	})
 }
