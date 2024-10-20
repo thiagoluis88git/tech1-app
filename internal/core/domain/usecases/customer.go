@@ -27,16 +27,28 @@ type UpdateCustomerUseCaseImpl struct {
 	repository         repository.CustomerRepository
 }
 
-type GetCustomerByCPFUseCase struct {
+type GetCustomerByCPFUseCase interface {
+	Execute(ctx context.Context, cpf string) (dto.Customer, error)
+}
+
+type GetCustomerByCPFUseCaseImpl struct {
 	validateCPFUseCase *ValidateCPFUseCase
 	repository         repository.CustomerRepository
 }
 
-type GetCustomerByIdUseCase struct {
+type GetCustomerByIdUseCase interface {
+	Execute(ctx context.Context, id uint) (dto.Customer, error)
+}
+
+type GetCustomerByIdUseCaseImpl struct {
 	repository repository.CustomerRepository
 }
 
-type LoginCustomerUseCase struct {
+type LoginCustomerUseCase interface {
+	Execute(ctx context.Context, cpf string) (dto.Token, error)
+}
+
+type LoginCustomerUseCaseImpl struct {
 	repository repository.CustomerRepository
 }
 
@@ -58,21 +70,21 @@ func NewCreateCustomerUseCase(validateCPFUseCase *ValidateCPFUseCase, repository
 	}
 }
 
-func NewGetCustomerByCPFUseCase(validateCPFUseCase *ValidateCPFUseCase, repository repository.CustomerRepository) *GetCustomerByCPFUseCase {
-	return &GetCustomerByCPFUseCase{
+func NewGetCustomerByCPFUseCase(validateCPFUseCase *ValidateCPFUseCase, repository repository.CustomerRepository) GetCustomerByCPFUseCase {
+	return &GetCustomerByCPFUseCaseImpl{
 		validateCPFUseCase: validateCPFUseCase,
 		repository:         repository,
 	}
 }
 
-func NewGetCustomerByIdUseCase(repository repository.CustomerRepository) *GetCustomerByIdUseCase {
-	return &GetCustomerByIdUseCase{
+func NewGetCustomerByIdUseCase(repository repository.CustomerRepository) GetCustomerByIdUseCase {
+	return &GetCustomerByIdUseCaseImpl{
 		repository: repository,
 	}
 }
 
-func NewLoginCustomerUseCase(repository repository.CustomerRepository) *LoginCustomerUseCase {
-	return &LoginCustomerUseCase{
+func NewLoginCustomerUseCase(repository repository.CustomerRepository) LoginCustomerUseCase {
+	return &LoginCustomerUseCaseImpl{
 		repository: repository,
 	}
 }
@@ -125,7 +137,7 @@ func (service *UpdateCustomerUseCaseImpl) Execute(ctx context.Context, customer 
 	return nil
 }
 
-func (service *GetCustomerByIdUseCase) Execute(ctx context.Context, id uint) (dto.Customer, error) {
+func (service *GetCustomerByIdUseCaseImpl) Execute(ctx context.Context, id uint) (dto.Customer, error) {
 	customer, err := service.repository.GetCustomerById(ctx, id)
 
 	if err != nil {
@@ -135,7 +147,7 @@ func (service *GetCustomerByIdUseCase) Execute(ctx context.Context, id uint) (dt
 	return customer, nil
 }
 
-func (service *GetCustomerByCPFUseCase) Execute(ctx context.Context, cpf string) (dto.Customer, error) {
+func (service *GetCustomerByCPFUseCaseImpl) Execute(ctx context.Context, cpf string) (dto.Customer, error) {
 	cleanedCPF, validate := service.validateCPFUseCase.Execute(cpf)
 
 	if !validate {
@@ -154,7 +166,7 @@ func (service *GetCustomerByCPFUseCase) Execute(ctx context.Context, cpf string)
 	return customer, nil
 }
 
-func (uc *LoginCustomerUseCase) Execute(ctx context.Context, cpf string) (dto.Token, error) {
+func (uc *LoginCustomerUseCaseImpl) Execute(ctx context.Context, cpf string) (dto.Token, error) {
 	token, err := uc.repository.Login(ctx, cpf)
 
 	if err != nil {

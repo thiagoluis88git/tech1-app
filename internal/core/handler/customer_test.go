@@ -23,6 +23,12 @@ func mockCustomer() map[string]any {
 	}
 }
 
+func mockCustomerByCPF() map[string]any {
+	return map[string]any{
+		"cpf": "83212446293",
+	}
+}
+
 func TestCustomerHandler(t *testing.T) {
 	t.Parallel()
 
@@ -156,9 +162,9 @@ func TestCustomerHandler(t *testing.T) {
 			Email: "teste@gmail.com",
 		}).Return(nil)
 
-		createCustomerHandler := handler.UpdateCustomerHandler(updateCustomerUseCase)
+		updateCustomerHandler := handler.UpdateCustomerHandler(updateCustomerUseCase)
 
-		createCustomerHandler.ServeHTTP(recorder, req)
+		updateCustomerHandler.ServeHTTP(recorder, req)
 
 		assert.Equal(t, http.StatusNoContent, recorder.Code)
 	})
@@ -190,9 +196,9 @@ func TestCustomerHandler(t *testing.T) {
 			Email: "teste@gmail.com",
 		}).Return(nil)
 
-		createCustomerHandler := handler.UpdateCustomerHandler(updateCustomerUseCase)
+		updateCustomerHandler := handler.UpdateCustomerHandler(updateCustomerUseCase)
 
-		createCustomerHandler.ServeHTTP(recorder, req)
+		updateCustomerHandler.ServeHTTP(recorder, req)
 
 		assert.Equal(t, http.StatusBadRequest, recorder.Code)
 	})
@@ -225,9 +231,9 @@ func TestCustomerHandler(t *testing.T) {
 			Email: "teste@gmail.com",
 		}).Return(nil)
 
-		createCustomerHandler := handler.UpdateCustomerHandler(updateCustomerUseCase)
+		updateCustomerHandler := handler.UpdateCustomerHandler(updateCustomerUseCase)
 
-		createCustomerHandler.ServeHTTP(recorder, req)
+		updateCustomerHandler.ServeHTTP(recorder, req)
 
 		assert.Equal(t, http.StatusBadRequest, recorder.Code)
 	})
@@ -262,9 +268,9 @@ func TestCustomerHandler(t *testing.T) {
 			StatusCode: 500,
 		})
 
-		createCustomerHandler := handler.UpdateCustomerHandler(updateCustomerUseCase)
+		updateCustomerHandler := handler.UpdateCustomerHandler(updateCustomerUseCase)
 
-		createCustomerHandler.ServeHTTP(recorder, req)
+		updateCustomerHandler.ServeHTTP(recorder, req)
 
 		assert.Equal(t, http.StatusInternalServerError, recorder.Code)
 	})
@@ -293,9 +299,230 @@ func TestCustomerHandler(t *testing.T) {
 			Email: "teste@gmail.com",
 		}).Return(nil)
 
-		createCustomerHandler := handler.UpdateCustomerHandler(updateCustomerUseCase)
+		updateCustomerHandler := handler.UpdateCustomerHandler(updateCustomerUseCase)
 
-		createCustomerHandler.ServeHTTP(recorder, req)
+		updateCustomerHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusBadRequest, recorder.Code)
+	})
+
+	t.Run("got success when calling get customer by id handler", func(t *testing.T) {
+		t.Parallel()
+
+		req := httptest.NewRequest(http.MethodGet, "/api/customer/{id}", nil)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+		rctx.URLParams.Add("id", "123")
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		getCustomerById := new(MockGetCustomerByIdUseCase)
+
+		getCustomerById.On("Execute", req.Context(), uint(123)).Return(dto.Customer{
+			ID:    uint(123),
+			Name:  "Teste",
+			CPF:   "83212446293",
+			Email: "teste@gmail.com",
+		}, nil)
+
+		getCustomerByIdHandler := handler.GetCustomerByIdHandler(getCustomerById)
+
+		getCustomerByIdHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusOK, recorder.Code)
+
+		var customer dto.Customer
+		err := json.Unmarshal(recorder.Body.Bytes(), &customer)
+
+		assert.NoError(t, err)
+
+		assert.Equal(t, "Teste", customer.Name)
+	})
+
+	t.Run("got error without param when calling get customer by id handler", func(t *testing.T) {
+		t.Parallel()
+
+		req := httptest.NewRequest(http.MethodGet, "/api/customer/{id}", nil)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		getCustomerById := new(MockGetCustomerByIdUseCase)
+
+		getCustomerById.On("Execute", req.Context(), uint(123)).Return(dto.Customer{
+			ID:    uint(123),
+			Name:  "Teste",
+			CPF:   "83212446293",
+			Email: "teste@gmail.com",
+		}, nil)
+
+		getCustomerByIdHandler := handler.GetCustomerByIdHandler(getCustomerById)
+
+		getCustomerByIdHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusBadRequest, recorder.Code)
+	})
+
+	t.Run("got error with invalid param when calling get customer by id handler", func(t *testing.T) {
+		t.Parallel()
+
+		req := httptest.NewRequest(http.MethodGet, "/api/customer/{id}", nil)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+		rctx.URLParams.Add("id", "123srvb")
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		getCustomerById := new(MockGetCustomerByIdUseCase)
+
+		getCustomerById.On("Execute", req.Context(), uint(123)).Return(dto.Customer{
+			ID:    uint(123),
+			Name:  "Teste",
+			CPF:   "83212446293",
+			Email: "teste@gmail.com",
+		}, nil)
+
+		getCustomerByIdHandler := handler.GetCustomerByIdHandler(getCustomerById)
+
+		getCustomerByIdHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusBadRequest, recorder.Code)
+	})
+
+	t.Run("got error with UseCase when calling get customer by id handler", func(t *testing.T) {
+		t.Parallel()
+
+		req := httptest.NewRequest(http.MethodGet, "/api/customer/{id}", nil)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+		rctx.URLParams.Add("id", "123")
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		getCustomerById := new(MockGetCustomerByIdUseCase)
+
+		getCustomerById.On("Execute", req.Context(), uint(123)).Return(dto.Customer{}, &responses.BusinessResponse{
+			StatusCode: 500,
+		})
+
+		getCustomerByIdHandler := handler.GetCustomerByIdHandler(getCustomerById)
+
+		getCustomerByIdHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusInternalServerError, recorder.Code)
+	})
+
+	t.Run("got success when calling get customer by cpf handler", func(t *testing.T) {
+		t.Parallel()
+
+		jsonData, err := json.Marshal(mockCustomerByCPF())
+
+		assert.NoError(t, err)
+
+		body := bytes.NewBuffer(jsonData)
+
+		req := httptest.NewRequest(http.MethodPost, "/api/customer/login", body)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		getCustomerByCPF := new(MockGetCustomerByCPFUseCase)
+
+		getCustomerByCPF.On("Execute", req.Context(), "83212446293").Return(dto.Customer{
+			ID:    uint(123),
+			Name:  "Teste",
+			CPF:   "83212446293",
+			Email: "teste@gmail.com",
+		}, nil)
+
+		getCustomerCPFIdHandler := handler.GetCustomerByCPFHandler(getCustomerByCPF)
+
+		getCustomerCPFIdHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusOK, recorder.Code)
+
+		var customer dto.Customer
+		err = json.Unmarshal(recorder.Body.Bytes(), &customer)
+
+		assert.NoError(t, err)
+
+		assert.Equal(t, "Teste", customer.Name)
+	})
+
+	t.Run("got error on UseCase when calling get customer by cpf handler", func(t *testing.T) {
+		t.Parallel()
+
+		jsonData, err := json.Marshal(mockCustomerByCPF())
+
+		assert.NoError(t, err)
+
+		body := bytes.NewBuffer(jsonData)
+
+		req := httptest.NewRequest(http.MethodPost, "/api/customer/login", body)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		getCustomerByCPF := new(MockGetCustomerByCPFUseCase)
+
+		getCustomerByCPF.On("Execute", req.Context(), "83212446293").Return(dto.Customer{}, &responses.BusinessResponse{
+			StatusCode: 500,
+		})
+
+		getCustomerCPFIdHandler := handler.GetCustomerByCPFHandler(getCustomerByCPF)
+
+		getCustomerCPFIdHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusInternalServerError, recorder.Code)
+	})
+
+	t.Run("got error with invalid json when calling get customer by cpf handler", func(t *testing.T) {
+		t.Parallel()
+
+		body := bytes.NewBuffer([]byte("assd{{}"))
+
+		req := httptest.NewRequest(http.MethodPost, "/api/customer/login", body)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		getCustomerByCPF := new(MockGetCustomerByCPFUseCase)
+
+		getCustomerByCPF.On("Execute", req.Context(), "83012446293").Return(dto.Customer{
+			ID:    uint(123),
+			Name:  "Teste",
+			CPF:   "83212446293",
+			Email: "teste@gmail.com",
+		}, nil)
+
+		getCustomerCPFIdHandler := handler.GetCustomerByCPFHandler(getCustomerByCPF)
+
+		getCustomerCPFIdHandler.ServeHTTP(recorder, req)
 
 		assert.Equal(t, http.StatusBadRequest, recorder.Code)
 	})

@@ -15,6 +15,18 @@ type MockUpdateCustomerUseCase struct {
 	mock.Mock
 }
 
+type MockGetCustomerByIdUseCase struct {
+	mock.Mock
+}
+
+type MockGetCustomerByCPFUseCase struct {
+	mock.Mock
+}
+
+type MockLoginCustomerUseCase struct {
+	mock.Mock
+}
+
 func (mock *MockCreateCustomerUseCase) Execute(ctx context.Context, customer dto.Customer) (dto.CustomerResponse, error) {
 	args := mock.Called(ctx, customer)
 	err := args.Error(1)
@@ -35,4 +47,37 @@ func (mock *MockUpdateCustomerUseCase) Execute(ctx context.Context, customer dto
 	}
 
 	return nil
+}
+
+func (mock *MockGetCustomerByIdUseCase) Execute(ctx context.Context, id uint) (dto.Customer, error) {
+	args := mock.Called(ctx, id)
+	err := args.Error(1)
+
+	if err != nil {
+		return dto.Customer{}, err
+	}
+
+	return args.Get(0).(dto.Customer), nil
+}
+
+func (mock *MockGetCustomerByCPFUseCase) Execute(ctx context.Context, cpf string) (dto.Customer, error) {
+	args := mock.Called(ctx, cpf)
+	err := args.Error(1)
+
+	if err != nil {
+		return dto.Customer{}, err
+	}
+
+	return args.Get(0).(dto.Customer), nil
+}
+
+func (mock *MockLoginCustomerUseCase) Execute(ctx context.Context, cpf string) (dto.Token, error) {
+	args := mock.Called(ctx, cpf)
+	err := args.Error(1)
+
+	if err != nil {
+		return dto.Token{}, err
+	}
+
+	return args.Get(0).(dto.Token), nil
 }
