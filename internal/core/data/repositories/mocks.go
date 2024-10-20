@@ -115,6 +115,7 @@ func (suite *RepositoryTestSuite) SetupTest() {
 		&model.OrderProduct{},
 		&model.OrderTicketNumber{},
 		&model.Customer{},
+		&model.Payment{},
 	)
 	suite.NoError(err)
 }
@@ -126,5 +127,6 @@ func (suite *RepositoryTestSuite) TearDownTest() {
 	suite.db.Exec("DROP TABLE IF EXISTS combo_products CASCADE;")
 	suite.db.Exec("DROP TABLE IF EXISTS orders CASCADE;")
 	suite.db.Exec("DROP TABLE IF EXISTS order_products CASCADE;")
+	suite.db.Exec("DROP TABLE IF EXISTS payments CASCADE;")
 	suite.db.Exec("DROP TABLE IF EXISTS order_ticket_numbers CASCADE;")
 }

@@ -8,6 +8,8 @@ import (
 )
 
 func TestValidateProductCategoryUseCase(t *testing.T) {
+	t.Parallel()
+
 	t.Run("got true when validating product with right parameters", func(t *testing.T) {
 		t.Parallel()
 

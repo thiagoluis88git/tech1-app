@@ -16,6 +16,8 @@ var (
 )
 
 func TestProductsUseCase(t *testing.T) {
+	t.Parallel()
+	
 	t.Run("got success when getting product categories in services", func(t *testing.T) {
 		t.Parallel()
 

@@ -12,6 +12,8 @@ import (
 )
 
 func TestPaymentServices(t *testing.T) {
+	t.Parallel()
+	
 	t.Run("got success when getting payment types in services", func(t *testing.T) {
 		t.Parallel()
 

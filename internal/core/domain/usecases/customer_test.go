@@ -41,6 +41,8 @@ var (
 )
 
 func TestCustomerServices(t *testing.T) {
+	t.Parallel()
+	
 	t.Run("got success when creating customer in services", func(t *testing.T) {
 		t.Parallel()
 

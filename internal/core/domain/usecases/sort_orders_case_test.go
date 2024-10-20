@@ -8,6 +8,8 @@ import (
 )
 
 func TestSortOrdersUseCase(t *testing.T) {
+	t.Parallel()
+	
 	t.Run("got success when sorting orders with many orders use case", func(t *testing.T) {
 		t.Parallel()
 

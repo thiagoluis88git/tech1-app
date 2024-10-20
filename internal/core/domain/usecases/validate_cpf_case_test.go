@@ -7,6 +7,8 @@ import (
 )
 
 func TestValidateCPFUseCase(t *testing.T) {
+	t.Parallel()
+
 	t.Run("got true when validating right CPF", func(t *testing.T) {
 		t.Parallel()
 

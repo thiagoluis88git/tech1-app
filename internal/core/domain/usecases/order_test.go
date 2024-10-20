@@ -14,6 +14,8 @@ import (
 )
 
 func TestOrderServices(t *testing.T) {
+	t.Parallel()
+	
 	t.Run("got success when generating ticket number in services", func(t *testing.T) {
 		t.Parallel()
 
