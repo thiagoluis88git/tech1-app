@@ -31,6 +31,14 @@ type MockLoginUnknownCustomerUseCase struct {
 	mock.Mock
 }
 
+type MockPayOrderUseCase struct {
+	mock.Mock
+}
+
+type MockGetPaymentTypesUseCase struct {
+	mock.Mock
+}
+
 func (mock *MockCreateCustomerUseCase) Execute(ctx context.Context, customer dto.Customer) (dto.CustomerResponse, error) {
 	args := mock.Called(ctx, customer)
 	err := args.Error(1)
@@ -95,4 +103,20 @@ func (mock *MockLoginUnknownCustomerUseCase) Execute(ctx context.Context) (dto.T
 	}
 
 	return args.Get(0).(dto.Token), nil
+}
+
+func (mock *MockPayOrderUseCase) Execute(ctx context.Context, payment dto.Payment) (dto.PaymentResponse, error) {
+	args := mock.Called(ctx, payment)
+	err := args.Error(1)
+
+	if err != nil {
+		return dto.PaymentResponse{}, err
+	}
+
+	return args.Get(0).(dto.PaymentResponse), nil
+}
+
+func (mock *MockGetPaymentTypesUseCase) Execute() []string {
+	args := mock.Called()
+	return args.Get(0).([]string)
 }

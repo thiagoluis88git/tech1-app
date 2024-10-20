@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"context"
 	"log"
 	"net/http"
 
@@ -19,11 +18,11 @@ import (
 // @Success 200 {object} dto.PaymentResponse
 // @Failure 400 "Payment has required fields"
 // @Router /api/payments [post]
-func CreatePaymentHandler(payOrder *usecases.PayOrderUseCase) http.HandlerFunc {
+func CreatePaymentHandler(payOrder usecases.PayOrderUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var combo dto.Payment
+		var payment dto.Payment
 
-		err := httpserver.DecodeJSONBody(w, r, &combo)
+		err := httpserver.DecodeJSONBody(w, r, &payment)
 
 		if err != nil {
 			log.Print("decoding payment body", map[string]interface{}{
@@ -34,7 +33,7 @@ func CreatePaymentHandler(payOrder *usecases.PayOrderUseCase) http.HandlerFunc {
 			return
 		}
 
-		paymentResponse, err := payOrder.Execute(context.Background(), combo)
+		paymentResponse, err := payOrder.Execute(r.Context(), payment)
 
 		if err != nil {
 			log.Print("create payment", map[string]interface{}{
@@ -56,7 +55,7 @@ func CreatePaymentHandler(payOrder *usecases.PayOrderUseCase) http.HandlerFunc {
 // @Produce json
 // @Success 200 {object} []string
 // @Router /api/payments/type [get]
-func GetPaymentTypeHandler(getPaymentTypes *usecases.GetPaymentTypesUseCase) http.HandlerFunc {
+func GetPaymentTypeHandler(getPaymentTypes usecases.GetPaymentTypesUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		httpserver.SendResponseSuccess(w, getPaymentTypes.Execute())
 	}
