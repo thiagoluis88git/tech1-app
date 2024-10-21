@@ -7,3 +7,4 @@ infra/k8s/.DS_Store
 internal/integrations/.DS_Store
 .DS_Store
 pkg/.DS_Store
+cover.out
