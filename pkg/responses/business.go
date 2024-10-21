@@ -82,18 +82,6 @@ func getBusinessMessageError(statusCode int, service string) string {
 		message = fmt.Sprintf("Conflit with some data using the service %v", service)
 	case http.StatusUnprocessableEntity:
 		message = fmt.Sprintf("Logic error found in service %v", service)
-	case http.StatusGone:
-		message = fmt.Sprintf("Gone error found in service %v", service)
-	case http.StatusPreconditionRequired:
-		message = fmt.Sprintf("Precondition Required found in service %v", service)
-	case http.StatusRequestedRangeNotSatisfiable:
-		message = fmt.Sprintf("Range Not Satisfiable found in service %v", service)
-	case http.StatusLengthRequired:
-		message = fmt.Sprintf("Length Required found in service %v", service)
-	case http.StatusRequestEntityTooLarge:
-		message = fmt.Sprintf("Some data is too large to be accepted found in service %v", service)
-	case http.StatusLocked:
-		message = fmt.Sprintf("The resource is locked or not finished found in service %v", service)
 	default:
 		message = fmt.Sprintf("Unexpected internal error trying to execute service %v", service)
 	}
