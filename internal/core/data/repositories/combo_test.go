@@ -1,10 +1,11 @@
-package repositories
+package repositories_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
 	"github.com/thiagoluis88git/tech1/internal/core/data/model"
+	"github.com/thiagoluis88git/tech1/internal/core/data/repositories"
 	"github.com/thiagoluis88git/tech1/internal/core/domain/dto"
 )
 
@@ -15,11 +16,11 @@ func TestComboRepository(t *testing.T) {
 func (suite *RepositoryTestSuite) TestCreateComboWithSuccess() {
 	// ensure that the postgres database is empty
 	var products []model.Product
-	result := suite.db.Find(&products)
+	result := suite.db.Connection.Find(&products)
 	suite.NoError(result.Error)
 	suite.Empty(products)
 
-	repo := NewProductRepository(suite.db)
+	repo := repositories.NewProductRepository(suite.db)
 
 	// Product 1
 	newProduct := dto.ProductForm{
@@ -73,7 +74,7 @@ func (suite *RepositoryTestSuite) TestCreateComboWithSuccess() {
 	suite.Equal(uint(3), newId3)
 
 	// ensure that we have a new product in the database
-	result = suite.db.Find(&products)
+	result = suite.db.Connection.Find(&products)
 	suite.NoError(result.Error)
 	suite.Equal(3, len(products))
 

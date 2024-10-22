@@ -6,16 +6,17 @@ import (
 	"github.com/thiagoluis88git/tech1/internal/core/data/model"
 	"github.com/thiagoluis88git/tech1/internal/core/domain/dto"
 	"github.com/thiagoluis88git/tech1/internal/core/domain/repository"
+	"github.com/thiagoluis88git/tech1/pkg/database"
 	"github.com/thiagoluis88git/tech1/pkg/responses"
 
 	"gorm.io/gorm"
 )
 
 type ProductRepository struct {
-	db *gorm.DB
+	db *database.Database
 }
 
-func NewProductRepository(db *gorm.DB) repository.ProductRepository {
+func NewProductRepository(db *database.Database) repository.ProductRepository {
 	return &ProductRepository{
 		db: db,
 	}
@@ -32,7 +33,7 @@ func (repository *ProductRepository) GetCategories() []string {
 }
 
 func (repository *ProductRepository) CreateProduct(ctx context.Context, product dto.ProductForm) (uint, error) {
-	tx := repository.db.WithContext(ctx).Begin()
+	tx := repository.db.Connection.WithContext(ctx).Begin()
 	defer func() {
 		if r := recover(); r != nil {
 			tx.Rollback()
@@ -117,7 +118,7 @@ func (repository *ProductRepository) createComboIfProductsNedded(
 func (repository *ProductRepository) GetProductsByCategory(ctx context.Context, category string) ([]dto.ProductResponse, error) {
 	var productmodel []model.Product
 	err := repository.
-		db.WithContext(ctx).
+		db.Connection.WithContext(ctx).
 		Model(&model.Product{}).
 		Preload("ProductImage").
 		Preload("ComboProduct").
@@ -135,7 +136,7 @@ func (repository *ProductRepository) GetProductsByCategory(ctx context.Context, 
 func (repository *ProductRepository) GetProductById(ctx context.Context, id uint) (dto.ProductResponse, error) {
 	var productEntity model.Product
 	err := repository.
-		db.WithContext(ctx).
+		db.Connection.WithContext(ctx).
 		Model(&model.Product{}).
 		Preload("ProductImage").
 		Preload("ComboProduct").
@@ -150,7 +151,7 @@ func (repository *ProductRepository) GetProductById(ctx context.Context, id uint
 }
 
 func (repository *ProductRepository) DeleteProduct(ctx context.Context, productId uint) error {
-	tx := repository.db.WithContext(ctx).Begin()
+	tx := repository.db.Connection.WithContext(ctx).Begin()
 	defer func() {
 		if r := recover(); r != nil {
 			tx.Rollback()
@@ -201,7 +202,7 @@ func (repository *ProductRepository) UpdateProduct(ctx context.Context, product 
 		Price:       product.Price,
 	}
 
-	err := repository.db.WithContext(ctx).Save(&productEntity).Error
+	err := repository.db.Connection.WithContext(ctx).Save(&productEntity).Error
 
 	if err != nil {
 		return responses.GetDatabaseError(err)
@@ -251,7 +252,7 @@ func (repository *ProductRepository) getComboProductsIfNedded(ctx context.Contex
 		for _, comboProduct := range value.ComboProduct {
 			var product model.Product
 
-			err := repository.db.
+			err := repository.db.Connection.
 				WithContext(ctx).
 				Preload("ProductImage").
 				First(&product, comboProduct.ComboProductID).

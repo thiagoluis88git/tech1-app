@@ -1,17 +1,21 @@
-package repositories
+package repositories_test
 
 import (
 	"context"
 	"time"
 
+	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/testcontainers/testcontainers-go/wait"
 	"github.com/thiagoluis88git/tech1/internal/core/data/model"
+	"github.com/thiagoluis88git/tech1/pkg/database"
+	"gorm.io/driver/mysql"
 	pg "gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 type MockCognitoRemoteDataSource struct {
@@ -65,7 +69,7 @@ func (mock *MockCognitoRemoteDataSource) LoginUnknown() (string, error) {
 type RepositoryTestSuite struct {
 	suite.Suite
 	ctx                context.Context
-	db                 *gorm.DB
+	db                 *database.Database
 	pgContainer        *postgres.PostgresContainer
 	pgConnectionString string
 }
@@ -92,9 +96,9 @@ func (suite *RepositoryTestSuite) SetupSuite() {
 
 	suite.pgContainer = pgContainer
 	suite.pgConnectionString = connStr
-	suite.db = db
+	suite.db = &database.Database{Connection: db}
 
-	sqlDB, err := suite.db.DB()
+	sqlDB, err := suite.db.Connection.DB()
 	suite.NoError(err)
 
 	err = sqlDB.Ping()
@@ -107,7 +111,7 @@ func (suite *RepositoryTestSuite) TearDownSuite() {
 }
 
 func (suite *RepositoryTestSuite) SetupTest() {
-	err := suite.db.AutoMigrate(
+	err := suite.db.Connection.AutoMigrate(
 		&model.Product{},
 		&model.ProductImage{},
 		&model.ComboProduct{},
@@ -121,12 +125,29 @@ func (suite *RepositoryTestSuite) SetupTest() {
 }
 
 func (suite *RepositoryTestSuite) TearDownTest() {
-	suite.db.Exec("DROP TABLE IF EXISTS customers CASCADE;")
-	suite.db.Exec("DROP TABLE IF EXISTS products CASCADE;")
-	suite.db.Exec("DROP TABLE IF EXISTS product_images CASCADE;")
-	suite.db.Exec("DROP TABLE IF EXISTS combo_products CASCADE;")
-	suite.db.Exec("DROP TABLE IF EXISTS orders CASCADE;")
-	suite.db.Exec("DROP TABLE IF EXISTS order_products CASCADE;")
-	suite.db.Exec("DROP TABLE IF EXISTS payments CASCADE;")
-	suite.db.Exec("DROP TABLE IF EXISTS order_ticket_numbers CASCADE;")
+	suite.db.Connection.Exec("DROP TABLE IF EXISTS customers CASCADE;")
+	suite.db.Connection.Exec("DROP TABLE IF EXISTS products CASCADE;")
+	suite.db.Connection.Exec("DROP TABLE IF EXISTS product_images CASCADE;")
+	suite.db.Connection.Exec("DROP TABLE IF EXISTS combo_products CASCADE;")
+	suite.db.Connection.Exec("DROP TABLE IF EXISTS orders CASCADE;")
+	suite.db.Connection.Exec("DROP TABLE IF EXISTS order_products CASCADE;")
+	suite.db.Connection.Exec("DROP TABLE IF EXISTS payments CASCADE;")
+	suite.db.Connection.Exec("DROP TABLE IF EXISTS order_ticket_numbers CASCADE;")
+}
+
+func SetupDBMocks() (*gorm.DB, sqlmock.Sqlmock, error) {
+	db, mock, err := sqlmock.New(sqlmock.QueryMatcherOption(sqlmock.QueryMatcherEqual))
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	gormDB, err := gorm.Open(mysql.New(mysql.Config{
+		Conn:                      db,
+		SkipInitializeWithVersion: true,
+	}), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Silent),
+	})
+
+	return gormDB, mock, err
 }

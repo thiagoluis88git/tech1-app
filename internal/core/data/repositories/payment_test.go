@@ -1,10 +1,11 @@
-package repositories
+package repositories_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
 	"github.com/thiagoluis88git/tech1/internal/core/data/model"
+	"github.com/thiagoluis88git/tech1/internal/core/data/repositories"
 	"github.com/thiagoluis88git/tech1/internal/core/domain/dto"
 )
 
@@ -15,11 +16,11 @@ func TestPaymentRepository(t *testing.T) {
 func (suite *RepositoryTestSuite) TestCreatePaymentOrderWithSuccess() {
 	// ensure that the postgres database is empty
 	var payments []model.Payment
-	result := suite.db.Find(&payments)
+	result := suite.db.Connection.Find(&payments)
 	suite.NoError(result.Error)
 	suite.Empty(payments)
 
-	repo := NewPaymentRepository(suite.db)
+	repo := repositories.NewPaymentRepository(suite.db)
 
 	newPayment := dto.Payment{
 		TotalPrice:  58.90,
@@ -35,11 +36,11 @@ func (suite *RepositoryTestSuite) TestCreatePaymentOrderWithSuccess() {
 func (suite *RepositoryTestSuite) TestCreatePaymentOrderWithUnknownUserError() {
 	// ensure that the postgres database is empty
 	var payments []model.Payment
-	result := suite.db.Find(&payments)
+	result := suite.db.Connection.Find(&payments)
 	suite.NoError(result.Error)
 	suite.Empty(payments)
 
-	repo := NewPaymentRepository(suite.db)
+	repo := repositories.NewPaymentRepository(suite.db)
 
 	unknownUser := uint(2)
 
@@ -58,11 +59,11 @@ func (suite *RepositoryTestSuite) TestCreatePaymentOrderWithUnknownUserError() {
 func (suite *RepositoryTestSuite) TestFinishPaymentOrderWithSuccess() {
 	// ensure that the postgres database is empty
 	var payments []model.Payment
-	result := suite.db.Find(&payments)
+	result := suite.db.Connection.Find(&payments)
 	suite.NoError(result.Error)
 	suite.Empty(payments)
 
-	repo := NewPaymentRepository(suite.db)
+	repo := repositories.NewPaymentRepository(suite.db)
 
 	newPayment := dto.Payment{
 		TotalPrice:  58.90,
@@ -82,11 +83,11 @@ func (suite *RepositoryTestSuite) TestFinishPaymentOrderWithSuccess() {
 func (suite *RepositoryTestSuite) TestFinishPaymentOrderWithError() {
 	// ensure that the postgres database is empty
 	var payments []model.Payment
-	result := suite.db.Find(&payments)
+	result := suite.db.Connection.Find(&payments)
 	suite.NoError(result.Error)
 	suite.Empty(payments)
 
-	repo := NewPaymentRepository(suite.db)
+	repo := repositories.NewPaymentRepository(suite.db)
 
 	newPayment := dto.Payment{
 		TotalPrice:  58.90,
@@ -104,7 +105,7 @@ func (suite *RepositoryTestSuite) TestFinishPaymentOrderWithError() {
 }
 
 func (suite *RepositoryTestSuite) TestGetPaymentTypesWithSuccess() {
-	repo := NewPaymentRepository(suite.db)
+	repo := repositories.NewPaymentRepository(suite.db)
 
 	paymentTypes := repo.GetPaymentTypes()
 

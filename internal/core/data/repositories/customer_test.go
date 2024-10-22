@@ -1,10 +1,11 @@
-package repositories
+package repositories_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
 	"github.com/thiagoluis88git/tech1/internal/core/data/model"
+	"github.com/thiagoluis88git/tech1/internal/core/data/repositories"
 	"github.com/thiagoluis88git/tech1/internal/core/domain/dto"
 )
 
@@ -15,12 +16,12 @@ func TestCustomerRepository(t *testing.T) {
 func (suite *RepositoryTestSuite) TestCreateCustomerWithSuccess() {
 	// ensure that the postgres database is empty
 	var customers []model.Customer
-	result := suite.db.Find(&customers)
+	result := suite.db.Connection.Find(&customers)
 	suite.NoError(result.Error)
 	suite.Empty(customers)
 
 	mockCognito := new(MockCognitoRemoteDataSource)
-	repo := NewCustomerRepository(suite.db, mockCognito)
+	repo := repositories.NewCustomerRepository(suite.db, mockCognito)
 
 	newCustomer := dto.Customer{
 		Name:  "Teste",
@@ -49,12 +50,12 @@ func (suite *RepositoryTestSuite) TestCreateCustomerWithSuccess() {
 func (suite *RepositoryTestSuite) TestGetCustomerByCPFWithSuccess() {
 	// ensure that the postgres database is empty
 	var customers []model.Customer
-	result := suite.db.Find(&customers)
+	result := suite.db.Connection.Find(&customers)
 	suite.NoError(result.Error)
 	suite.Empty(customers)
 
 	mockCognito := new(MockCognitoRemoteDataSource)
-	repo := NewCustomerRepository(suite.db, mockCognito)
+	repo := repositories.NewCustomerRepository(suite.db, mockCognito)
 
 	// Product 1
 	newCustomer := dto.Customer{

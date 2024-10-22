@@ -7,17 +7,18 @@ import (
 	"github.com/thiagoluis88git/tech1/internal/core/domain/dto"
 	"github.com/thiagoluis88git/tech1/internal/core/domain/repository"
 	"github.com/thiagoluis88git/tech1/internal/integrations/remote"
+	"github.com/thiagoluis88git/tech1/pkg/database"
 	"github.com/thiagoluis88git/tech1/pkg/responses"
 
 	"gorm.io/gorm"
 )
 
 type UserAdminRepository struct {
-	db            *gorm.DB
+	db            *database.Database
 	cognitoRemote remote.CognitoRemoteDataSource
 }
 
-func NewUserAdminRepository(db *gorm.DB, cognitoRemote remote.CognitoRemoteDataSource) repository.UserAdminRepository {
+func NewUserAdminRepository(db *database.Database, cognitoRemote remote.CognitoRemoteDataSource) repository.UserAdminRepository {
 	return &UserAdminRepository{
 		db:            db,
 		cognitoRemote: cognitoRemote,
@@ -37,7 +38,7 @@ func (repository *UserAdminRepository) CreateUser(ctx context.Context, customer 
 		return 0, responses.GetCognitoError(err)
 	}
 
-	err = repository.db.WithContext(ctx).Create(userEntity).Error
+	err = repository.db.Connection.WithContext(ctx).Create(userEntity).Error
 
 	if err != nil {
 		return 0, responses.GetDatabaseError(err)
@@ -54,7 +55,7 @@ func (repository *UserAdminRepository) UpdateUser(ctx context.Context, customer 
 		Email: customer.Email,
 	}
 
-	err := repository.db.WithContext(ctx).Save(&userEntity).Error
+	err := repository.db.Connection.WithContext(ctx).Save(&userEntity).Error
 
 	if err != nil {
 		return responses.GetDatabaseError(err)
@@ -67,7 +68,7 @@ func (repository *UserAdminRepository) GetUserById(ctx context.Context, id uint)
 	var userEntity model.UserAdmin
 
 	err := repository.
-		db.WithContext(ctx).
+		db.Connection.WithContext(ctx).
 		First(&userEntity, id).
 		Error
 
@@ -82,7 +83,7 @@ func (repository *UserAdminRepository) GetUserByCPF(ctx context.Context, cpf str
 	var userEntity model.UserAdmin
 
 	err := repository.
-		db.WithContext(ctx).
+		db.Connection.WithContext(ctx).
 		Where("cpf = ?", cpf).
 		First(&userEntity).
 		Error

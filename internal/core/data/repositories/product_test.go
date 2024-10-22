@@ -1,4 +1,4 @@
-package repositories
+package repositories_test
 
 import (
 	"errors"
@@ -6,6 +6,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 	"github.com/thiagoluis88git/tech1/internal/core/data/model"
+	"github.com/thiagoluis88git/tech1/internal/core/data/repositories"
 	"github.com/thiagoluis88git/tech1/internal/core/domain/dto"
 	"github.com/thiagoluis88git/tech1/pkg/responses"
 )
@@ -17,11 +18,11 @@ func TestProductRepository(t *testing.T) {
 func (suite *RepositoryTestSuite) TestGetProductsWithSuccess() {
 	// ensure that the postgres database is empty
 	var products []model.Product
-	result := suite.db.Find(&products)
+	result := suite.db.Connection.Find(&products)
 	suite.NoError(result.Error)
 	suite.Empty(products)
 
-	repo := NewProductRepository(suite.db)
+	repo := repositories.NewProductRepository(suite.db)
 
 	newProduct := dto.ProductForm{
 		Name:        "New Product Created",
@@ -48,11 +49,11 @@ func (suite *RepositoryTestSuite) TestGetProductsWithSuccess() {
 func (suite *RepositoryTestSuite) TestGetProductByIdWithSuccess() {
 	// ensure that the postgres database is empty
 	var products []model.Product
-	result := suite.db.Find(&products)
+	result := suite.db.Connection.Find(&products)
 	suite.NoError(result.Error)
 	suite.Empty(products)
 
-	repo := NewProductRepository(suite.db)
+	repo := repositories.NewProductRepository(suite.db)
 
 	newProduct := dto.ProductForm{
 		Name:        "New Product Created",
@@ -78,11 +79,11 @@ func (suite *RepositoryTestSuite) TestGetProductByIdWithSuccess() {
 func (suite *RepositoryTestSuite) TestCreateProductWithSuccess() {
 	// ensure that the postgres database is empty
 	var products []model.Product
-	result := suite.db.Find(&products)
+	result := suite.db.Connection.Find(&products)
 	suite.NoError(result.Error)
 	suite.Empty(products)
 
-	repo := NewProductRepository(suite.db)
+	repo := repositories.NewProductRepository(suite.db)
 	newProduct := dto.ProductForm{
 		Name:        "New Product Created",
 		Description: "New Description Product Created",
@@ -99,7 +100,7 @@ func (suite *RepositoryTestSuite) TestCreateProductWithSuccess() {
 	suite.Equal(uint(1), newId)
 
 	// ensure that we have a new product in the database
-	result = suite.db.Find(&products)
+	result = suite.db.Connection.Find(&products)
 	suite.NoError(result.Error)
 	suite.Equal(1, len(products))
 	suite.Equal(uint(1), products[0].ID)
@@ -110,12 +111,12 @@ func (suite *RepositoryTestSuite) TestCreateProductWithSuccess() {
 func (suite *RepositoryTestSuite) TestUpdateProductWithSuccess() {
 	// ensure that the postgres database is empty
 	var products []model.Product
-	result := suite.db.Find(&products)
+	result := suite.db.Connection.Find(&products)
 	suite.NoError(result.Error)
 	suite.Empty(products)
 
 	// create repository and save new note
-	repo := NewProductRepository(suite.db)
+	repo := repositories.NewProductRepository(suite.db)
 	newProduct := dto.ProductForm{
 		Name:        "New Product",
 		Description: "New Description Product",
@@ -133,7 +134,7 @@ func (suite *RepositoryTestSuite) TestUpdateProductWithSuccess() {
 	suite.Equal(uint(1), newId)
 
 	// ensure that we have a new product in the database
-	result = suite.db.Find(&products)
+	result = suite.db.Connection.Find(&products)
 	suite.NoError(result.Error)
 	suite.Equal(1, len(products))
 	suite.Equal(uint(1), products[0].ID)
@@ -158,7 +159,7 @@ func (suite *RepositoryTestSuite) TestUpdateProductWithSuccess() {
 	suite.NoError(err)
 
 	// ensure that we have a new product in the database
-	result = suite.db.Find(&products)
+	result = suite.db.Connection.Find(&products)
 	suite.NoError(result.Error)
 	suite.Equal(1, len(products))
 	suite.Equal(uint(1), products[0].ID)
@@ -169,12 +170,12 @@ func (suite *RepositoryTestSuite) TestUpdateProductWithSuccess() {
 func (suite *RepositoryTestSuite) TestCreateProductWithConflictError() {
 	// ensure that the postgres database is empty
 	var products []model.Product
-	result := suite.db.Find(&products)
+	result := suite.db.Connection.Find(&products)
 	suite.NoError(result.Error)
 	suite.Empty(products)
 
 	// create repository and save new note
-	repo := NewProductRepository(suite.db)
+	repo := repositories.NewProductRepository(suite.db)
 	newProduct := dto.ProductForm{
 		Name:        "New Product Created",
 		Description: "New Description Product Created",

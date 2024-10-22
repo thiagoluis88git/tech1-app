@@ -1,10 +1,11 @@
-package repositories
+package repositories_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
 	"github.com/thiagoluis88git/tech1/internal/core/data/model"
+	"github.com/thiagoluis88git/tech1/internal/core/data/repositories"
 	"github.com/thiagoluis88git/tech1/internal/core/domain/dto"
 )
 
@@ -15,11 +16,11 @@ func TestOrderRepository(t *testing.T) {
 func (suite *RepositoryTestSuite) TestCreateOrderWithSuccess() {
 	// ensure that the postgres database is empty
 	var products []model.Product
-	result := suite.db.Find(&products)
+	result := suite.db.Connection.Find(&products)
 	suite.NoError(result.Error)
 	suite.Empty(products)
 
-	repoProduct := NewProductRepository(suite.db)
+	repoProduct := repositories.NewProductRepository(suite.db)
 	newProduct := dto.ProductForm{
 		Name:        "New Product Created",
 		Description: "New Description Product Created",
@@ -36,7 +37,7 @@ func (suite *RepositoryTestSuite) TestCreateOrderWithSuccess() {
 	suite.NoError(err)
 	suite.Equal(uint(1), newId)
 
-	repo := NewOrderRespository(suite.db)
+	repo := repositories.NewOrderRespository(suite.db)
 	newOrder := dto.Order{
 		TotalPrice:   5090,
 		PaymentID:    uint(12),

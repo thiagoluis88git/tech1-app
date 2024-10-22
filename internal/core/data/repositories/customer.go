@@ -7,17 +7,18 @@ import (
 	"github.com/thiagoluis88git/tech1/internal/core/domain/dto"
 	"github.com/thiagoluis88git/tech1/internal/core/domain/repository"
 	"github.com/thiagoluis88git/tech1/internal/integrations/remote"
+	"github.com/thiagoluis88git/tech1/pkg/database"
 	"github.com/thiagoluis88git/tech1/pkg/responses"
 
 	"gorm.io/gorm"
 )
 
 type CustomerRepository struct {
-	db            *gorm.DB
+	db            *database.Database
 	cognitoRemote remote.CognitoRemoteDataSource
 }
 
-func NewCustomerRepository(db *gorm.DB, cognitoRemote remote.CognitoRemoteDataSource) repository.CustomerRepository {
+func NewCustomerRepository(db *database.Database, cognitoRemote remote.CognitoRemoteDataSource) repository.CustomerRepository {
 	return &CustomerRepository{
 		db:            db,
 		cognitoRemote: cognitoRemote,
@@ -37,7 +38,7 @@ func (repository *CustomerRepository) CreateCustomer(ctx context.Context, custom
 		return 0, responses.GetCognitoError(err)
 	}
 
-	err = repository.db.WithContext(ctx).Create(customerEntity).Error
+	err = repository.db.Connection.WithContext(ctx).Create(customerEntity).Error
 
 	if err != nil {
 		return 0, responses.GetDatabaseError(err)
@@ -54,7 +55,7 @@ func (repository *CustomerRepository) UpdateCustomer(ctx context.Context, custom
 		Email: customer.Email,
 	}
 
-	err := repository.db.WithContext(ctx).Save(&customerEntity).Error
+	err := repository.db.Connection.WithContext(ctx).Save(&customerEntity).Error
 
 	if err != nil {
 		return responses.GetDatabaseError(err)
@@ -67,7 +68,7 @@ func (repository *CustomerRepository) GetCustomerById(ctx context.Context, id ui
 	var customerEntity model.Customer
 
 	err := repository.
-		db.WithContext(ctx).
+		db.Connection.WithContext(ctx).
 		First(&customerEntity, id).
 		Error
 
@@ -82,7 +83,7 @@ func (repository *CustomerRepository) GetCustomerByCPF(ctx context.Context, cpf 
 	var customerEntity model.Customer
 
 	err := repository.
-		db.WithContext(ctx).
+		db.Connection.WithContext(ctx).
 		Where("cpf = ?", cpf).
 		First(&customerEntity).
 		Error

@@ -10,7 +10,11 @@ import (
 	"gorm.io/gorm"
 )
 
-func ConfigDatabase() *gorm.DB {
+type Database struct {
+	Connection *gorm.DB
+}
+
+func ConfigDatabase() *Database {
 	dsn := fmt.Sprintf("host=%v user=%v password=%v dbname=%v port=%v",
 		environment.GetDBHost(),
 		environment.GetDBUser(),
@@ -36,5 +40,7 @@ func ConfigDatabase() *gorm.DB {
 		&model.OrderTicketNumber{},
 	)
 
-	return db
+	return &Database{
+		Connection: db,
+	}
 }

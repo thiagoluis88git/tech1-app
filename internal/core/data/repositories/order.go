@@ -7,16 +7,15 @@ import (
 	"github.com/thiagoluis88git/tech1/internal/core/data/model"
 	"github.com/thiagoluis88git/tech1/internal/core/domain/dto"
 	"github.com/thiagoluis88git/tech1/internal/core/domain/repository"
+	"github.com/thiagoluis88git/tech1/pkg/database"
 	"github.com/thiagoluis88git/tech1/pkg/responses"
-
-	"gorm.io/gorm"
 )
 
 type OrderRespository struct {
-	db *gorm.DB
+	db *database.Database
 }
 
-func NewOrderRespository(db *gorm.DB) repository.OrderRepository {
+func NewOrderRespository(db *database.Database) repository.OrderRepository {
 	return &OrderRespository{
 		db: db,
 	}
@@ -31,7 +30,7 @@ func (repository *OrderRespository) CreatePayingOrder(ctx context.Context, order
 }
 
 func (repository *OrderRespository) createOrder(ctx context.Context, order dto.Order, status string) (dto.OrderResponse, error) {
-	tx := repository.db.WithContext(ctx).Begin()
+	tx := repository.db.Connection.WithContext(ctx).Begin()
 	defer func() {
 		if r := recover(); r != nil {
 			tx.Rollback()
@@ -88,7 +87,7 @@ func (repository *OrderRespository) createOrder(ctx context.Context, order dto.O
 }
 
 func (repository *OrderRespository) DeleteOrder(ctx context.Context, orderID uint) error {
-	tx := repository.db.WithContext(ctx).Begin()
+	tx := repository.db.Connection.WithContext(ctx).Begin()
 	defer func() {
 		if r := recover(); r != nil {
 			tx.Rollback()
@@ -124,7 +123,7 @@ func (repository *OrderRespository) DeleteOrder(ctx context.Context, orderID uin
 }
 
 func (repository *OrderRespository) FinishOrderWithPayment(ctx context.Context, orderID uint, paymentID uint) error {
-	err := repository.db.WithContext(ctx).
+	err := repository.db.Connection.WithContext(ctx).
 		Model(&model.Order{}).
 		Where("id = ?", orderID).
 		Update("payment_id", paymentID).
@@ -141,7 +140,7 @@ func (repository *OrderRespository) FinishOrderWithPayment(ctx context.Context, 
 func (repository *OrderRespository) GetOrderById(ctx context.Context, orderId uint) (dto.OrderResponse, error) {
 	var orderEntity model.Order
 	err := repository.
-		db.WithContext(ctx).
+		db.Connection.WithContext(ctx).
 		Model(&model.Order{}).
 		Preload("OrderProduct.Product").
 		Preload("Customer").
@@ -194,7 +193,7 @@ func (repository *OrderRespository) GetOrderById(ctx context.Context, orderId ui
 func (repository *OrderRespository) GetOrdersToPrepare(ctx context.Context) ([]dto.OrderResponse, error) {
 	var orderEntity []model.Order
 	err := repository.
-		db.WithContext(ctx).
+		db.Connection.WithContext(ctx).
 		Model(&model.Order{}).
 		Preload("OrderProduct.Product").
 		Preload("Customer").
@@ -213,7 +212,7 @@ func (repository *OrderRespository) GetOrdersToPrepare(ctx context.Context) ([]d
 func (repository *OrderRespository) GetOrdersToFollow(ctx context.Context) ([]dto.OrderResponse, error) {
 	var orderEntity []model.Order
 	err := repository.
-		db.WithContext(ctx).
+		db.Connection.WithContext(ctx).
 		Model(&model.Order{}).
 		Preload("OrderProduct.Product").
 		Preload("Customer").
@@ -236,7 +235,7 @@ func (repository *OrderRespository) GetOrdersToFollow(ctx context.Context) ([]dt
 func (repository *OrderRespository) GetOrdersWaitingPayment(ctx context.Context) ([]dto.OrderResponse, error) {
 	var orderEntity []model.Order
 	err := repository.
-		db.WithContext(ctx).
+		db.Connection.WithContext(ctx).
 		Model(&model.Order{}).
 		Preload("OrderProduct.Product").
 		Preload("Customer").
@@ -290,7 +289,7 @@ func (repository *OrderRespository) buildOrdersList(orderEntity []model.Order) [
 }
 
 func (repository *OrderRespository) UpdateToPreparing(ctx context.Context, orderId uint) error {
-	err := repository.db.WithContext(ctx).
+	err := repository.db.Connection.WithContext(ctx).
 		Model(&model.Order{}).
 		Where("id = ?", orderId).
 		Update("order_status", model.OrderStatusPreparing).
@@ -305,7 +304,7 @@ func (repository *OrderRespository) UpdateToPreparing(ctx context.Context, order
 }
 
 func (repository *OrderRespository) UpdateToDone(ctx context.Context, orderId uint) error {
-	err := repository.db.WithContext(ctx).
+	err := repository.db.Connection.WithContext(ctx).
 		Model(&model.Order{}).
 		Where("id = ?", orderId).
 		Update("order_status", model.OrderStatusDone).
@@ -320,7 +319,7 @@ func (repository *OrderRespository) UpdateToDone(ctx context.Context, orderId ui
 }
 
 func (repository *OrderRespository) UpdateToDelivered(ctx context.Context, orderId uint) error {
-	err := repository.db.WithContext(ctx).
+	err := repository.db.Connection.WithContext(ctx).
 		Model(&model.Order{}).
 		Where("id = ?", orderId).
 		Update("order_status", model.OrderStatusDelivered).
@@ -335,7 +334,7 @@ func (repository *OrderRespository) UpdateToDelivered(ctx context.Context, order
 }
 
 func (repository *OrderRespository) UpdateToNotDelivered(ctx context.Context, orderId uint) error {
-	err := repository.db.WithContext(ctx).
+	err := repository.db.Connection.WithContext(ctx).
 		Model(&model.Order{}).
 		Where("id = ?", orderId).
 		Update("order_status", model.OrderStatusNotDelivered).
@@ -351,7 +350,7 @@ func (repository *OrderRespository) UpdateToNotDelivered(ctx context.Context, or
 
 func (repository *OrderRespository) GetNextTicketNumber(ctx context.Context, date int64) int {
 	var orderTicketNumber model.OrderTicketNumber
-	err := repository.db.WithContext(ctx).
+	err := repository.db.Connection.WithContext(ctx).
 		Model(&model.OrderTicketNumber{}).
 		Where("date = ?", date).
 		Find(&orderTicketNumber).
@@ -373,7 +372,7 @@ func (repository *OrderRespository) createNewTicketForDate(ctx context.Context, 
 		TicketNumber: 1,
 	}
 
-	errCreate := repository.db.WithContext(ctx).Create(&orderTicketNumber).Error
+	errCreate := repository.db.Connection.WithContext(ctx).Create(&orderTicketNumber).Error
 
 	if errCreate != nil {
 		return 999
@@ -383,7 +382,7 @@ func (repository *OrderRespository) createNewTicketForDate(ctx context.Context, 
 }
 
 func (repository *OrderRespository) updateTicketForDate(ctx context.Context, date int64, newTicketNumber int) int {
-	err := repository.db.WithContext(ctx).
+	err := repository.db.Connection.WithContext(ctx).
 		Model(&model.OrderTicketNumber{}).
 		Where("date = ?", date).
 		Update("ticket_number", newTicketNumber).

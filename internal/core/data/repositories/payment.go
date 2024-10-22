@@ -6,16 +6,15 @@ import (
 	"github.com/thiagoluis88git/tech1/internal/core/data/model"
 	"github.com/thiagoluis88git/tech1/internal/core/domain/dto"
 	"github.com/thiagoluis88git/tech1/internal/core/domain/repository"
+	"github.com/thiagoluis88git/tech1/pkg/database"
 	"github.com/thiagoluis88git/tech1/pkg/responses"
-
-	"gorm.io/gorm"
 )
 
 type PaymentRepository struct {
-	db *gorm.DB
+	db *database.Database
 }
 
-func NewPaymentRepository(db *gorm.DB) repository.PaymentRepository {
+func NewPaymentRepository(db *database.Database) repository.PaymentRepository {
 	return &PaymentRepository{
 		db: db,
 	}
@@ -29,7 +28,7 @@ func (repository *PaymentRepository) GetPaymentTypes() []string {
 }
 
 func (repository *PaymentRepository) CreatePaymentOrder(ctx context.Context, payment dto.Payment) (dto.PaymentResponse, error) {
-	tx := repository.db.WithContext(ctx).Begin()
+	tx := repository.db.Connection.WithContext(ctx).Begin()
 	defer func() {
 		if r := recover(); r != nil {
 			tx.Rollback()
@@ -67,7 +66,7 @@ func (repository *PaymentRepository) CreatePaymentOrder(ctx context.Context, pay
 }
 
 func (repository *PaymentRepository) FinishPaymentWithError(ctx context.Context, paymentId uint) error {
-	err := repository.db.WithContext(ctx).
+	err := repository.db.Connection.WithContext(ctx).
 		Model(&model.Payment{}).
 		Where("id = ?", paymentId).
 		Update("payment_status", model.PaymentErrorStatus).
@@ -81,7 +80,7 @@ func (repository *PaymentRepository) FinishPaymentWithError(ctx context.Context,
 }
 
 func (repository *PaymentRepository) FinishPaymentWithSuccess(ctx context.Context, paymentId uint) error {
-	err := repository.db.WithContext(ctx).
+	err := repository.db.Connection.WithContext(ctx).
 		Model(&model.Payment{}).
 		Where("id = ?", paymentId).
 		Update("payment_status", model.PaymentPayedStatus).
