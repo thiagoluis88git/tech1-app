@@ -9,7 +9,11 @@ import (
 	"github.com/thiagoluis88git/tech1/pkg/responses"
 )
 
-type CreateUserUseCase struct {
+type CreateUserUseCase interface {
+	Execute(ctx context.Context, user dto.UserAdmin) (dto.UserAdminResponse, error)
+}
+
+type CreateUserUseCaseImpl struct {
 	validateCPFUseCase *ValidateCPFUseCase
 	repository         repository.UserAdminRepository
 }
@@ -39,8 +43,8 @@ func NewUpdateUserUseCase(validateCPFUseCase *ValidateCPFUseCase, repository rep
 	}
 }
 
-func NewCreateUserUseCase(validateCPFUseCase *ValidateCPFUseCase, repository repository.UserAdminRepository) *CreateUserUseCase {
-	return &CreateUserUseCase{
+func NewCreateUserUseCase(validateCPFUseCase *ValidateCPFUseCase, repository repository.UserAdminRepository) CreateUserUseCase {
+	return &CreateUserUseCaseImpl{
 		validateCPFUseCase: validateCPFUseCase,
 		repository:         repository,
 	}
@@ -65,7 +69,7 @@ func NewLoginUserUseCase(repository repository.UserAdminRepository) *LoginUserUs
 	}
 }
 
-func (service *CreateUserUseCase) Execute(ctx context.Context, user dto.UserAdmin) (dto.UserAdminResponse, error) {
+func (service *CreateUserUseCaseImpl) Execute(ctx context.Context, user dto.UserAdmin) (dto.UserAdminResponse, error) {
 	cleanedCPF, validate := service.validateCPFUseCase.Execute(user.CPF)
 
 	if !validate {

@@ -20,7 +20,7 @@ import (
 // @Failure 400 "Customer has required fields"
 // @Failure 409 "This user is already added"
 // @Router /auth/admin/signup [post]
-func CreateUserHandler(createUserAdmin *usecases.CreateUserUseCase) http.HandlerFunc {
+func CreateUserHandler(createUserAdmin usecases.CreateUserUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var user dto.UserAdmin
 

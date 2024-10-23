@@ -212,6 +212,10 @@ type MockProductRepository struct {
 	mock.Mock
 }
 
+type MockUserAdminRepository struct {
+	mock.Mock
+}
+
 func (mock *MockCustomerRepository) CreateCustomer(ctx context.Context, customer dto.Customer) (uint, error) {
 	args := mock.Called(ctx, customer)
 	err := args.Error(1)
@@ -522,4 +526,59 @@ func (mock *MockProductRepository) UpdateProduct(ctx context.Context, product dt
 func (mock *MockProductRepository) GetCategories() []string {
 	args := mock.Called()
 	return args.Get(0).([]string)
+}
+
+func (mock *MockUserAdminRepository) CreateUser(ctx context.Context, customer dto.UserAdmin) (uint, error) {
+	args := mock.Called(ctx, customer)
+	err := args.Error(1)
+
+	if err != nil {
+		return uint(0), err
+	}
+
+	return args.Get(0).(uint), nil
+}
+
+func (mock *MockUserAdminRepository) GetUserById(ctx context.Context, id uint) (dto.UserAdmin, error) {
+	args := mock.Called(ctx, id)
+	err := args.Error(1)
+
+	if err != nil {
+		return dto.UserAdmin{}, err
+	}
+
+	return args.Get(0).(dto.UserAdmin), nil
+}
+
+func (mock *MockUserAdminRepository) GetUserByCPF(ctx context.Context, cpf string) (dto.UserAdmin, error) {
+	args := mock.Called(ctx, cpf)
+	err := args.Error(1)
+
+	if err != nil {
+		return dto.UserAdmin{}, err
+	}
+
+	return args.Get(0).(dto.UserAdmin), nil
+}
+
+func (mock *MockUserAdminRepository) Login(ctx context.Context, cpf string) (string, error) {
+	args := mock.Called(ctx, cpf)
+	err := args.Error(1)
+
+	if err != nil {
+		return "", err
+	}
+
+	return args.Get(0).(string), nil
+}
+
+func (mock *MockUserAdminRepository) UpdateUser(ctx context.Context, customer dto.UserAdmin) error {
+	args := mock.Called(ctx, customer)
+	err := args.Error(1)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
