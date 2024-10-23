@@ -2,6 +2,7 @@ package repositories_test
 
 import (
 	"context"
+	"errors"
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
@@ -10,6 +11,7 @@ import (
 	"github.com/thiagoluis88git/tech1/internal/core/data/repositories"
 	"github.com/thiagoluis88git/tech1/internal/core/domain/dto"
 	"github.com/thiagoluis88git/tech1/pkg/database"
+	"github.com/thiagoluis88git/tech1/pkg/responses"
 )
 
 const (
@@ -57,5 +59,157 @@ func TestUserAdminLocal(t *testing.T) {
 
 		assert.NoError(t, err)
 		assert.Equal(t, uint(1), id)
+	})
+
+	t.Run("got error on Cognito remote when saving user admin local", func(t *testing.T) {
+		t.Parallel()
+
+		db, sqlMock, err := SetupDBMocks()
+
+		assert.NoError(t, err)
+
+		sqlMock.ExpectBegin()
+		sqlMock.ExpectExec(insertQuery).
+			WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), nil, "NAME", "CPF", "EMAIL").
+			WillReturnResult(sqlmock.NewResult(1, 1))
+		sqlMock.ExpectCommit()
+
+		cognitoRemote := new(MockCognitoRemoteDataSource)
+		localDs := repositories.NewUserAdminRepository(&database.Database{Connection: db}, cognitoRemote)
+
+		cognitoRemote.On("SignUpAdmin", mockModelUserAdmin()).Return(&responses.NetworkError{
+			Code: 400,
+		})
+
+		id, err := localDs.CreateUser(context.TODO(), mockDTOUserAdmin())
+
+		assert.Error(t, err)
+		assert.Equal(t, uint(0), id)
+	})
+
+	t.Run("got error on Create User DB when saving user admin local", func(t *testing.T) {
+		t.Parallel()
+
+		db, sqlMock, err := SetupDBMocks()
+
+		assert.NoError(t, err)
+
+		sqlMock.ExpectBegin()
+		sqlMock.ExpectExec(insertQuery).
+			WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), nil, "NAME", "CPF", "EMAIL").
+			WillReturnError(errors.New("Error on DB"))
+		sqlMock.ExpectCommit()
+
+		cognitoRemote := new(MockCognitoRemoteDataSource)
+		localDs := repositories.NewUserAdminRepository(&database.Database{Connection: db}, cognitoRemote)
+
+		cognitoRemote.On("SignUpAdmin", mockModelUserAdmin()).Return(nil)
+
+		id, err := localDs.CreateUser(context.TODO(), mockDTOUserAdmin())
+
+		assert.Error(t, err)
+		assert.Equal(t, uint(0), id)
+	})
+
+	t.Run("got success when updating user admin local", func(t *testing.T) {
+		t.Parallel()
+
+		db, sqlMock, err := SetupDBMocks()
+
+		assert.NoError(t, err)
+
+		sqlMock.ExpectBegin()
+		sqlMock.ExpectExec(insertQuery).
+			WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), nil, "NAME", "CPF", "EMAIL").
+			WillReturnResult(sqlmock.NewResult(1, 1))
+		sqlMock.ExpectCommit()
+
+		cognitoRemote := new(MockCognitoRemoteDataSource)
+		localDs := repositories.NewUserAdminRepository(&database.Database{Connection: db}, cognitoRemote)
+
+		err = localDs.UpdateUser(context.TODO(), mockDTOUserAdmin())
+
+		assert.NoError(t, err)
+	})
+
+	t.Run("got error on Update User DB when updating user admin local", func(t *testing.T) {
+		t.Parallel()
+
+		db, sqlMock, err := SetupDBMocks()
+
+		assert.NoError(t, err)
+
+		sqlMock.ExpectBegin()
+		sqlMock.ExpectExec(insertQuery).
+			WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), nil, "NAME", "CPF", "EMAIL").
+			WillReturnError(errors.New("Error on DB"))
+		sqlMock.ExpectCommit()
+
+		cognitoRemote := new(MockCognitoRemoteDataSource)
+		localDs := repositories.NewUserAdminRepository(&database.Database{Connection: db}, cognitoRemote)
+
+		err = localDs.UpdateUser(context.TODO(), mockDTOUserAdmin())
+
+		assert.Error(t, err)
+	})
+
+	// t.Run("got success when getting user admin by id local", func(t *testing.T) {
+	// 	t.Parallel()
+
+	// 	db, sqlMock, err := SetupDBMocks()
+
+	// 	assert.NoError(t, err)
+
+	// 	sqlMock.ExpectBegin()
+	// 	sqlMock.ExpectExec(insertQuery).
+	// 		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), nil, "NAME", "CPF", "EMAIL").
+	// 		WillReturnResult(sqlmock.NewResult(1, 1))
+	// 	sqlMock.ExpectCommit()
+
+	// 	cognitoRemote := new(MockCognitoRemoteDataSource)
+	// 	localDs := repositories.NewUserAdminRepository(&database.Database{Connection: db}, cognitoRemote)
+
+	// 	userAdmin, err := localDs.GetUserById(context.TODO(), uint(1))
+
+	// 	assert.NoError(t, err)
+	// 	assert.NotEmpty(t, userAdmin)
+	// })
+
+	t.Run("got success when login user admin local", func(t *testing.T) {
+		t.Parallel()
+
+		db, _, err := SetupDBMocks()
+
+		assert.NoError(t, err)
+
+		cognitoRemote := new(MockCognitoRemoteDataSource)
+		localDs := repositories.NewUserAdminRepository(&database.Database{Connection: db}, cognitoRemote)
+
+		cognitoRemote.On("Login", "12345678910").Return("TOKEN", nil)
+
+		token, err := localDs.Login(context.TODO(), "12345678910")
+
+		assert.NoError(t, err)
+		assert.Equal(t, "TOKEN", token)
+	})
+
+	t.Run("got error when login user admin local", func(t *testing.T) {
+		t.Parallel()
+
+		db, _, err := SetupDBMocks()
+
+		assert.NoError(t, err)
+
+		cognitoRemote := new(MockCognitoRemoteDataSource)
+		localDs := repositories.NewUserAdminRepository(&database.Database{Connection: db}, cognitoRemote)
+
+		cognitoRemote.On("Login", "12345678910").Return("", &responses.NetworkError{
+			Code: 400,
+		})
+
+		token, err := localDs.Login(context.TODO(), "12345678910")
+
+		assert.Error(t, err)
+		assert.Empty(t, token)
 	})
 }

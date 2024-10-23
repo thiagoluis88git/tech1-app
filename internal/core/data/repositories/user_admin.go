@@ -108,7 +108,7 @@ func (repository *UserAdminRepository) Login(ctx context.Context, cpf string) (s
 	token, err := repository.cognitoRemote.Login(cpf)
 
 	if err != nil {
-		return "", responses.GetDatabaseError(err)
+		return "", responses.GetCognitoError(err)
 	}
 
 	return token, nil

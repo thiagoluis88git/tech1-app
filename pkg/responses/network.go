@@ -57,28 +57,3 @@ func IsNetworkResponseOk(response *http.Response, bodyMessage string) error {
 		Message: bodyMessage,
 	}
 }
-
-func AdjustStatusCodeFromMessageError(networError *NetworkError) error {
-	statusCode := networError.Code
-
-	if strings.Contains(networError.Message, "jwt expired") {
-		statusCode = http.StatusUnauthorized
-	}
-
-	if strings.Contains(networError.Message, "jwt malformed") {
-		statusCode = http.StatusBadRequest
-	}
-
-	if strings.Contains(networError.Message, "jwt must be provided") {
-		statusCode = http.StatusBadRequest
-	}
-
-	if strings.Contains(networError.Message, "invalid token") {
-		statusCode = http.StatusBadRequest
-	}
-
-	return &NetworkError{
-		Code:    statusCode,
-		Message: networError.Message,
-	}
-}
