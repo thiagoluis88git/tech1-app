@@ -23,7 +23,7 @@ import (
 // @Success 200 {object} dto.OrderResponse
 // @Failure 400 "Order has required fields"
 // @Router /api/orders [post]
-func CreateOrderHandler(createOrder *usecases.CreateOrderUseCase) http.HandlerFunc {
+func CreateOrderHandler(createOrder usecases.CreateOrderUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var order dto.Order
 
@@ -70,7 +70,7 @@ func CreateOrderHandler(createOrder *usecases.CreateOrderUseCase) http.HandlerFu
 // @Success 200 {object} dto.OrderResponse
 // @Failure 400 "Order has required fields"
 // @Router /api/orders/{id} [get]
-func GetOrderByIdHandler(getOrderById *usecases.GetOrderByIdUseCase) http.HandlerFunc {
+func GetOrderByIdHandler(getOrderById usecases.GetOrderByIdUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		orderIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
 

@@ -9,7 +9,12 @@ import (
 	"github.com/thiagoluis88git/tech1/pkg/responses"
 )
 
-type CreateOrderUseCase struct {
+type CreateOrderUseCase interface {
+	Execute(ctx context.Context, order dto.Order, date int64, wg *sync.WaitGroup, ch chan bool) (dto.OrderResponse, error)
+	GenerateTicket(ctx context.Context, date int64) int
+}
+
+type CreateOrderUseCaseImpl struct {
 	orderRepo                repository.OrderRepository
 	customerRepo             repository.CustomerRepository
 	validateToPrepare        *ValidateOrderToPrepareUseCase
@@ -38,7 +43,11 @@ type UpdateToNotDeliveredUseCase struct {
 	validateToDeliveredOrNot *ValidateOrderToDeliveredOrNotUseCase
 }
 
-type GetOrderByIdUseCase struct {
+type GetOrderByIdUseCase interface {
+	Execute(ctx context.Context, orderId uint) (dto.OrderResponse, error)
+}
+
+type GetOrderByIdUseCaseImpl struct {
 	orderRepo repository.OrderRepository
 }
 
@@ -64,8 +73,8 @@ func NewCreateOrderUseCase(
 	validateToDone *ValidateOrderToDoneUseCase,
 	validateToDeliveredOrNot *ValidateOrderToDeliveredOrNotUseCase,
 	sortOrderUseCase *SortOrdersUseCase,
-) *CreateOrderUseCase {
-	return &CreateOrderUseCase{
+) CreateOrderUseCase {
+	return &CreateOrderUseCaseImpl{
 		orderRepo:                orderRepo,
 		customerRepo:             customerRepo,
 		validateToPrepare:        validateToPrepate,
@@ -77,8 +86,8 @@ func NewCreateOrderUseCase(
 
 func NewGetOrderByIdUseCase(
 	orderRepo repository.OrderRepository,
-) *GetOrderByIdUseCase {
-	return &GetOrderByIdUseCase{
+) GetOrderByIdUseCase {
+	return &GetOrderByIdUseCaseImpl{
 		orderRepo: orderRepo,
 	}
 }
@@ -153,7 +162,7 @@ func NewUpdateToNotDeliveredUseCase(
 	}
 }
 
-func (usecase *CreateOrderUseCase) Execute(ctx context.Context, order dto.Order, date int64, wg *sync.WaitGroup, ch chan bool) (dto.OrderResponse, error) {
+func (usecase *CreateOrderUseCaseImpl) Execute(ctx context.Context, order dto.Order, date int64, wg *sync.WaitGroup, ch chan bool) (dto.OrderResponse, error) {
 	//Block this code below until this Channel be empty (by reading with <-ch)
 	ch <- true
 
@@ -179,11 +188,11 @@ func (usecase *CreateOrderUseCase) Execute(ctx context.Context, order dto.Order,
 	return response, nil
 }
 
-func (usecase *CreateOrderUseCase) GenerateTicket(ctx context.Context, date int64) int {
+func (usecase *CreateOrderUseCaseImpl) GenerateTicket(ctx context.Context, date int64) int {
 	return usecase.orderRepo.GetNextTicketNumber(ctx, date)
 }
 
-func (usecase *GetOrderByIdUseCase) Execute(ctx context.Context, orderId uint) (dto.OrderResponse, error) {
+func (usecase *GetOrderByIdUseCaseImpl) Execute(ctx context.Context, orderId uint) (dto.OrderResponse, error) {
 	response, err := usecase.orderRepo.GetOrderById(ctx, orderId)
 
 	if err != nil {

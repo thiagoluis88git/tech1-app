@@ -2,6 +2,7 @@ package handler_test
 
 import (
 	"context"
+	"sync"
 
 	"github.com/stretchr/testify/mock"
 	"github.com/thiagoluis88git/tech1/internal/core/domain/dto"
@@ -36,6 +37,14 @@ type MockPayOrderUseCase struct {
 }
 
 type MockGetPaymentTypesUseCase struct {
+	mock.Mock
+}
+
+type MockCreateOrderUseCase struct {
+	mock.Mock
+}
+
+type MockGetOrderByIdUseCase struct {
 	mock.Mock
 }
 
@@ -114,6 +123,44 @@ func (mock *MockPayOrderUseCase) Execute(ctx context.Context, payment dto.Paymen
 	}
 
 	return args.Get(0).(dto.PaymentResponse), nil
+}
+
+func (m *MockCreateOrderUseCase) Execute(
+	ctx context.Context,
+	order dto.Order,
+	date int64,
+	wg *sync.WaitGroup,
+	_ chan bool) (dto.OrderResponse, error) {
+	args := m.Called(ctx, order, date, wg, mock.Anything)
+	err := args.Error(1)
+
+	if err != nil {
+		return dto.OrderResponse{}, err
+	}
+
+	return args.Get(0).(dto.OrderResponse), nil
+}
+
+func (mock *MockCreateOrderUseCase) GenerateTicket(ctx context.Context, date int64) int {
+	args := mock.Called(ctx, date)
+	err := args.Error(1)
+
+	if err != nil {
+		return 0
+	}
+
+	return args.Get(0).(int)
+}
+
+func (mock *MockGetOrderByIdUseCase) Execute(ctx context.Context, orderId uint) (dto.OrderResponse, error) {
+	args := mock.Called(ctx, orderId)
+	err := args.Error(1)
+
+	if err != nil {
+		return dto.OrderResponse{}, err
+	}
+
+	return args.Get(0).(dto.OrderResponse), nil
 }
 
 func (mock *MockGetPaymentTypesUseCase) Execute() []string {

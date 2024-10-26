@@ -20,6 +20,7 @@ func mockLoginCustomer() dto.CustomerForm {
 		CPF: "83212446293",
 	}
 }
+
 func TestAuthHandler(t *testing.T) {
 	t.Parallel()
 
