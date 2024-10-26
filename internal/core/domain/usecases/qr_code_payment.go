@@ -12,7 +12,18 @@ import (
 	"github.com/thiagoluis88git/tech1/pkg/responses"
 )
 
-type GenerateQRCodePaymentUseCase struct {
+type GenerateQRCodePaymentUseCase interface {
+	Execute(
+		ctx context.Context,
+		token string,
+		qrOrder dto.QRCodeOrder,
+		date int64,
+		wg *sync.WaitGroup,
+		ch chan bool,
+	) (dto.QRCodeDataResponse, error)
+}
+
+type GenerateQRCodePaymentUseCaseImpl struct {
 	repository        repository.QRCodePaymentRepository
 	orderRepository   repository.OrderRepository
 	paymentRepository repository.PaymentRepository
@@ -28,8 +39,8 @@ func NewGenerateQRCodePaymentUseCase(
 	repository repository.QRCodePaymentRepository,
 	orderRepository repository.OrderRepository,
 	paymentRepository repository.PaymentRepository,
-) *GenerateQRCodePaymentUseCase {
-	return &GenerateQRCodePaymentUseCase{
+) GenerateQRCodePaymentUseCase {
+	return &GenerateQRCodePaymentUseCaseImpl{
 		repository:        repository,
 		orderRepository:   orderRepository,
 		paymentRepository: paymentRepository,
@@ -48,7 +59,7 @@ func NewFinishOrderForQRCodeUseCase(
 	}
 }
 
-func (service *GenerateQRCodePaymentUseCase) Execute(
+func (service *GenerateQRCodePaymentUseCaseImpl) Execute(
 	ctx context.Context,
 	token string,
 	qrOrder dto.QRCodeOrder,

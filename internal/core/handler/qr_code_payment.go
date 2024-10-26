@@ -21,7 +21,7 @@ import (
 // @Param qrCodeOrder body dto.QRCodeOrder true "qrCodeOrder"
 // @Success 200 {object} dto.QRCodeDataResponse
 // @Router /api/qrcode/generate [post]
-func GenerateQRCodeHandler(generateQRCodePayment *usecases.GenerateQRCodePaymentUseCase) http.HandlerFunc {
+func GenerateQRCodeHandler(generateQRCodePayment usecases.GenerateQRCodePaymentUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var form dto.QRCodeOrder
 

@@ -216,6 +216,10 @@ type MockUserAdminRepository struct {
 	mock.Mock
 }
 
+type MockQRCodePaymentRepository struct {
+	mock.Mock
+}
+
 func (mock *MockCustomerRepository) CreateCustomer(ctx context.Context, customer dto.Customer) (uint, error) {
 	args := mock.Called(ctx, customer)
 	err := args.Error(1)
@@ -581,4 +585,35 @@ func (mock *MockUserAdminRepository) UpdateUser(ctx context.Context, customer dt
 	}
 
 	return nil
+}
+
+func (mock *MockQRCodePaymentRepository) Generate(
+	ctx context.Context,
+	token string,
+	form dto.Order,
+	orderID int,
+) (dto.QRCodeDataResponse, error) {
+	args := mock.Called(ctx, token, form, orderID)
+	err := args.Error(1)
+
+	if err != nil {
+		return dto.QRCodeDataResponse{}, err
+	}
+
+	return args.Get(0).(dto.QRCodeDataResponse), nil
+}
+
+func (mock *MockQRCodePaymentRepository) GetQRCodePaymentData(
+	ctx context.Context, 
+	token string, 
+	endpoint string,
+) (dto.ExternalPaymentInformation, error) {
+	args := mock.Called(ctx, token, endpoint)
+	err := args.Error(1)
+
+	if err != nil {
+		return dto.ExternalPaymentInformation{}, err
+	}
+
+	return args.Get(0).(dto.ExternalPaymentInformation), nil
 }
