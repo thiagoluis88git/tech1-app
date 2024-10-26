@@ -51,17 +51,29 @@ type GetOrderByIdUseCaseImpl struct {
 	orderRepo repository.OrderRepository
 }
 
-type GetOrdersToPrepareUseCase struct {
+type GetOrdersToPrepareUseCase interface {
+	Execute(ctx context.Context) ([]dto.OrderResponse, error)
+}
+
+type GetOrdersToPrepareUseCaseImpl struct {
 	orderRepo        repository.OrderRepository
 	sortOrderUseCase *SortOrdersUseCase
 }
 
-type GetOrdersToFollowUseCase struct {
+type GetOrdersToFollowUseCase interface {
+	Execute(ctx context.Context) ([]dto.OrderResponse, error)
+}
+
+type GetOrdersToFollowUseCaseImpl struct {
 	orderRepo        repository.OrderRepository
 	sortOrderUseCase *SortOrdersUseCase
 }
 
-type GetOrdersWaitingPaymentUseCase struct {
+type GetOrdersWaitingPaymentUseCase interface {
+	Execute(ctx context.Context) ([]dto.OrderResponse, error)
+}
+
+type GetOrdersWaitingPaymentUseCaseImpl struct {
 	orderRepo        repository.OrderRepository
 	sortOrderUseCase *SortOrdersUseCase
 }
@@ -95,8 +107,8 @@ func NewGetOrderByIdUseCase(
 func NewGetOrdersToPrepareUseCase(
 	orderRepo repository.OrderRepository,
 	sortOrderUseCase *SortOrdersUseCase,
-) *GetOrdersToPrepareUseCase {
-	return &GetOrdersToPrepareUseCase{
+) GetOrdersToPrepareUseCase {
+	return &GetOrdersToPrepareUseCaseImpl{
 		orderRepo:        orderRepo,
 		sortOrderUseCase: sortOrderUseCase,
 	}
@@ -105,8 +117,8 @@ func NewGetOrdersToPrepareUseCase(
 func NewGetOrdersToFollowUseCase(
 	orderRepo repository.OrderRepository,
 	sortOrderUseCase *SortOrdersUseCase,
-) *GetOrdersToFollowUseCase {
-	return &GetOrdersToFollowUseCase{
+) GetOrdersToFollowUseCase {
+	return &GetOrdersToFollowUseCaseImpl{
 		orderRepo:        orderRepo,
 		sortOrderUseCase: sortOrderUseCase,
 	}
@@ -115,8 +127,8 @@ func NewGetOrdersToFollowUseCase(
 func NewGetOrdersWaitingPaymentUseCase(
 	orderRepo repository.OrderRepository,
 	sortOrderUseCase *SortOrdersUseCase,
-) *GetOrdersWaitingPaymentUseCase {
-	return &GetOrdersWaitingPaymentUseCase{
+) GetOrdersWaitingPaymentUseCase {
+	return &GetOrdersWaitingPaymentUseCaseImpl{
 		orderRepo:        orderRepo,
 		sortOrderUseCase: sortOrderUseCase,
 	}
@@ -202,7 +214,7 @@ func (usecase *GetOrderByIdUseCaseImpl) Execute(ctx context.Context, orderId uin
 	return response, nil
 }
 
-func (usecase *GetOrdersToPrepareUseCase) Execute(ctx context.Context) ([]dto.OrderResponse, error) {
+func (usecase *GetOrdersToPrepareUseCaseImpl) Execute(ctx context.Context) ([]dto.OrderResponse, error) {
 	response, err := usecase.orderRepo.GetOrdersToPrepare(ctx)
 
 	if err != nil {
@@ -214,7 +226,7 @@ func (usecase *GetOrdersToPrepareUseCase) Execute(ctx context.Context) ([]dto.Or
 	return response, nil
 }
 
-func (usecase *GetOrdersToFollowUseCase) Execute(ctx context.Context) ([]dto.OrderResponse, error) {
+func (usecase *GetOrdersToFollowUseCaseImpl) Execute(ctx context.Context) ([]dto.OrderResponse, error) {
 	response, err := usecase.orderRepo.GetOrdersToFollow(ctx)
 
 	if err != nil {
@@ -226,7 +238,7 @@ func (usecase *GetOrdersToFollowUseCase) Execute(ctx context.Context) ([]dto.Ord
 	return response, nil
 }
 
-func (usecase *GetOrdersWaitingPaymentUseCase) Execute(ctx context.Context) ([]dto.OrderResponse, error) {
+func (usecase *GetOrdersWaitingPaymentUseCaseImpl) Execute(ctx context.Context) ([]dto.OrderResponse, error) {
 	response, err := usecase.orderRepo.GetOrdersWaitingPayment(ctx)
 
 	if err != nil {

@@ -116,7 +116,7 @@ func GetOrderByIdHandler(getOrderById usecases.GetOrderByIdUseCase) http.Handler
 // @Produce json
 // @Success 200 {object} []dto.OrderResponse
 // @Router /api/orders/to-prepare [get]
-func GetOrdersToPrepareHandler(getOrdersToPrepare *usecases.GetOrdersToPrepareUseCase) http.HandlerFunc {
+func GetOrdersToPrepareHandler(getOrdersToPrepare usecases.GetOrdersToPrepareUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		response, err := getOrdersToPrepare.Execute(r.Context())
 
@@ -140,7 +140,7 @@ func GetOrdersToPrepareHandler(getOrdersToPrepare *usecases.GetOrdersToPrepareUs
 // @Produce json
 // @Success 200 {object} []dto.OrderResponse
 // @Router /api/orders/status [get]
-func GetOrdersToFollowHandler(getOrdersToFollow *usecases.GetOrdersToFollowUseCase) http.HandlerFunc {
+func GetOrdersToFollowHandler(getOrdersToFollow usecases.GetOrdersToFollowUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		response, err := getOrdersToFollow.Execute(r.Context())
 
@@ -165,7 +165,7 @@ func GetOrdersToFollowHandler(getOrdersToFollow *usecases.GetOrdersToFollowUseCa
 // @Produce json
 // @Success 200 {object} []dto.OrderResponse
 // @Router /api/orders/waiting-payment [get]
-func GetOrdersWaitingPaymentHandler(getOrdersWaitingPayment *usecases.GetOrdersWaitingPaymentUseCase) http.HandlerFunc {
+func GetOrdersWaitingPaymentHandler(getOrdersWaitingPayment usecases.GetOrdersWaitingPaymentUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		response, err := getOrdersWaitingPayment.Execute(r.Context())
 

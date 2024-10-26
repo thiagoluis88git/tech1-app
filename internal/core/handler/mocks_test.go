@@ -48,6 +48,18 @@ type MockGetOrderByIdUseCase struct {
 	mock.Mock
 }
 
+type MockGetOrdersToPrepareUseCase struct {
+	mock.Mock
+}
+
+type MockGetOrdersToFollowUseCase struct {
+	mock.Mock
+}
+
+type MockGetOrdersWaitingPaymentUseCase struct {
+	mock.Mock
+}
+
 func (mock *MockCreateCustomerUseCase) Execute(ctx context.Context, customer dto.Customer) (dto.CustomerResponse, error) {
 	args := mock.Called(ctx, customer)
 	err := args.Error(1)
@@ -123,6 +135,39 @@ func (mock *MockPayOrderUseCase) Execute(ctx context.Context, payment dto.Paymen
 	}
 
 	return args.Get(0).(dto.PaymentResponse), nil
+}
+
+func (mock *MockGetOrdersToPrepareUseCase) Execute(ctx context.Context) ([]dto.OrderResponse, error) {
+	args := mock.Called(ctx)
+	err := args.Error(1)
+
+	if err != nil {
+		return []dto.OrderResponse{}, err
+	}
+
+	return args.Get(0).([]dto.OrderResponse), nil
+}
+
+func (mock *MockGetOrdersToFollowUseCase) Execute(ctx context.Context) ([]dto.OrderResponse, error) {
+	args := mock.Called(ctx)
+	err := args.Error(1)
+
+	if err != nil {
+		return []dto.OrderResponse{}, err
+	}
+
+	return args.Get(0).([]dto.OrderResponse), nil
+}
+
+func (mock *MockGetOrdersWaitingPaymentUseCase) Execute(ctx context.Context) ([]dto.OrderResponse, error) {
+	args := mock.Called(ctx)
+	err := args.Error(1)
+
+	if err != nil {
+		return []dto.OrderResponse{}, err
+	}
+
+	return args.Get(0).([]dto.OrderResponse), nil
 }
 
 func (m *MockCreateOrderUseCase) Execute(
