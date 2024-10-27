@@ -76,6 +76,18 @@ type MockUpdateToNotDeliveredUseCase struct {
 	mock.Mock
 }
 
+type MockCreateProductUseCase struct {
+	mock.Mock
+}
+
+type MockGetProductsByCategoryUseCase struct {
+	mock.Mock
+}
+
+type MockGetProductsByIDUseCase struct {
+	mock.Mock
+}
+
 func (mock *MockCreateCustomerUseCase) Execute(ctx context.Context, customer dto.Customer) (dto.CustomerResponse, error) {
 	args := mock.Called(ctx, customer)
 	err := args.Error(1)
@@ -200,6 +212,39 @@ func (m *MockCreateOrderUseCase) Execute(
 	}
 
 	return args.Get(0).(dto.OrderResponse), nil
+}
+
+func (m *MockCreateProductUseCase) Execute(ctx context.Context, product dto.ProductForm) (uint, error) {
+	args := m.Called(ctx, product)
+	err := args.Error(1)
+
+	if err != nil {
+		return uint(0), err
+	}
+
+	return args.Get(0).(uint), nil
+}
+
+func (m *MockGetProductsByCategoryUseCase) Execute(ctx context.Context, category string) ([]dto.ProductResponse, error) {
+	args := m.Called(ctx, category)
+	err := args.Error(1)
+
+	if err != nil {
+		return []dto.ProductResponse{}, err
+	}
+
+	return args.Get(0).([]dto.ProductResponse), nil
+}
+
+func (m *MockGetProductsByIDUseCase) Execute(ctx context.Context, id uint) (dto.ProductResponse, error) {
+	args := m.Called(ctx, id)
+	err := args.Error(1)
+
+	if err != nil {
+		return dto.ProductResponse{}, err
+	}
+
+	return args.Get(0).(dto.ProductResponse), nil
 }
 
 func (mock *MockCreateOrderUseCase) GenerateTicket(ctx context.Context, date int64) int {

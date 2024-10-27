@@ -21,7 +21,7 @@ import (
 // @Failure 400 "Product has required fields"
 // @Failure 409 "This Product is already added"
 // @Router /api/admin/products [post]
-func CreateProductHandler(createUseCase *usecases.CreateProductUseCase) http.HandlerFunc {
+func CreateProductHandler(createUseCase usecases.CreateProductUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var product dto.ProductForm
 
@@ -36,7 +36,7 @@ func CreateProductHandler(createUseCase *usecases.CreateProductUseCase) http.Han
 			return
 		}
 
-		productId, err := createUseCase.Execute(context.Background(), product)
+		productId, err := createUseCase.Execute(r.Context(), product)
 
 		if err != nil {
 			log.Print("create product", map[string]interface{}{
@@ -61,7 +61,7 @@ func CreateProductHandler(createUseCase *usecases.CreateProductUseCase) http.Han
 // @Produce json
 // @Success 200 {object} []dto.ProductResponse
 // @Router /api/products/categories/{category} [get]
-func GetProductsByCategoryHandler(getProductsUseCase *usecases.GetProductsByCategoryUseCase) http.HandlerFunc {
+func GetProductsByCategoryHandler(getProductsUseCase usecases.GetProductsByCategoryUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		category, err := httpserver.GetPathParamFromRequest(r, "category")
 
@@ -74,7 +74,7 @@ func GetProductsByCategoryHandler(getProductsUseCase *usecases.GetProductsByCate
 			return
 		}
 
-		products, err := getProductsUseCase.Execute(context.Background(), category)
+		products, err := getProductsUseCase.Execute(r.Context(), category)
 
 		if err != nil {
 			log.Print("get products by category", map[string]interface{}{
@@ -97,7 +97,7 @@ func GetProductsByCategoryHandler(getProductsUseCase *usecases.GetProductsByCate
 // @Produce json
 // @Success 200 {object} dto.ProductResponse
 // @Router /api/products/{id} [get]
-func GetProductsByIdHandler(getProductById *usecases.GetProductByIdUseCase) http.HandlerFunc {
+func GetProductsByIdHandler(getProductById usecases.GetProductByIdUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		productIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -121,7 +121,7 @@ func GetProductsByIdHandler(getProductById *usecases.GetProductByIdUseCase) http
 			return
 		}
 
-		product, err := getProductById.Execute(context.Background(), uint(productId))
+		product, err := getProductById.Execute(r.Context(), uint(productId))
 
 		if err != nil {
 			log.Print("get product by id", map[string]interface{}{

@@ -205,7 +205,7 @@ func UpdateOrderPreparingHandler(updateToPreparing usecases.UpdateToPreparingUse
 			return
 		}
 
-		id, err := GetOrderId(idStr)
+		id, err := getOrderId(idStr)
 
 		if err != nil {
 			log.Print("update order status", map[string]interface{}{
@@ -254,7 +254,7 @@ func UpdateOrderDoneHandler(updateToDone usecases.UpdateToDoneUseCase) http.Hand
 			return
 		}
 
-		id, err := GetOrderId(idStr)
+		id, err := getOrderId(idStr)
 
 		if err != nil {
 			log.Print("update order status", map[string]interface{}{
@@ -303,7 +303,7 @@ func UpdateOrderDeliveredHandler(updateToDelivered usecases.UpdateToDeliveredUse
 			return
 		}
 
-		id, err := GetOrderId(idStr)
+		id, err := getOrderId(idStr)
 
 		if err != nil {
 			log.Print("update order status", map[string]interface{}{
@@ -352,7 +352,7 @@ func UpdateOrderNotDeliveredandler(updateToNotDelivered usecases.UpdateToNotDeli
 			return
 		}
 
-		id, err := GetOrderId(idStr)
+		id, err := getOrderId(idStr)
 
 		if err != nil {
 			log.Print("update order status", map[string]interface{}{
@@ -378,7 +378,7 @@ func UpdateOrderNotDeliveredandler(updateToNotDelivered usecases.UpdateToNotDeli
 	}
 }
 
-func GetOrderId(orderdStr string) (uint, error) {
+func getOrderId(orderdStr string) (uint, error) {
 	orderId, err := strconv.Atoi(orderdStr)
 
 	if err != nil {
