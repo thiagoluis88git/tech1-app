@@ -23,22 +23,38 @@ type CreateOrderUseCaseImpl struct {
 	sortOrderUseCase         *SortOrdersUseCase
 }
 
-type UpdateToPreparingUseCase struct {
+type UpdateToPreparingUseCase interface {
+	Execute(ctx context.Context, orderId uint) error
+}
+
+type UpdateToPreparingUseCaseImpl struct {
 	orderRepo         repository.OrderRepository
 	validateToPrepare *ValidateOrderToPrepareUseCase
 }
 
-type UpdateToDoneUseCase struct {
+type UpdateToDoneUseCase interface {
+	Execute(ctx context.Context, orderId uint) error
+}
+
+type UpdateToDoneUseCaseImpl struct {
 	orderRepo      repository.OrderRepository
 	validateToDone *ValidateOrderToDoneUseCase
 }
 
-type UpdateToDeliveredUseCase struct {
+type UpdateToDeliveredUseCase interface {
+	Execute(ctx context.Context, orderId uint) error
+}
+
+type UpdateToDeliveredUseCaseImpl struct {
 	orderRepo                repository.OrderRepository
 	validateToDeliveredOrNot *ValidateOrderToDeliveredOrNotUseCase
 }
 
-type UpdateToNotDeliveredUseCase struct {
+type UpdateToNotDeliveredUseCase interface {
+	Execute(ctx context.Context, orderId uint) error
+}
+
+type UpdateToNotDeliveredUseCaseImpl struct {
 	orderRepo                repository.OrderRepository
 	validateToDeliveredOrNot *ValidateOrderToDeliveredOrNotUseCase
 }
@@ -137,8 +153,8 @@ func NewGetOrdersWaitingPaymentUseCase(
 func NewUpdateToPreparingUseCase(
 	orderRepo repository.OrderRepository,
 	validateToPrepare *ValidateOrderToPrepareUseCase,
-) *UpdateToPreparingUseCase {
-	return &UpdateToPreparingUseCase{
+) UpdateToPreparingUseCase {
+	return &UpdateToPreparingUseCaseImpl{
 		orderRepo:         orderRepo,
 		validateToPrepare: validateToPrepare,
 	}
@@ -147,8 +163,8 @@ func NewUpdateToPreparingUseCase(
 func NewUpdateToDoneUseCase(
 	orderRepo repository.OrderRepository,
 	validateToDone *ValidateOrderToDoneUseCase,
-) *UpdateToDoneUseCase {
-	return &UpdateToDoneUseCase{
+) UpdateToDoneUseCase {
+	return &UpdateToDoneUseCaseImpl{
 		orderRepo:      orderRepo,
 		validateToDone: validateToDone,
 	}
@@ -157,8 +173,8 @@ func NewUpdateToDoneUseCase(
 func NewUpdateToDeliveredUseCase(
 	orderRepo repository.OrderRepository,
 	validateToDeliveredOrNot *ValidateOrderToDeliveredOrNotUseCase,
-) *UpdateToDeliveredUseCase {
-	return &UpdateToDeliveredUseCase{
+) UpdateToDeliveredUseCase {
+	return &UpdateToDeliveredUseCaseImpl{
 		orderRepo:                orderRepo,
 		validateToDeliveredOrNot: validateToDeliveredOrNot,
 	}
@@ -167,8 +183,8 @@ func NewUpdateToDeliveredUseCase(
 func NewUpdateToNotDeliveredUseCase(
 	orderRepo repository.OrderRepository,
 	validateToDeliveredOrNot *ValidateOrderToDeliveredOrNotUseCase,
-) *UpdateToNotDeliveredUseCase {
-	return &UpdateToNotDeliveredUseCase{
+) UpdateToNotDeliveredUseCase {
+	return &UpdateToNotDeliveredUseCaseImpl{
 		orderRepo:                orderRepo,
 		validateToDeliveredOrNot: validateToDeliveredOrNot,
 	}
@@ -250,7 +266,7 @@ func (usecase *GetOrdersWaitingPaymentUseCaseImpl) Execute(ctx context.Context) 
 	return response, nil
 }
 
-func (usecase *UpdateToPreparingUseCase) Execute(ctx context.Context, orderId uint) error {
+func (usecase *UpdateToPreparingUseCaseImpl) Execute(ctx context.Context, orderId uint) error {
 	err := usecase.validateToPrepare.Execute(ctx, orderId)
 
 	if err != nil {
@@ -266,7 +282,7 @@ func (usecase *UpdateToPreparingUseCase) Execute(ctx context.Context, orderId ui
 	return nil
 }
 
-func (usecase *UpdateToDoneUseCase) Execute(ctx context.Context, orderId uint) error {
+func (usecase *UpdateToDoneUseCaseImpl) Execute(ctx context.Context, orderId uint) error {
 	err := usecase.validateToDone.Execute(ctx, orderId)
 
 	if err != nil {
@@ -282,7 +298,7 @@ func (usecase *UpdateToDoneUseCase) Execute(ctx context.Context, orderId uint) e
 	return nil
 }
 
-func (usecase *UpdateToDeliveredUseCase) Execute(ctx context.Context, orderId uint) error {
+func (usecase *UpdateToDeliveredUseCaseImpl) Execute(ctx context.Context, orderId uint) error {
 	err := usecase.validateToDeliveredOrNot.Execute(ctx, orderId)
 
 	if err != nil {
@@ -298,7 +314,7 @@ func (usecase *UpdateToDeliveredUseCase) Execute(ctx context.Context, orderId ui
 	return nil
 }
 
-func (usecase *UpdateToNotDeliveredUseCase) Execute(ctx context.Context, orderId uint) error {
+func (usecase *UpdateToNotDeliveredUseCaseImpl) Execute(ctx context.Context, orderId uint) error {
 	err := usecase.validateToDeliveredOrNot.Execute(ctx, orderId)
 
 	if err != nil {

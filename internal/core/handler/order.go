@@ -192,7 +192,7 @@ func GetOrdersWaitingPaymentHandler(getOrdersWaitingPayment usecases.GetOrdersWa
 // @Failure 404 "Order not found"
 // @Failure 428 "Precondition failed: Need to be with status Criado"
 // @Router /api/orders/{id}/preparing [put]
-func UpdateOrderPreparingHandler(updateToPreparing *usecases.UpdateToPreparingUseCase) http.HandlerFunc {
+func UpdateOrderPreparingHandler(updateToPreparing usecases.UpdateToPreparingUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -241,7 +241,7 @@ func UpdateOrderPreparingHandler(updateToPreparing *usecases.UpdateToPreparingUs
 // @Failure 404 "Order not found"
 // @Failure 428 "Precondition failed: Need to be with status Preparando"
 // @Router /api/orders/{id}/done [put]
-func UpdateOrderDoneHandler(updateToDone *usecases.UpdateToDoneUseCase) http.HandlerFunc {
+func UpdateOrderDoneHandler(updateToDone usecases.UpdateToDoneUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -290,7 +290,7 @@ func UpdateOrderDoneHandler(updateToDone *usecases.UpdateToDoneUseCase) http.Han
 // @Failure 404 "Order not found"
 // @Failure 428 "Precondition failed: Need to be with status Finalizado"
 // @Router /api/orders/{id}/delivered [put]
-func UpdateOrderDeliveredHandler(updateToDelivered *usecases.UpdateToDeliveredUseCase) http.HandlerFunc {
+func UpdateOrderDeliveredHandler(updateToDelivered usecases.UpdateToDeliveredUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -339,7 +339,7 @@ func UpdateOrderDeliveredHandler(updateToDelivered *usecases.UpdateToDeliveredUs
 // @Failure 404 "Order not found"
 // @Failure 428 "Precondition failed: Need to be with status Finalizado"
 // @Router /api/orders/{id}/not-delivered [put]
-func UpdateOrderNotDeliveredandler(updateToNotDelivered *usecases.UpdateToNotDeliveredUseCase) http.HandlerFunc {
+func UpdateOrderNotDeliveredandler(updateToNotDelivered usecases.UpdateToNotDeliveredUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
