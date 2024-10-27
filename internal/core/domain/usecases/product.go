@@ -34,11 +34,19 @@ type GetProductByIdUseCaseImpl struct {
 	repository repository.ProductRepository
 }
 
-type DeleteProductUseCase struct {
+type DeleteProductUseCase interface {
+	Execute(ctx context.Context, productId uint) error
+}
+
+type DeleteProductUseCaseImpl struct {
 	repository repository.ProductRepository
 }
 
-type UpdateProductUseCase struct {
+type UpdateProductUseCase interface {
+	Execute(ctx context.Context, product dto.ProductForm) error
+}
+
+type UpdateProductUseCaseImpl struct {
 	repository repository.ProductRepository
 }
 
@@ -65,14 +73,14 @@ func NewGetProductByIdUseCase(repository repository.ProductRepository) GetProduc
 	}
 }
 
-func NewDeleteProductUseCase(repository repository.ProductRepository) *DeleteProductUseCase {
-	return &DeleteProductUseCase{
+func NewDeleteProductUseCase(repository repository.ProductRepository) DeleteProductUseCase {
+	return &DeleteProductUseCaseImpl{
 		repository: repository,
 	}
 }
 
-func NewUpdateProductUseCase(repository repository.ProductRepository) *UpdateProductUseCase {
-	return &UpdateProductUseCase{
+func NewUpdateProductUseCase(repository repository.ProductRepository) UpdateProductUseCase {
+	return &UpdateProductUseCaseImpl{
 		repository: repository,
 	}
 }
@@ -120,7 +128,7 @@ func (service *GetProductByIdUseCaseImpl) Execute(ctx context.Context, id uint) 
 	return products, nil
 }
 
-func (service *DeleteProductUseCase) Execute(ctx context.Context, productId uint) error {
+func (service *DeleteProductUseCaseImpl) Execute(ctx context.Context, productId uint) error {
 	err := service.repository.DeleteProduct(ctx, productId)
 
 	if err != nil {
@@ -130,7 +138,7 @@ func (service *DeleteProductUseCase) Execute(ctx context.Context, productId uint
 	return nil
 }
 
-func (service *UpdateProductUseCase) Execute(ctx context.Context, product dto.ProductForm) error {
+func (service *UpdateProductUseCaseImpl) Execute(ctx context.Context, product dto.ProductForm) error {
 	err := service.repository.UpdateProduct(ctx, product)
 
 	if err != nil {

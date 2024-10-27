@@ -29,6 +29,21 @@ func mockProduct() dto.ProductForm {
 	}
 }
 
+func mockUpdateProduct() dto.ProductForm {
+	return dto.ProductForm{
+		Id:          uint(12),
+		Name:        "Name",
+		Description: "Description",
+		Category:    "Category",
+		Price:       12.55,
+		Images: []dto.ProducImage{
+			{
+				ImageUrl: "ImageUrl",
+			},
+		},
+	}
+}
+
 func TestCreateProductHandler(t *testing.T) {
 	t.Parallel()
 
@@ -328,6 +343,254 @@ func TestCreateProductHandler(t *testing.T) {
 		getProductsByIDHandler := handler.GetProductsByIdHandler(getProductsByIDUseCase)
 
 		getProductsByIDHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusBadRequest, recorder.Code)
+	})
+
+	t.Run("got success when calling deleting product handler", func(t *testing.T) {
+		t.Parallel()
+
+		req := httptest.NewRequest(http.MethodDelete, "/api/products/{id}", nil)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+		rctx.URLParams.Add("id", "3")
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		deleteProductUseCase := new(MockDeleteProductUseCase)
+
+		deleteProductUseCase.On("Execute", req.Context(), uint(3)).
+			Return(nil)
+
+		deleteProductHandler := handler.DeleteProductHandler(deleteProductUseCase)
+
+		deleteProductHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusNoContent, recorder.Code)
+	})
+
+	t.Run("got error on DeleteProduct UseCase when calling deleting product handler", func(t *testing.T) {
+		t.Parallel()
+
+		req := httptest.NewRequest(http.MethodDelete, "/api/products/{id}", nil)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+		rctx.URLParams.Add("id", "3")
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		deleteProductUseCase := new(MockDeleteProductUseCase)
+
+		deleteProductUseCase.On("Execute", req.Context(), uint(3)).
+			Return(&responses.BusinessResponse{
+				StatusCode: 422,
+			})
+
+		deleteProductHandler := handler.DeleteProductHandler(deleteProductUseCase)
+
+		deleteProductHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusUnprocessableEntity, recorder.Code)
+	})
+
+	t.Run("got error on invalid id when calling deleting product handler", func(t *testing.T) {
+		t.Parallel()
+
+		req := httptest.NewRequest(http.MethodDelete, "/api/products/{id}", nil)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+		rctx.URLParams.Add("id", "s3")
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		deleteProductUseCase := new(MockDeleteProductUseCase)
+
+		deleteProductUseCase.On("Execute", req.Context(), uint(3)).
+			Return(&responses.BusinessResponse{
+				StatusCode: 422,
+			})
+
+		deleteProductHandler := handler.DeleteProductHandler(deleteProductUseCase)
+
+		deleteProductHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusBadRequest, recorder.Code)
+	})
+
+	t.Run("got error on missing id when calling deleting product handler", func(t *testing.T) {
+		t.Parallel()
+
+		req := httptest.NewRequest(http.MethodDelete, "/api/products/{id}", nil)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		deleteProductUseCase := new(MockDeleteProductUseCase)
+
+		deleteProductUseCase.On("Execute", req.Context(), uint(3)).
+			Return(&responses.BusinessResponse{
+				StatusCode: 422,
+			})
+
+		deleteProductHandler := handler.DeleteProductHandler(deleteProductUseCase)
+
+		deleteProductHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusBadRequest, recorder.Code)
+	})
+
+	t.Run("got success when calling updating product handler", func(t *testing.T) {
+		t.Parallel()
+
+		jsonData, err := json.Marshal(mockUpdateProduct())
+
+		assert.NoError(t, err)
+
+		body := bytes.NewBuffer(jsonData)
+
+		req := httptest.NewRequest(http.MethodPost, "/api/products/{id}", body)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+		rctx.URLParams.Add("id", "12")
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		updateProductUseCase := new(MockUpdateProductUseCase)
+
+		updateProductUseCase.On("Execute", req.Context(), mockUpdateProduct()).
+			Return(nil)
+
+		updateProductHandler := handler.UpdateProductHandler(updateProductUseCase)
+
+		updateProductHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusNoContent, recorder.Code)
+	})
+
+	t.Run("got error on UpdateProduct UseCase when calling updating product handler", func(t *testing.T) {
+		t.Parallel()
+
+		jsonData, err := json.Marshal(mockUpdateProduct())
+
+		assert.NoError(t, err)
+
+		body := bytes.NewBuffer(jsonData)
+
+		req := httptest.NewRequest(http.MethodPost, "/api/products/{id}", body)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+		rctx.URLParams.Add("id", "12")
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		updateProductUseCase := new(MockUpdateProductUseCase)
+
+		updateProductUseCase.On("Execute", req.Context(), mockUpdateProduct()).
+			Return(&responses.BusinessResponse{
+				StatusCode: 422,
+			})
+
+		updateProductHandler := handler.UpdateProductHandler(updateProductUseCase)
+
+		updateProductHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusUnprocessableEntity, recorder.Code)
+	})
+
+	t.Run("got error on invalid json when calling updating product handler", func(t *testing.T) {
+		t.Parallel()
+
+		body := bytes.NewBuffer([]byte("dsgfg{"))
+
+		req := httptest.NewRequest(http.MethodPost, "/api/products/{id}", body)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+		rctx.URLParams.Add("id", "12")
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		updateProductUseCase := new(MockUpdateProductUseCase)
+
+		updateProductHandler := handler.UpdateProductHandler(updateProductUseCase)
+
+		updateProductHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusBadRequest, recorder.Code)
+	})
+
+	t.Run("got error on invalid id when calling updating product handler", func(t *testing.T) {
+		t.Parallel()
+
+		jsonData, err := json.Marshal(mockUpdateProduct())
+
+		assert.NoError(t, err)
+
+		body := bytes.NewBuffer(jsonData)
+
+		req := httptest.NewRequest(http.MethodPost, "/api/products/{id}", body)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+		rctx.URLParams.Add("id", "x12")
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		updateProductUseCase := new(MockUpdateProductUseCase)
+
+		updateProductHandler := handler.UpdateProductHandler(updateProductUseCase)
+
+		updateProductHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusBadRequest, recorder.Code)
+	})
+
+	t.Run("got error on missing id when calling updating product handler", func(t *testing.T) {
+		t.Parallel()
+
+		jsonData, err := json.Marshal(mockUpdateProduct())
+
+		assert.NoError(t, err)
+
+		body := bytes.NewBuffer(jsonData)
+
+		req := httptest.NewRequest(http.MethodPost, "/api/products/{id}", body)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		updateProductUseCase := new(MockUpdateProductUseCase)
+
+		updateProductHandler := handler.UpdateProductHandler(updateProductUseCase)
+
+		updateProductHandler.ServeHTTP(recorder, req)
 
 		assert.Equal(t, http.StatusBadRequest, recorder.Code)
 	})

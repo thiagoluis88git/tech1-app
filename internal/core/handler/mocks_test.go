@@ -88,6 +88,14 @@ type MockGetProductsByIDUseCase struct {
 	mock.Mock
 }
 
+type MockDeleteProductUseCase struct {
+	mock.Mock
+}
+
+type MockUpdateProductUseCase struct {
+	mock.Mock
+}
+
 func (mock *MockCreateCustomerUseCase) Execute(ctx context.Context, customer dto.Customer) (dto.CustomerResponse, error) {
 	args := mock.Called(ctx, customer)
 	err := args.Error(1)
@@ -261,6 +269,28 @@ func (mock *MockCreateOrderUseCase) GenerateTicket(ctx context.Context, date int
 func (mock *MockUpdateToPreparingUseCase) Execute(ctx context.Context, orderId uint) error {
 	args := mock.Called(ctx, orderId)
 	err := args.Error(1)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (mock *MockDeleteProductUseCase) Execute(ctx context.Context, productId uint) error {
+	args := mock.Called(ctx, productId)
+	err := args.Error(0)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (mock *MockUpdateProductUseCase) Execute(ctx context.Context, product dto.ProductForm) error {
+	args := mock.Called(ctx, product)
+	err := args.Error(0)
 
 	if err != nil {
 		return err

@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"context"
 	"log"
 	"net/http"
 	"strconv"
@@ -144,7 +143,7 @@ func GetProductsByIdHandler(getProductById usecases.GetProductByIdUseCase) http.
 // @Produce json
 // @Success 204
 // @Router /api/admin/products/{id} [delete]
-func DeleteProductHandler(deleteProduct *usecases.DeleteProductUseCase) http.HandlerFunc {
+func DeleteProductHandler(deleteProduct usecases.DeleteProductUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		productIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -168,7 +167,7 @@ func DeleteProductHandler(deleteProduct *usecases.DeleteProductUseCase) http.Han
 			return
 		}
 
-		err = deleteProduct.Execute(context.Background(), uint(productId))
+		err = deleteProduct.Execute(r.Context(), uint(productId))
 
 		if err != nil {
 			log.Print("delete product", map[string]interface{}{
@@ -191,7 +190,7 @@ func DeleteProductHandler(deleteProduct *usecases.DeleteProductUseCase) http.Han
 // @Produce json
 // @Success 204
 // @Router /api/admin/products/{id} [put]
-func UpdateProductHandler(updateProduct *usecases.UpdateProductUseCase) http.HandlerFunc {
+func UpdateProductHandler(updateProduct usecases.UpdateProductUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		productIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -229,7 +228,7 @@ func UpdateProductHandler(updateProduct *usecases.UpdateProductUseCase) http.Han
 		}
 
 		product.Id = uint(productId)
-		err = updateProduct.Execute(context.Background(), product)
+		err = updateProduct.Execute(r.Context(), product)
 
 		if err != nil {
 			log.Print("update product", map[string]interface{}{
