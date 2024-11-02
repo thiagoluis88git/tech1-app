@@ -100,6 +100,10 @@ type MockGenerateQRCodePaymentUseCase struct {
 	mock.Mock
 }
 
+type MockCreateUserUseCase struct {
+	mock.Mock
+}
+
 func (mock *MockCreateCustomerUseCase) Execute(ctx context.Context, customer dto.Customer) (dto.CustomerResponse, error) {
 	args := mock.Called(ctx, customer)
 	err := args.Error(1)
@@ -286,6 +290,17 @@ func (mock *MockCreateOrderUseCase) GenerateTicket(ctx context.Context, date int
 	}
 
 	return args.Get(0).(int)
+}
+
+func (mock *MockCreateUserUseCase) Execute(ctx context.Context, user dto.UserAdmin) (dto.UserAdminResponse, error) {
+	args := mock.Called(ctx, user)
+	err := args.Error(1)
+
+	if err != nil {
+		return dto.UserAdminResponse{}, err
+	}
+
+	return args.Get(0).(dto.UserAdminResponse), nil
 }
 
 func (mock *MockUpdateToPreparingUseCase) Execute(ctx context.Context, orderId uint) error {
