@@ -19,6 +19,22 @@ import (
 	"github.com/thiagoluis88git/tech1/pkg/responses"
 )
 
+func setup() {
+	os.Setenv(environment.QRCodeGatewayRootURL, "ROOT_URL")
+	os.Setenv(environment.DBHost, "HOST")
+	os.Setenv(environment.DBPort, "1234")
+	os.Setenv(environment.DBUser, "User")
+	os.Setenv(environment.DBPassword, "Pass")
+	os.Setenv(environment.DBName, "Name")
+	os.Setenv(environment.CognitoClientID, "ClienId")
+	os.Setenv(environment.CognitoGroupAdmin, "Admin")
+	os.Setenv(environment.CognitoGroupUser, "CognitoUser")
+	os.Setenv(environment.CognitoUserPoolID, "USerPool")
+	os.Setenv(environment.WebhookMercadoLivrePaymentURL, "WEBHOOK")
+	os.Setenv(environment.QRCodeGatewayToken, "token")
+	os.Setenv(environment.Region, "Region")
+}
+
 func mockQRCodeOrder() dto.QRCodeOrder {
 	return dto.QRCodeOrder{
 		TotalPrice:   123.45,
@@ -32,16 +48,13 @@ func mockQRCodeOrder() dto.QRCodeOrder {
 	}
 }
 
-func setup() {
-	os.Setenv(environment.QRCodeGatewayToken, "token")
-}
-
 func TestGenerateQRCodeHandler(t *testing.T) {
 	t.Parallel()
 	setup()
 
 	t.Run("got success when calling generate qrcode handler", func(t *testing.T) {
 		t.Parallel()
+		environment.LoadEnvironmentVariables()
 
 		jsonData, err := json.Marshal(mockQRCodeOrder())
 

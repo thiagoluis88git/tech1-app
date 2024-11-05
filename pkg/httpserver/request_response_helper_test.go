@@ -17,6 +17,152 @@ import (
 func TestRequestResponseHelper(t *testing.T) {
 	t.Parallel()
 
+	t.Run("get success when calling SendResponseSuccessWithStatus", func(t *testing.T) {
+		t.Parallel()
+
+		responseHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			var destination any
+			err := httpserver.DecodeJSONBody(w, r, &destination)
+
+			assert.Error(t, err)
+			assert.Equal(t, "Request body must not be empty", err.Error())
+
+			httpserver.SendResponseSuccessWithStatus(w, "", http.StatusOK)
+		})
+
+		ts := httptest.NewServer(responseHandler)
+		defer ts.Close()
+
+		req, _ := http.NewRequest(http.MethodPost, ts.URL+"/mock", strings.NewReader(""))
+		req.Header.Add("Content-Type", "application/json")
+
+		response, err := ts.Client().Do(req)
+
+		assert.NoError(t, err)
+		defer response.Body.Close()
+	})
+
+	t.Run("get success when calling SendResponseSuccess", func(t *testing.T) {
+		t.Parallel()
+
+		responseHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			var destination any
+			err := httpserver.DecodeJSONBody(w, r, &destination)
+
+			assert.Error(t, err)
+			assert.Equal(t, "Request body must not be empty", err.Error())
+
+			httpserver.SendResponseSuccess(w, "")
+		})
+
+		ts := httptest.NewServer(responseHandler)
+		defer ts.Close()
+
+		req, _ := http.NewRequest(http.MethodPost, ts.URL+"/mock", strings.NewReader(""))
+		req.Header.Add("Content-Type", "application/json")
+
+		response, err := ts.Client().Do(req)
+
+		assert.NoError(t, err)
+		defer response.Body.Close()
+	})
+
+	t.Run("get success when calling SendResponseNoContentSuccess", func(t *testing.T) {
+		t.Parallel()
+
+		responseHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			var destination any
+			err := httpserver.DecodeJSONBody(w, r, &destination)
+
+			assert.Error(t, err)
+			assert.Equal(t, "Request body must not be empty", err.Error())
+
+			httpserver.SendResponseNoContentSuccess(w)
+		})
+
+		ts := httptest.NewServer(responseHandler)
+		defer ts.Close()
+
+		req, _ := http.NewRequest(http.MethodPost, ts.URL+"/mock", strings.NewReader(""))
+		req.Header.Add("Content-Type", "application/json")
+
+		response, err := ts.Client().Do(req)
+
+		assert.NoError(t, err)
+		defer response.Body.Close()
+	})
+
+	t.Run("get success when calling SendResponseError", func(t *testing.T) {
+		t.Parallel()
+
+		responseHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			var destination any
+			err := httpserver.DecodeJSONBody(w, r, &destination)
+
+			assert.Error(t, err)
+			assert.Equal(t, "Request body must not be empty", err.Error())
+
+			httpserver.SendResponseError(w, errors.New("ERROR"))
+		})
+
+		ts := httptest.NewServer(responseHandler)
+		defer ts.Close()
+
+		req, _ := http.NewRequest(http.MethodPost, ts.URL+"/mock", strings.NewReader(""))
+		req.Header.Add("Content-Type", "application/json")
+
+		response, err := ts.Client().Do(req)
+
+		assert.NoError(t, err)
+		defer response.Body.Close()
+	})
+
+	t.Run("get success when calling SendBadRequestError", func(t *testing.T) {
+		t.Parallel()
+
+		responseHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			var destination any
+			err := httpserver.DecodeJSONBody(w, r, &destination)
+
+			assert.Error(t, err)
+			assert.Equal(t, "Request body must not be empty", err.Error())
+
+			httpserver.SendBadRequestError(w, errors.New("ERROR"))
+		})
+
+		ts := httptest.NewServer(responseHandler)
+		defer ts.Close()
+
+		req, _ := http.NewRequest(http.MethodPost, ts.URL+"/mock", strings.NewReader(""))
+		req.Header.Add("Content-Type", "application/json")
+
+		response, err := ts.Client().Do(req)
+
+		assert.NoError(t, err)
+		defer response.Body.Close()
+	})
+
+	t.Run("get StatusInternalServerError when calling GetStatusCodeFromError", func(t *testing.T) {
+		t.Parallel()
+
+		err := &responses.NetworkError{}
+		status := httpserver.GetStatusCodeFromError(err)
+
+		assert.Equal(t, http.StatusInternalServerError, status)
+	})
+
+	t.Run("get business status code when calling GetStatusCodeFromError", func(t *testing.T) {
+		t.Parallel()
+
+		err := &responses.BusinessResponse{
+			StatusCode: 422,
+		}
+
+		status := httpserver.GetStatusCodeFromError(err)
+
+		assert.Equal(t, http.StatusUnprocessableEntity, status)
+	})
+
 	t.Run("got error when passing empty json", func(t *testing.T) {
 		t.Parallel()
 

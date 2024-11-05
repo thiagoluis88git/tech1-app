@@ -104,6 +104,10 @@ type MockCreateUserUseCase struct {
 	mock.Mock
 }
 
+type MockGetCategoryUseCase struct {
+	mock.Mock
+}
+
 func (mock *MockCreateCustomerUseCase) Execute(ctx context.Context, customer dto.Customer) (dto.CustomerResponse, error) {
 	args := mock.Called(ctx, customer)
 	err := args.Error(1)
@@ -381,6 +385,11 @@ func (mock *MockGetOrderByIdUseCase) Execute(ctx context.Context, orderId uint) 
 }
 
 func (mock *MockGetPaymentTypesUseCase) Execute() []string {
+	args := mock.Called()
+	return args.Get(0).([]string)
+}
+
+func (mock *MockGetCategoryUseCase) Execute() []string {
 	args := mock.Called()
 	return args.Get(0).([]string)
 }

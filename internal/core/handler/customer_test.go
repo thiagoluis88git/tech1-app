@@ -259,12 +259,7 @@ func TestCustomerHandler(t *testing.T) {
 
 		updateCustomerUseCase := new(MockUpdateCustomerUseCase)
 
-		updateCustomerUseCase.On("Execute", req.Context(), dto.Customer{
-			ID:    uint(123),
-			Name:  "Teste",
-			CPF:   "83212446293",
-			Email: "teste@gmail.com",
-		}).Return(&responses.BusinessResponse{
+		updateCustomerUseCase.On("Execute", req.Context(), dto.Customer{}).Return(&responses.BusinessResponse{
 			StatusCode: 500,
 		})
 

@@ -47,6 +47,42 @@ func mockUpdateProduct() dto.ProductForm {
 func TestCreateProductHandler(t *testing.T) {
 	t.Parallel()
 
+	t.Run("got success when calling get category handler handler", func(t *testing.T) {
+		t.Parallel()
+
+		jsonData, err := json.Marshal(mockProduct())
+
+		assert.NoError(t, err)
+
+		body := bytes.NewBuffer(jsonData)
+
+		req := httptest.NewRequest(http.MethodPost, "/api/products/categories", body)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		getCategoryUseCase := new(MockGetCategoryUseCase)
+
+		getCategoryUseCase.On("Execute").Return([]string{"CAT1, CAT2"})
+
+		getCategoryHandler := handler.GetCategoriesHandler(getCategoryUseCase)
+
+		getCategoryHandler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusOK, recorder.Code)
+
+		var response []string
+		err = json.Unmarshal(recorder.Body.Bytes(), &response)
+
+		assert.NoError(t, err)
+
+		assert.Equal(t, "CAT1, CAT2", response[0])
+	})
+
 	t.Run("got success when calling create product handler", func(t *testing.T) {
 		t.Parallel()
 

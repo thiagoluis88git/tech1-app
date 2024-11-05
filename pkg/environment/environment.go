@@ -106,105 +106,53 @@ func getEnvironmentVariable(key string) string {
 }
 
 func GetWebhookMercadoLivrePaymentURL() string {
-	if singleton != nil {
-		return singleton.webhookMercadoLivrePaymentURL
-	}
-
-	return getEnvironmentVariable(WebhookMercadoLivrePaymentURL)
+	return singleton.webhookMercadoLivrePaymentURL
 }
 
 func GetQRCodeGatewayRootURL() string {
-	if singleton != nil {
-		return singleton.qrCodeGatewayRootURL
-	}
-
-	return getEnvironmentVariable(QRCodeGatewayRootURL)
+	return singleton.qrCodeGatewayRootURL
 }
 
 func GetQRCodeGatewayToken() string {
-	if singleton != nil {
-		return singleton.qrCodeGatewayToken
-	}
-
-	return getEnvironmentVariable(QRCodeGatewayToken)
+	return singleton.qrCodeGatewayToken
 }
 
 func GetDBHost() string {
-	if singleton != nil {
-		return singleton.dbHost
-	}
-
-	return getEnvironmentVariable(DBHost)
+	return singleton.dbHost
 }
 
 func GetDBPort() string {
-	if singleton != nil {
-		return singleton.dbPort
-	}
-
-	return getEnvironmentVariable(DBPort)
+	return singleton.dbPort
 }
 
 func GetDBName() string {
-	if singleton != nil {
-		return singleton.dbName
-	}
-
-	return getEnvironmentVariable(DBName)
+	return singleton.dbName
 }
 
 func GetDBUser() string {
-	if singleton != nil {
-		return singleton.dbUser
-	}
-
-	return getEnvironmentVariable(DBUser)
+	return singleton.dbUser
 }
 
 func GetDBPassword() string {
-	if singleton != nil {
-		return singleton.dbPassword
-	}
-
-	return getEnvironmentVariable(DBPassword)
+	return singleton.dbPassword
 }
 
 func GetCognitoClientID() string {
-	if singleton != nil {
-		return singleton.cognitoClientID
-	}
-
-	return getEnvironmentVariable(CognitoClientID)
+	return singleton.cognitoClientID
 }
 
 func GetCognitoGroupUser() string {
-	if singleton != nil {
-		return singleton.cognitoGroupUser
-	}
-
-	return getEnvironmentVariable(CognitoGroupUser)
+	return singleton.cognitoGroupUser
 }
 
 func GetCognitoGroupAdmin() string {
-	if singleton != nil {
-		return singleton.cognitoGroupAdmin
-	}
-
-	return getEnvironmentVariable(CognitoGroupAdmin)
+	return singleton.cognitoGroupAdmin
 }
 
 func GetCognitoUserPoolID() string {
-	if singleton != nil {
-		return singleton.cognitoUserPoolID
-	}
-
-	return getEnvironmentVariable(CognitoUserPoolID)
+	return singleton.cognitoUserPoolID
 }
 
 func GetRegion() string {
-	if singleton != nil {
-		return singleton.region
-	}
-
-	return getEnvironmentVariable(Region)
+	return singleton.region
 }

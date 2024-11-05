@@ -251,7 +251,7 @@ func UpdateProductHandler(updateProduct usecases.UpdateProductUseCase) http.Hand
 // @Produce json
 // @Success 200 {object} []string
 // @Router /api/products/categories [get]
-func GetCategoriesHandler(getCategoriesUseCase *usecases.GetCategoriesUseCase) http.HandlerFunc {
+func GetCategoriesHandler(getCategoriesUseCase usecases.GetCategoriesUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		httpserver.SendResponseSuccess(w, getCategoriesUseCase.Execute())
 	}

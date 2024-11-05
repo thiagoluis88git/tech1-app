@@ -604,8 +604,8 @@ func (mock *MockQRCodePaymentRepository) Generate(
 }
 
 func (mock *MockQRCodePaymentRepository) GetQRCodePaymentData(
-	ctx context.Context, 
-	token string, 
+	ctx context.Context,
+	token string,
 	endpoint string,
 ) (dto.ExternalPaymentInformation, error) {
 	args := mock.Called(ctx, token, endpoint)

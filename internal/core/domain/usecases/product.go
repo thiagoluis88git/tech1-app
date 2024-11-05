@@ -50,7 +50,11 @@ type UpdateProductUseCaseImpl struct {
 	repository repository.ProductRepository
 }
 
-type GetCategoriesUseCase struct {
+type GetCategoriesUseCase interface {
+	Execute() []string
+}
+
+type GetCategoriesUseCaseImpl struct {
 	repository repository.ProductRepository
 }
 
@@ -85,8 +89,8 @@ func NewUpdateProductUseCase(repository repository.ProductRepository) UpdateProd
 	}
 }
 
-func NewGetCategoriesUseCase(repository repository.ProductRepository) *GetCategoriesUseCase {
-	return &GetCategoriesUseCase{
+func NewGetCategoriesUseCase(repository repository.ProductRepository) GetCategoriesUseCase {
+	return &GetCategoriesUseCaseImpl{
 		repository: repository,
 	}
 }
@@ -148,6 +152,6 @@ func (service *UpdateProductUseCaseImpl) Execute(ctx context.Context, product dt
 	return nil
 }
 
-func (service *GetCategoriesUseCase) Execute() []string {
+func (service *GetCategoriesUseCaseImpl) Execute() []string {
 	return service.repository.GetCategories()
 }
