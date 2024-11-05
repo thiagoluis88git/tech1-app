@@ -10,6 +10,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 	"github.com/thiagoluis88git/tech1/internal/core/domain/dto"
 	"github.com/thiagoluis88git/tech1/internal/core/handler"
 	"github.com/thiagoluis88git/tech1/pkg/responses"
@@ -259,7 +260,7 @@ func TestCustomerHandler(t *testing.T) {
 
 		updateCustomerUseCase := new(MockUpdateCustomerUseCase)
 
-		updateCustomerUseCase.On("Execute", req.Context(), dto.Customer{}).Return(&responses.BusinessResponse{
+		updateCustomerUseCase.On("Execute", req.Context(), mock.Anything).Return(&responses.BusinessResponse{
 			StatusCode: 500,
 		})
 
