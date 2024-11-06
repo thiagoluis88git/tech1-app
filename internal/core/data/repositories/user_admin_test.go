@@ -12,10 +12,13 @@ import (
 	"github.com/thiagoluis88git/tech1/internal/core/domain/dto"
 	"github.com/thiagoluis88git/tech1/pkg/database"
 	"github.com/thiagoluis88git/tech1/pkg/responses"
+	"gorm.io/gorm"
 )
 
 const (
-	insertQuery = "INSERT INTO `user_admins` (`created_at`,`updated_at`,`deleted_at`,`name`,`cpf`,`email`) VALUES (?,?,?,?,?,?)"
+	insertQuery      = "INSERT INTO `user_admins` (`created_at`,`updated_at`,`deleted_at`,`name`,`cpf`,`email`) VALUES (?,?,?,?,?,?)"
+	selectQueryByID  = "SELECT * FROM `user_admins` WHERE `user_admins`.`id` = ? AND `user_admins`.`deleted_at` IS NULL ORDER BY `user_admins`.`id` LIMIT ?"
+	selectQueryByCPF = "SELECT * FROM `user_admins` WHERE cpf = ? AND `user_admins`.`deleted_at` IS NULL ORDER BY `user_admins`.`id` LIMIT ?"
 )
 
 func mockDTOUserAdmin() dto.UserAdmin {
@@ -153,27 +156,85 @@ func TestUserAdminLocal(t *testing.T) {
 		assert.Error(t, err)
 	})
 
-	// t.Run("got success when getting user admin by id local", func(t *testing.T) {
-	// 	t.Parallel()
+	t.Run("got success when getting user admin by id local", func(t *testing.T) {
+		t.Parallel()
 
-	// 	db, sqlMock, err := SetupDBMocks()
+		db, sqlMock, err := SetupDBMocks()
 
-	// 	assert.NoError(t, err)
+		assert.NoError(t, err)
 
-	// 	sqlMock.ExpectBegin()
-	// 	sqlMock.ExpectExec(insertQuery).
-	// 		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), nil, "NAME", "CPF", "EMAIL").
-	// 		WillReturnResult(sqlmock.NewResult(1, 1))
-	// 	sqlMock.ExpectCommit()
+		sqlMock.ExpectQuery(selectQueryByID).
+			WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg()).
+			WillReturnRows(sqlmock.NewRows([]string{"name", "cpf", "email"}).AddRow("Name", "CPF", "Email"))
 
-	// 	cognitoRemote := new(MockCognitoRemoteDataSource)
-	// 	localDs := repositories.NewUserAdminRepository(&database.Database{Connection: db}, cognitoRemote)
+		cognitoRemote := new(MockCognitoRemoteDataSource)
+		localDs := repositories.NewUserAdminRepository(&database.Database{Connection: db}, cognitoRemote)
 
-	// 	userAdmin, err := localDs.GetUserById(context.TODO(), uint(1))
+		userAdmin, err := localDs.GetUserById(context.TODO(), uint(1))
 
-	// 	assert.NoError(t, err)
-	// 	assert.NotEmpty(t, userAdmin)
-	// })
+		assert.NoError(t, err)
+		assert.NotEmpty(t, userAdmin)
+	})
+
+	t.Run("got error when getting user admin by id local", func(t *testing.T) {
+		t.Parallel()
+
+		db, sqlMock, err := SetupDBMocks()
+
+		assert.NoError(t, err)
+
+		sqlMock.ExpectQuery(selectQueryByID).
+			WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg()).
+			WillReturnError(gorm.ErrRecordNotFound)
+
+		cognitoRemote := new(MockCognitoRemoteDataSource)
+		localDs := repositories.NewUserAdminRepository(&database.Database{Connection: db}, cognitoRemote)
+
+		userAdmin, err := localDs.GetUserById(context.TODO(), uint(1))
+
+		assert.Error(t, err)
+		assert.Empty(t, userAdmin)
+	})
+
+	t.Run("got success when getting user admin by cpf local", func(t *testing.T) {
+		t.Parallel()
+
+		db, sqlMock, err := SetupDBMocks()
+
+		assert.NoError(t, err)
+
+		sqlMock.ExpectQuery(selectQueryByCPF).
+			WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg()).
+			WillReturnRows(sqlmock.NewRows([]string{"name", "cpf", "email"}).AddRow("Name", "CPF", "Email"))
+
+		cognitoRemote := new(MockCognitoRemoteDataSource)
+		localDs := repositories.NewUserAdminRepository(&database.Database{Connection: db}, cognitoRemote)
+
+		userAdmin, err := localDs.GetUserByCPF(context.TODO(), "CPF")
+
+		assert.NoError(t, err)
+		assert.NotEmpty(t, userAdmin)
+	})
+
+	t.Run("got error when getting user admin by cpf local", func(t *testing.T) {
+		t.Parallel()
+
+		db, sqlMock, err := SetupDBMocks()
+
+		assert.NoError(t, err)
+
+		sqlMock.ExpectQuery(selectQueryByCPF).
+			WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg()).
+			WillReturnError(gorm.ErrRecordNotFound)
+
+		cognitoRemote := new(MockCognitoRemoteDataSource)
+		localDs := repositories.NewUserAdminRepository(&database.Database{Connection: db}, cognitoRemote)
+
+		userAdmin, err := localDs.GetUserByCPF(context.TODO(), "CPF")
+
+		assert.Error(t, err)
+		assert.Empty(t, userAdmin)
+	})
 
 	t.Run("got success when login user admin local", func(t *testing.T) {
 		t.Parallel()

@@ -53,7 +53,6 @@ func TestGenerateQRCodeHandler(t *testing.T) {
 	setup()
 
 	t.Run("got success when calling generate qrcode handler", func(t *testing.T) {
-		t.Parallel()
 		environment.LoadEnvironmentVariables()
 
 		jsonData, err := json.Marshal(mockQRCodeOrder())
@@ -100,8 +99,6 @@ func TestGenerateQRCodeHandler(t *testing.T) {
 	})
 
 	t.Run("got error on GenerateQRCode UseCase when calling generate qrcode handler", func(t *testing.T) {
-		t.Parallel()
-
 		jsonData, err := json.Marshal(mockQRCodeOrder())
 
 		assert.NoError(t, err)
@@ -139,8 +136,6 @@ func TestGenerateQRCodeHandler(t *testing.T) {
 	})
 
 	t.Run("got error on invalid json UseCase when calling generate qrcode handler", func(t *testing.T) {
-		t.Parallel()
-
 		body := bytes.NewBuffer([]byte("sdfg{{}"))
 
 		req := httptest.NewRequest(http.MethodPost, "/api/qrcode", body)
