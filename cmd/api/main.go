@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/thiagoluis88git/tech1/internal/core/data/repositories"
@@ -14,6 +15,7 @@ import (
 	"github.com/thiagoluis88git/tech1/pkg/environment"
 	"github.com/thiagoluis88git/tech1/pkg/httpserver"
 	"github.com/thiagoluis88git/tech1/pkg/responses"
+	"gorm.io/driver/postgres"
 
 	"github.com/mvrilo/go-redoc"
 
@@ -50,7 +52,19 @@ func main() {
 		DocsPath:    "/docs",
 	}
 
-	db := database.ConfigDatabase()
+	dsn := fmt.Sprintf("host=%v user=%v password=%v dbname=%v port=%v",
+		environment.GetDBHost(),
+		environment.GetDBUser(),
+		environment.GetDBPassword(),
+		environment.GetDBName(),
+		environment.GetDBPort(),
+	)
+
+	db, err := database.ConfigDatabase(postgres.Open(dsn))
+
+	if err != nil {
+		panic(fmt.Sprintf("could not open database: %v", err.Error()))
+	}
 
 	router := chi.NewRouter()
 	router.Use(chiMiddleware.RequestID)

@@ -18,17 +18,29 @@ type CreateUserUseCaseImpl struct {
 	repository         repository.UserAdminRepository
 }
 
-type UpdateUserUseCase struct {
+type UpdateUserUseCase interface {
+	Execute(ctx context.Context, user dto.UserAdmin) error
+}
+
+type UpdateUserUseCaseImpl struct {
 	validateCPFUseCase *ValidateCPFUseCase
 	repository         repository.UserAdminRepository
 }
 
-type GetUserByCPFUseCase struct {
+type GetUserByCPFUseCase interface {
+	Execute(ctx context.Context, cpf string) (dto.UserAdmin, error)
+}
+
+type GetUserByCPFUseCaseImpl struct {
 	validateCPFUseCase *ValidateCPFUseCase
 	repository         repository.UserAdminRepository
 }
 
-type GetUserByIdUseCase struct {
+type GetUserByIdUseCase interface {
+	Execute(ctx context.Context, id uint) (dto.UserAdmin, error)
+}
+
+type GetUserByIdUseCaseImpl struct {
 	repository repository.UserAdminRepository
 }
 
@@ -36,8 +48,8 @@ type LoginUserUseCase struct {
 	repository repository.UserAdminRepository
 }
 
-func NewUpdateUserUseCase(validateCPFUseCase *ValidateCPFUseCase, repository repository.UserAdminRepository) *UpdateUserUseCase {
-	return &UpdateUserUseCase{
+func NewUpdateUserUseCase(validateCPFUseCase *ValidateCPFUseCase, repository repository.UserAdminRepository) UpdateUserUseCase {
+	return &UpdateUserUseCaseImpl{
 		validateCPFUseCase: validateCPFUseCase,
 		repository:         repository,
 	}
@@ -50,15 +62,15 @@ func NewCreateUserUseCase(validateCPFUseCase *ValidateCPFUseCase, repository rep
 	}
 }
 
-func NewGetUserByCPFUseCase(validateCPFUseCase *ValidateCPFUseCase, repository repository.UserAdminRepository) *GetUserByCPFUseCase {
-	return &GetUserByCPFUseCase{
+func NewGetUserByCPFUseCase(validateCPFUseCase *ValidateCPFUseCase, repository repository.UserAdminRepository) GetUserByCPFUseCase {
+	return &GetUserByCPFUseCaseImpl{
 		validateCPFUseCase: validateCPFUseCase,
 		repository:         repository,
 	}
 }
 
-func NewGetUserByIdUseCase(repository repository.UserAdminRepository) *GetUserByIdUseCase {
-	return &GetUserByIdUseCase{
+func NewGetUserByIdUseCase(repository repository.UserAdminRepository) GetUserByIdUseCase {
+	return &GetUserByIdUseCaseImpl{
 		repository: repository,
 	}
 }
@@ -91,7 +103,7 @@ func (service *CreateUserUseCaseImpl) Execute(ctx context.Context, user dto.User
 	}, nil
 }
 
-func (service *UpdateUserUseCase) Execute(ctx context.Context, user dto.UserAdmin) error {
+func (service *UpdateUserUseCaseImpl) Execute(ctx context.Context, user dto.UserAdmin) error {
 	cleanedCPF, validate := service.validateCPFUseCase.Execute(user.CPF)
 
 	if !validate {
@@ -111,7 +123,7 @@ func (service *UpdateUserUseCase) Execute(ctx context.Context, user dto.UserAdmi
 	return nil
 }
 
-func (service *GetUserByIdUseCase) Execute(ctx context.Context, id uint) (dto.UserAdmin, error) {
+func (service *GetUserByIdUseCaseImpl) Execute(ctx context.Context, id uint) (dto.UserAdmin, error) {
 	user, err := service.repository.GetUserById(ctx, id)
 
 	if err != nil {
@@ -121,7 +133,7 @@ func (service *GetUserByIdUseCase) Execute(ctx context.Context, id uint) (dto.Us
 	return user, nil
 }
 
-func (service *GetUserByCPFUseCase) Execute(ctx context.Context, cpf string) (dto.UserAdmin, error) {
+func (service *GetUserByCPFUseCaseImpl) Execute(ctx context.Context, cpf string) (dto.UserAdmin, error) {
 	cleanedCPF, validate := service.validateCPFUseCase.Execute(cpf)
 
 	if !validate {

@@ -1,12 +1,8 @@
 package database
 
 import (
-	"fmt"
-
 	"github.com/thiagoluis88git/tech1/internal/core/data/model"
-	"github.com/thiagoluis88git/tech1/pkg/environment"
 
-	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
@@ -14,18 +10,11 @@ type Database struct {
 	Connection *gorm.DB
 }
 
-func ConfigDatabase() *Database {
-	dsn := fmt.Sprintf("host=%v user=%v password=%v dbname=%v port=%v",
-		environment.GetDBHost(),
-		environment.GetDBUser(),
-		environment.GetDBPassword(),
-		environment.GetDBName(),
-		environment.GetDBPort(),
-	)
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+func ConfigDatabase(dialector gorm.Dialector) (*Database, error) {
+	db, err := gorm.Open(dialector, &gorm.Config{})
 
 	if err != nil {
-		panic(fmt.Sprintf("could not open database: %v", err.Error()))
+		return &Database{}, err
 	}
 
 	db.AutoMigrate(
@@ -42,5 +31,5 @@ func ConfigDatabase() *Database {
 
 	return &Database{
 		Connection: db,
-	}
+	}, nil
 }

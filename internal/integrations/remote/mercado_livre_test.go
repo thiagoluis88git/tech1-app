@@ -103,4 +103,69 @@ func TestMercadoLivreRemote(t *testing.T) {
 		assert.Equal(t, true, isNetError)
 		assert.Equal(t, http.StatusUnprocessableEntity, netError.Code)
 	})
+
+	t.Run("got success when get payment data remote", func(t *testing.T) {
+		t.Parallel()
+
+		environment.LoadEnvironmentVariables()
+
+		recorder := httptest.NewRecorder()
+		recorder.Header().Add("Content-Type", "application/json")
+		recorder.WriteHeader(http.StatusOK)
+		_, err := recorder.WriteString(MockPaymentData)
+
+		assert.NoError(t, err)
+
+		resultExpected := recorder.Result()
+
+		mockClient := &http.Client{
+			Transport: &MockRoundTripper{
+				Response: resultExpected,
+			},
+		}
+
+		ds := remote.NewMercadoLivreDataSource(mockClient)
+
+		response, err := ds.GetPaymentData(context.TODO(), "token", "endpoint")
+
+		assert.NoError(t, err)
+		assert.Equal(t, int64(3), response.ID)
+		assert.Equal(t, "COMPLETE", response.Status)
+		assert.Equal(t, "EXTERNAL_REFERENCE", response.ExternalReference)
+		assert.Equal(t, "PREFERENCE_ID", response.PreferenceID)
+		assert.Equal(t, "MARKETPLACE", response.Marketplace)
+	})
+
+	t.Run("got error on invalid json when get payment data remote", func(t *testing.T) {
+		t.Parallel()
+
+		environment.LoadEnvironmentVariables()
+
+		recorder := httptest.NewRecorder()
+		recorder.Header().Add("Content-Type", "application/json")
+		recorder.WriteHeader(http.StatusOK)
+		_, err := recorder.WriteString("dsdd}}")
+
+		assert.NoError(t, err)
+
+		resultExpected := recorder.Result()
+
+		mockClient := &http.Client{
+			Transport: &MockRoundTripper{
+				Response: resultExpected,
+			},
+		}
+
+		ds := remote.NewMercadoLivreDataSource(mockClient)
+
+		response, err := ds.GetPaymentData(context.TODO(), "token", "endpoint")
+
+		assert.Error(t, err)
+		assert.Empty(t, response)
+
+		var netError *responses.NetworkError
+		isNetError := errors.As(err, &netError)
+		assert.Equal(t, true, isNetError)
+		assert.Equal(t, http.StatusUnprocessableEntity, netError.Code)
+	})
 }

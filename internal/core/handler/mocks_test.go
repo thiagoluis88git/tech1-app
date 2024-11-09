@@ -8,6 +8,29 @@ import (
 	"github.com/thiagoluis88git/tech1/internal/core/domain/dto"
 )
 
+func mockCreateUserForm() dto.UserAdmin {
+	return dto.UserAdmin{
+		Name:  "Name",
+		CPF:   "12345678910",
+		Email: "teste@email.com",
+	}
+}
+
+func mockUpdateUserForm() dto.UserAdmin {
+	return dto.UserAdmin{
+		ID:    uint(3),
+		Name:  "Name",
+		CPF:   "12345678910",
+		Email: "teste@email.com",
+	}
+}
+
+func mockGetUserByCPF() dto.UserAdminForm {
+	return dto.UserAdminForm{
+		CPF: "12345678910",
+	}
+}
+
 type MockCreateCustomerUseCase struct {
 	mock.Mock
 }
@@ -101,6 +124,18 @@ type MockGenerateQRCodePaymentUseCase struct {
 }
 
 type MockCreateUserUseCase struct {
+	mock.Mock
+}
+
+type MockUpdateUserUseCase struct {
+	mock.Mock
+}
+
+type MockGetUserByIdUseCase struct {
+	mock.Mock
+}
+
+type MockGetUserByCPFUseCase struct {
 	mock.Mock
 }
 
@@ -305,6 +340,39 @@ func (mock *MockCreateUserUseCase) Execute(ctx context.Context, user dto.UserAdm
 	}
 
 	return args.Get(0).(dto.UserAdminResponse), nil
+}
+
+func (mock *MockGetUserByIdUseCase) Execute(ctx context.Context, id uint) (dto.UserAdmin, error) {
+	args := mock.Called(ctx, id)
+	err := args.Error(1)
+
+	if err != nil {
+		return dto.UserAdmin{}, err
+	}
+
+	return args.Get(0).(dto.UserAdmin), nil
+}
+
+func (mock *MockGetUserByCPFUseCase) Execute(ctx context.Context, cpf string) (dto.UserAdmin, error) {
+	args := mock.Called(ctx, cpf)
+	err := args.Error(1)
+
+	if err != nil {
+		return dto.UserAdmin{}, err
+	}
+
+	return args.Get(0).(dto.UserAdmin), nil
+}
+
+func (mock *MockUpdateUserUseCase) Execute(ctx context.Context, user dto.UserAdmin) error {
+	args := mock.Called(ctx, user)
+	err := args.Error(0)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (mock *MockUpdateToPreparingUseCase) Execute(ctx context.Context, orderId uint) error {

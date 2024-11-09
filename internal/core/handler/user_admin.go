@@ -61,7 +61,7 @@ func CreateUserHandler(createUserAdmin usecases.CreateUserUseCase) http.HandlerF
 // @Failure 400 "User has required fields"
 // @Failure 404 "User not found"
 // @Router /api/users/{id} [put]
-func UpdateUserHandler(updateUser *usecases.UpdateUserUseCase) http.HandlerFunc {
+func UpdateUserHandler(updateUser usecases.UpdateUserUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		userIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -122,7 +122,7 @@ func UpdateUserHandler(updateUser *usecases.UpdateUserUseCase) http.HandlerFunc 
 // @Success 200 {object} dto.UserAdmin
 // @Failure 404 "User not found"
 // @Router /api/users/{id} [get]
-func GetUserByIdHandler(getUserById *usecases.GetUserByIdUseCase) http.HandlerFunc {
+func GetUserByIdHandler(getUserById usecases.GetUserByIdUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		userIdStr, err := httpserver.GetPathParamFromRequest(r, "id")
 
@@ -170,7 +170,7 @@ func GetUserByIdHandler(getUserById *usecases.GetUserByIdUseCase) http.HandlerFu
 // @Success 200 {object} dto.UserAdmin
 // @Failure 404 "User not found"
 // @Router /api/users/login [post]
-func GetUserByCPFHandler(getUserByCPF *usecases.GetUserByCPFUseCase) http.HandlerFunc {
+func GetUserByCPFHandler(getUserByCPF usecases.GetUserByCPFUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var userForm dto.UserAdminForm
 
