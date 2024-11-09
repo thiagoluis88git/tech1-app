@@ -44,7 +44,11 @@ type GetUserByIdUseCaseImpl struct {
 	repository repository.UserAdminRepository
 }
 
-type LoginUserUseCase struct {
+type LoginUserUseCase interface {
+	Execute(ctx context.Context, cpf string) (dto.Token, error)
+}
+
+type LoginUserUseCaseImpl struct {
 	repository repository.UserAdminRepository
 }
 
@@ -75,8 +79,8 @@ func NewGetUserByIdUseCase(repository repository.UserAdminRepository) GetUserByI
 	}
 }
 
-func NewLoginUserUseCase(repository repository.UserAdminRepository) *LoginUserUseCase {
-	return &LoginUserUseCase{
+func NewLoginUserUseCase(repository repository.UserAdminRepository) LoginUserUseCase {
+	return &LoginUserUseCaseImpl{
 		repository: repository,
 	}
 }
@@ -152,7 +156,7 @@ func (service *GetUserByCPFUseCaseImpl) Execute(ctx context.Context, cpf string)
 	return user, nil
 }
 
-func (uc *LoginUserUseCase) Execute(ctx context.Context, cpf string) (dto.Token, error) {
+func (uc *LoginUserUseCaseImpl) Execute(ctx context.Context, cpf string) (dto.Token, error) {
 	token, err := uc.repository.Login(ctx, cpf)
 
 	if err != nil {

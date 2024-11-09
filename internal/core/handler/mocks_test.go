@@ -143,6 +143,10 @@ type MockGetCategoryUseCase struct {
 	mock.Mock
 }
 
+type MockLoginUserUseCase struct {
+	mock.Mock
+}
+
 func (mock *MockCreateCustomerUseCase) Execute(ctx context.Context, customer dto.Customer) (dto.CustomerResponse, error) {
 	args := mock.Called(ctx, customer)
 	err := args.Error(1)
@@ -362,6 +366,17 @@ func (mock *MockGetUserByCPFUseCase) Execute(ctx context.Context, cpf string) (d
 	}
 
 	return args.Get(0).(dto.UserAdmin), nil
+}
+
+func (mock *MockLoginUserUseCase) Execute(ctx context.Context, cpf string) (dto.Token, error) {
+	args := mock.Called(ctx, cpf)
+	err := args.Error(1)
+
+	if err != nil {
+		return dto.Token{}, err
+	}
+
+	return args.Get(0).(dto.Token), nil
 }
 
 func (mock *MockUpdateUserUseCase) Execute(ctx context.Context, user dto.UserAdmin) error {

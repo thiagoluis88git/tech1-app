@@ -209,7 +209,7 @@ func GetUserByCPFHandler(getUserByCPF usecases.GetUserByCPFUseCase) http.Handler
 // @Success 200 {object} dto.Token
 // @Failure 404 "User not found"
 // @Router /auth/admin/login [post]
-func LoginUserHandler(loginUserUseCase *usecases.LoginUserUseCase) http.HandlerFunc {
+func LoginUserHandler(loginUserUseCase usecases.LoginUserUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var userForm dto.UserAdminForm
 

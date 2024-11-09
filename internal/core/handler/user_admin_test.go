@@ -457,4 +457,103 @@ func TestUserAdminHandler(t *testing.T) {
 
 		assert.Equal(t, http.StatusBadRequest, recorder.Code)
 	})
+
+	t.Run("got success when calling get login user admin handler", func(t *testing.T) {
+		t.Parallel()
+
+		jsonData, err := json.Marshal(mockGetUserByCPF())
+
+		assert.NoError(t, err)
+
+		body := bytes.NewBuffer(jsonData)
+
+		req := httptest.NewRequest(http.MethodPost, "/users/login", body)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		loginUserUseCase := new(MockLoginUserUseCase)
+
+		loginUserUseCase.On("Execute", req.Context(), "12345678910").
+			Return(dto.Token{
+				AccessToken: "Access1234",
+			}, nil)
+
+		handler := handler.LoginUserHandler(loginUserUseCase)
+
+		handler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusOK, recorder.Code)
+
+		var response dto.Token
+		err = json.Unmarshal(recorder.Body.Bytes(), &response)
+
+		assert.NoError(t, err)
+
+		assert.Equal(t, "Access1234", response.AccessToken)
+	})
+
+	t.Run("got error on Login UseCase when calling get login user admin handler", func(t *testing.T) {
+		t.Parallel()
+
+		jsonData, err := json.Marshal(mockGetUserByCPF())
+
+		assert.NoError(t, err)
+
+		body := bytes.NewBuffer(jsonData)
+
+		req := httptest.NewRequest(http.MethodPost, "/users/login", body)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		loginUserUseCase := new(MockLoginUserUseCase)
+
+		loginUserUseCase.On("Execute", req.Context(), "12345678910").
+			Return(dto.Token{}, &responses.BusinessResponse{
+				StatusCode: 401,
+			})
+
+		handler := handler.LoginUserHandler(loginUserUseCase)
+
+		handler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusUnauthorized, recorder.Code)
+	})
+
+	t.Run("got error invalid json when calling get login user admin handler", func(t *testing.T) {
+		t.Parallel()
+
+		body := bytes.NewBuffer([]byte("asdf{{}"))
+
+		req := httptest.NewRequest(http.MethodPost, "/users/login", body)
+		req.Header.Add("Content-Type", "application/json")
+
+		rctx := chi.NewRouteContext()
+
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+		recorder := httptest.NewRecorder()
+
+		loginUserUseCase := new(MockLoginUserUseCase)
+
+		loginUserUseCase.On("Execute", req.Context(), "12345678910").
+			Return(dto.Token{}, &responses.BusinessResponse{
+				StatusCode: 401,
+			})
+
+		handler := handler.LoginUserHandler(loginUserUseCase)
+
+		handler.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusBadRequest, recorder.Code)
+	})
 }
