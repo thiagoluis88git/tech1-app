@@ -29,7 +29,11 @@ type GenerateQRCodePaymentUseCaseImpl struct {
 	paymentRepository repository.PaymentRepository
 }
 
-type FinishOrderForQRCodeUseCase struct {
+type FinishOrderForQRCodeUseCase interface {
+	Execute(ctx context.Context, token string, form dto.ExternalPaymentEvent) error
+}
+
+type FinishOrderForQRCodeUseCaseImpl struct {
 	repository        repository.QRCodePaymentRepository
 	orderRepository   repository.OrderRepository
 	paymentRepository repository.PaymentRepository
@@ -51,8 +55,8 @@ func NewFinishOrderForQRCodeUseCase(
 	repository repository.QRCodePaymentRepository,
 	orderRepository repository.OrderRepository,
 	paymentRepository repository.PaymentRepository,
-) *FinishOrderForQRCodeUseCase {
-	return &FinishOrderForQRCodeUseCase{
+) FinishOrderForQRCodeUseCase {
+	return &FinishOrderForQRCodeUseCaseImpl{
 		repository:        repository,
 		orderRepository:   orderRepository,
 		paymentRepository: paymentRepository,
@@ -118,7 +122,7 @@ func (service *GenerateQRCodePaymentUseCaseImpl) Execute(
 	return qrCode, nil
 }
 
-func (service *FinishOrderForQRCodeUseCase) Execute(ctx context.Context, token string, form dto.ExternalPaymentEvent) error {
+func (service *FinishOrderForQRCodeUseCaseImpl) Execute(ctx context.Context, token string, form dto.ExternalPaymentEvent) error {
 	if form.Topic != "merchant_order" {
 		return &responses.NetworkError{
 			Code: http.StatusNotAcceptable,

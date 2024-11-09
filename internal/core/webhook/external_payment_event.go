@@ -20,7 +20,7 @@ import (
 // @Success 204
 // @Failure 406 "StatusNotAcceptable - Topic is not 'merchant_order'"
 // @Router /api/webhook/ml/payment [post]
-func PostExternalPaymentEventWebhook(finishOrderForQRCode *usecases.FinishOrderForQRCodeUseCase) http.HandlerFunc {
+func PostExternalPaymentEventWebhook(finishOrderForQRCode usecases.FinishOrderForQRCodeUseCase) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var form dto.ExternalPaymentEvent
 
