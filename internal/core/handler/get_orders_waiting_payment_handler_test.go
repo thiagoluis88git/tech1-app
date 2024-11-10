@@ -1,7 +1,6 @@
 package handler_test
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"net/http"
@@ -15,19 +14,13 @@ import (
 	"github.com/thiagoluis88git/tech1/pkg/responses"
 )
 
-func TestGetOrdersWaitingPaymentHandler(t *testing.T) {
+func TestGetOrdersToWaitinPaymentHandler(t *testing.T) {
 	t.Parallel()
 
 	t.Run("got success when calling get orders waiting payment handler", func(t *testing.T) {
 		t.Parallel()
 
-		jsonData, err := json.Marshal(mockOrder())
-
-		assert.NoError(t, err)
-
-		body := bytes.NewBuffer(jsonData)
-
-		req := httptest.NewRequest(http.MethodPost, "/api/orders-to-prepare", body)
+		req := httptest.NewRequest(http.MethodPost, "/api/orders-waiting-payment", nil)
 		req.Header.Add("Content-Type", "application/json")
 
 		rctx := chi.NewRouteContext()
@@ -36,39 +29,33 @@ func TestGetOrdersWaitingPaymentHandler(t *testing.T) {
 
 		recorder := httptest.NewRecorder()
 
-		getOrdersToPrepareUseCase := new(MockGetOrdersToPrepareUseCase)
+		getOrdersWaitingPaymentUseCase := new(MockGetOrdersWaitingPaymentUseCase)
 
-		getOrdersToPrepareUseCase.On("Execute", req.Context()).
+		getOrdersWaitingPaymentUseCase.On("Execute", req.Context()).
 			Return([]dto.OrderResponse{
 				{
 					OrderId: uint(12),
 				},
 			}, nil)
 
-		getOrdersToPrepareHandler := handler.GetOrdersToPrepareHandler(getOrdersToPrepareUseCase)
+		getOrdersWaitingPaymentHandler := handler.GetOrdersWaitingPaymentHandler(getOrdersWaitingPaymentUseCase)
 
-		getOrdersToPrepareHandler.ServeHTTP(recorder, req)
+		getOrdersWaitingPaymentHandler.ServeHTTP(recorder, req)
 
 		assert.Equal(t, http.StatusOK, recorder.Code)
 
 		var response []dto.OrderResponse
-		err = json.Unmarshal(recorder.Body.Bytes(), &response)
+		err := json.Unmarshal(recorder.Body.Bytes(), &response)
 
 		assert.NoError(t, err)
 
 		assert.Equal(t, uint(12), response[0].OrderId)
 	})
 
-	t.Run("got error on GetOrders Use Case when calling get orders to prepare handler", func(t *testing.T) {
+	t.Run("got error on GetOrders Use Case when calling get orders waiting payment handler", func(t *testing.T) {
 		t.Parallel()
 
-		jsonData, err := json.Marshal(mockOrder())
-
-		assert.NoError(t, err)
-
-		body := bytes.NewBuffer(jsonData)
-
-		req := httptest.NewRequest(http.MethodPost, "/api/orders-to-prepare", body)
+		req := httptest.NewRequest(http.MethodGet, "/api/orders-waiting-payment", nil)
 		req.Header.Add("Content-Type", "application/json")
 
 		rctx := chi.NewRouteContext()
@@ -77,16 +64,16 @@ func TestGetOrdersWaitingPaymentHandler(t *testing.T) {
 
 		recorder := httptest.NewRecorder()
 
-		getOrdersToPrepareUseCase := new(MockGetOrdersToPrepareUseCase)
+		getOrdersWaitingPaymentUseCase := new(MockGetOrdersWaitingPaymentUseCase)
 
-		getOrdersToPrepareUseCase.On("Execute", req.Context()).
+		getOrdersWaitingPaymentUseCase.On("Execute", req.Context()).
 			Return([]dto.OrderResponse{}, &responses.BusinessResponse{
 				StatusCode: 422,
 			})
 
-		getOrdersToPrepareHandler := handler.GetOrdersToPrepareHandler(getOrdersToPrepareUseCase)
+		getOrdersWaitingPaymentHandler := handler.GetOrdersWaitingPaymentHandler(getOrdersWaitingPaymentUseCase)
 
-		getOrdersToPrepareHandler.ServeHTTP(recorder, req)
+		getOrdersWaitingPaymentHandler.ServeHTTP(recorder, req)
 
 		assert.Equal(t, http.StatusUnprocessableEntity, recorder.Code)
 	})

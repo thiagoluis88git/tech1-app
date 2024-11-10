@@ -578,7 +578,7 @@ func (mock *MockUserAdminRepository) Login(ctx context.Context, cpf string) (str
 
 func (mock *MockUserAdminRepository) UpdateUser(ctx context.Context, customer dto.UserAdmin) error {
 	args := mock.Called(ctx, customer)
-	err := args.Error(1)
+	err := args.Error(0)
 
 	if err != nil {
 		return err

@@ -15,7 +15,7 @@ import (
 
 func TestOrderServices(t *testing.T) {
 	t.Parallel()
-	
+
 	t.Run("got success when generating ticket number in services", func(t *testing.T) {
 		t.Parallel()
 
@@ -481,5 +481,48 @@ func TestOrderServices(t *testing.T) {
 		var businessError *responses.BusinessResponse
 		assert.Equal(t, true, errors.As(err, &businessError))
 		assert.Equal(t, http.StatusNotFound, businessError.StatusCode)
+	})
+
+	t.Run("got success when get orders waiting payment use case", func(t *testing.T) {
+		t.Parallel()
+
+		mockRepo := new(MockOrderRepository)
+		sut := NewGetOrdersWaitingPaymentUseCase(mockRepo, NewSortOrdersUseCase())
+
+		ctx := context.TODO()
+
+		mockRepo.On("GetOrdersWaitingPayment", ctx).Return([]dto.OrderResponse{
+			{
+				OrderId:      uint(2),
+				TicketNumber: 12,
+			},
+			{
+				OrderId:      uint(3),
+				TicketNumber: 13,
+			},
+		}, nil)
+
+		response, err := sut.Execute(ctx)
+
+		assert.NoError(t, err)
+		assert.Equal(t, 2, len(response))
+	})
+
+	t.Run("got error on GetOrdersWaitingPayment Repository when get orders waiting payment use case", func(t *testing.T) {
+		t.Parallel()
+
+		mockRepo := new(MockOrderRepository)
+		sut := NewGetOrdersWaitingPaymentUseCase(mockRepo, NewSortOrdersUseCase())
+
+		ctx := context.TODO()
+
+		mockRepo.On("GetOrdersWaitingPayment", ctx).Return([]dto.OrderResponse{}, &responses.LocalError{
+			Code: 409,
+		})
+
+		response, err := sut.Execute(ctx)
+
+		assert.Error(t, err)
+		assert.Empty(t, response)
 	})
 }

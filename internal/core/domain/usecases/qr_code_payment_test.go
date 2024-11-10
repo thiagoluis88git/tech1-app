@@ -32,6 +32,13 @@ func mockPayment() dto.Payment {
 	}
 }
 
+func newExternalPaymentEvent() dto.ExternalPaymentEvent {
+	return dto.ExternalPaymentEvent{
+		Resource: "Resource",
+		Topic:    "merchant_order",
+	}
+}
+
 func mockDate() int64 {
 	return time.Now().Unix()
 }
@@ -211,5 +218,79 @@ func TestQRCodePaymentUseCase(t *testing.T) {
 
 		assert.Error(t, err)
 		assert.Empty(t, response)
+	})
+
+	t.Run("got success when finishing order payment use case", func(t *testing.T) {
+		t.Parallel()
+
+		mockOrderRepo := new(MockOrderRepository)
+		mockPaymentRepo := new(MockPaymentRepository)
+		mockQRCodePaymentepo := new(MockQRCodePaymentRepository)
+		sut := NewFinishOrderForQRCodeUseCase(mockQRCodePaymentepo, mockOrderRepo, mockPaymentRepo)
+
+		ctx := context.TODO()
+
+		mockQRCodePaymentepo.On("GetQRCodePaymentData", ctx, "token", "Resource").Return(dto.ExternalPaymentInformation{
+			ID:                int64(2),
+			Status:            "COMPLETE",
+			OrderStatus:       "paid",
+			ExternalReference: "123|789",
+		}, nil)
+
+		mockPaymentRepo.On("FinishPaymentWithSuccess", ctx, uint(789)).Return(nil)
+		mockOrderRepo.On("FinishOrderWithPayment", ctx, uint(123), uint(789)).Return(nil)
+		err := sut.Execute(ctx, "token", newExternalPaymentEvent())
+
+		mockOrderRepo.AssertExpectations(t)
+		mockPaymentRepo.AssertExpectations(t)
+		mockQRCodePaymentepo.AssertExpectations(t)
+
+		assert.NoError(t, err)
+	})
+
+	t.Run("got no error on not paid when finishing order payment use case", func(t *testing.T) {
+		t.Parallel()
+
+		mockOrderRepo := new(MockOrderRepository)
+		mockPaymentRepo := new(MockPaymentRepository)
+		mockQRCodePaymentepo := new(MockQRCodePaymentRepository)
+		sut := NewFinishOrderForQRCodeUseCase(mockQRCodePaymentepo, mockOrderRepo, mockPaymentRepo)
+
+		ctx := context.TODO()
+
+		mockQRCodePaymentepo.On("GetQRCodePaymentData", ctx, "token", "Resource").Return(dto.ExternalPaymentInformation{
+			ID:                int64(2),
+			Status:            "COMPLETE",
+			OrderStatus:       "waiting",
+			ExternalReference: "123|789",
+		}, nil)
+
+		err := sut.Execute(ctx, "token", newExternalPaymentEvent())
+
+		mockQRCodePaymentepo.AssertExpectations(t)
+
+		assert.NoError(t, err)
+	})
+
+	t.Run("got error on GetQRCodePaymentData Repository when finishing order payment use case", func(t *testing.T) {
+		t.Parallel()
+
+		mockOrderRepo := new(MockOrderRepository)
+		mockPaymentRepo := new(MockPaymentRepository)
+		mockQRCodePaymentepo := new(MockQRCodePaymentRepository)
+		sut := NewFinishOrderForQRCodeUseCase(mockQRCodePaymentepo, mockOrderRepo, mockPaymentRepo)
+
+		ctx := context.TODO()
+
+		mockQRCodePaymentepo.On("GetQRCodePaymentData", ctx, "token", "Resource").
+			Return(dto.ExternalPaymentInformation{}, &responses.NetworkError{
+				Code: 500,
+			})
+
+		err := sut.Execute(ctx, "token", newExternalPaymentEvent())
+
+		mockQRCodePaymentepo.AssertExpectations(t)
+
+		assert.Error(t, err)
 	})
 }

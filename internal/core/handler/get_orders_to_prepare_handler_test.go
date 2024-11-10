@@ -15,7 +15,7 @@ import (
 	"github.com/thiagoluis88git/tech1/pkg/responses"
 )
 
-func TestGetOrdersToPrepareHandler(t *testing.T) {
+func TestGetOrdersWaitingPrepareHandler(t *testing.T) {
 	t.Parallel()
 
 	t.Run("got success when calling get orders to prepare handler", func(t *testing.T) {
